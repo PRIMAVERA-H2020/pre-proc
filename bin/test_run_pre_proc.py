@@ -43,13 +43,13 @@ def main(args):
     Main entry point
     """
     fixer = ParentBranchTimeDoubleFix(
-        ['tas_Amon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc'],
+        'tas_Amon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc',
         TMPDIR
     )
     fixer.apply_fix()
 
     fixer = ChildBranchTimeDoubleFix(
-        ['tas_Amon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc'],
+        'tas_Amon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc',
         TMPDIR
     )
     fixer.apply_fix()
