@@ -4,6 +4,7 @@ common.py
 Library code used by many functions.
 """
 import logging.config
+import os
 import subprocess
 
 logger = logging.getLogger(__name__)
@@ -30,3 +31,22 @@ def run_command(command):
         return cmd_out.rstrip().split('\n')
     else:
         return None
+
+
+def ilist_files(directory, suffix='.nc'):
+    """
+    Return an iterator of all the files with the specified suffix in the
+    submission directory structure and sub-directories.
+
+    :param str directory: The root directory of the submission
+    :param str suffix: The suffix of the files of interest
+    :returns: A list of absolute filepaths
+    """
+    dir_files = os.listdir(directory)
+    for filename in dir_files:
+        file_path = os.path.join(directory, filename)
+        if os.path.isdir(file_path):
+            for ifile in ilist_files(file_path):
+                yield ifile
+        elif file_path.endswith(suffix):
+            yield file_path

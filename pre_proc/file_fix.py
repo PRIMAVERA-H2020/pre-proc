@@ -10,7 +10,7 @@ from netCDF4 import Dataset
 
 from pre_proc.common import run_command
 from pre_proc.exceptions import (AttributeNotFoundError,
-                                 AttributeConversionError)
+                                     AttributeConversionError)
 
 
 class FileFix(object):
@@ -19,20 +19,15 @@ class FileFix(object):
     """
     __metaclass__ = ABCMeta
 
-    def __init__(self, filenames, input_dir, output_dir):
+    def __init__(self, filename, directory):
         """
         Initialise the class
 
-        :param list filenames: The basenames as strings of the files to
-            process.
-        :param str input_dir: The directory that the files are
-            currently in.
-        :param str output_dir: The directory to save the output files
-            to.
+        :param list filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
         """
-        self.filenames = filenames
-        self.input_dir = input_dir
-        self.output_dir = output_dir
+        self.filename = filename
+        self.directory = directory
 
     @abstractmethod
     def apply_fix(self):
@@ -46,11 +41,11 @@ class AttEdFix(FileFix):
     """
     __metaclass__ = ABCMeta
 
-    def __init__(self, filenames, input_dir, output_dir):
+    def __init__(self, filename, directory):
         """
         Initialise the class
         """
-        super(AttEdFix, self).__init__(filenames, input_dir, output_dir)
+        super(AttEdFix, self).__init__(filename, directory)
         # The name of the attribute to fix
         self.attribute_name = None
         # The var_nm to pass to ncatted, e.g. global for a global
@@ -66,35 +61,31 @@ class AttEdFix(FileFix):
 
     def apply_fix(self):
         """
-        Loop through each of the specified files and fix the specified
-        attribute
+        Fix the specified attribute on the file
         """
-        for filename in self.filenames:
-            self._get_existing_value(filename)
-            self._calculate_new_value(filename)
-            self._run_ncatted(filename)
+        self._get_existing_value()
+        self._calculate_new_value()
+        self._run_ncatted()
 
-    def _get_existing_value(self, filename):
+    def _get_existing_value(self):
         """
-        Get the value of the existing attribute from a single specified file
-
-        :param str filename: The name of the input file to fix
+        Get the value of the existing attribute from the current file
         """
-        filepath = os.path.join(self.input_dir, filename)
+        filepath = os.path.join(self.directory, self.filename)
         with Dataset(filepath) as rootgrp:
             self.existing_value = getattr(rootgrp, self.attribute_name, None)
 
         if self.existing_value is None:
-            raise AttributeNotFoundError(filename, self.attribute_name)
+            raise AttributeNotFoundError(self.filename, self.attribute_name)
 
     @abstractmethod
-    def _calculate_new_value(self, filename):
+    def _calculate_new_value(self):
         """
         From the existing value of the attribute, calculate the new value
         """
         pass
 
-    def _run_ncatted(self, filename):
+    def _run_ncatted(self):
         """
         Run the command
 
@@ -102,14 +93,13 @@ class AttEdFix(FileFix):
         """
         # Aiming for:
         # ncatted -h -a branch_time_in_parent,global,o,d,10800.0
-        cmd = 'ncatted -h -a {},{},{},{},{} {} {}'.format(
+        cmd = 'ncatted -h -a {},{},{},{},{} {}'.format(
             self.attribute_name,
             self.attribute_visibility,
             'o',
             self.attribute_type,
             self.new_value,
-            os.path.join(self.input_dir, filename),
-            os.path.join(self.output_dir, filename)
+            os.path.join(self.directory, self.filename)
         )
         run_command(cmd)
 
@@ -118,14 +108,19 @@ class ParentBranchTimeDoubleFix(AttEdFix):
     """
     Make the global attribute `branch_time_in_parent` a double
     """
-    def __init__(self, filenames, input_dir, output_dir):
-        super(ParentBranchTimeDoubleFix, self).__init__(filenames, input_dir,
-                                                        output_dir)
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(ParentBranchTimeDoubleFix, self).__init__(filename, directory)
         self.attribute_name = 'branch_time_in_parent'
         self.attribute_visibility = 'global'
         self.attribute_type = 'd'
 
-    def _calculate_new_value(self, filename):
+    def _calculate_new_value(self):
         """
         The new value is the existing string converted to a double.
 
@@ -135,21 +130,26 @@ class ParentBranchTimeDoubleFix(AttEdFix):
             self.new_value = float(self.existing_value)
         except ValueError:
             raise AttributeConversionError(self.attribute_name, 'float',
-                                           filename)
+                                           self.filename)
 
 
 class ChildBranchTimeDoubleFix(AttEdFix):
     """
-    Make the global attribute `branch_time_in_parent` a double
+    Make the global attribute `branch_time_in_child` a double
     """
-    def __init__(self, filenames, input_dir, output_dir):
-        super(ChildBranchTimeDoubleFix, self).__init__(filenames, input_dir,
-                                                       output_dir)
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param list filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(ChildBranchTimeDoubleFix, self).__init__(filename, directory)
         self.attribute_name = 'branch_time_in_child'
         self.attribute_visibility = 'global'
         self.attribute_type = 'd'
 
-    def _calculate_new_value(self, filename):
+    def _calculate_new_value(self):
         """
         The new value is the existing string converted to a double.
 
@@ -159,4 +159,4 @@ class ChildBranchTimeDoubleFix(AttEdFix):
             self.new_value = float(self.existing_value)
         except ValueError:
             raise AttributeConversionError(self.attribute_name, 'float',
-                                           filename)
+                                           self.filename)
