@@ -18,7 +18,7 @@ __version__ = '0.1.0b1'
 DEFAULT_LOG_LEVEL = logging.WARNING
 DEFAULT_LOG_FORMAT = '%(levelname)s: %(message)s'
 
-TMPDIR = '/var/tmp'
+TMPDIR = '/group_workspaces/jasmin2/primavera1/cache/jseddon/pre-proc'
 
 logger = logging.getLogger(__name__)
 
@@ -43,14 +43,14 @@ def main(args):
     Main entry point
     """
     fixer = ParentBranchTimeDoubleFix(
-        ['tas_Amon_HadGEM3-GC31-LL_control-1950_r1i1p1f1_gn_195001-195012.nc'],
-        '/scratch/jseddon/sandbox'
+        ['tas_Amon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc'],
+        TMPDIR
     )
     fixer.apply_fix()
 
     fixer = ChildBranchTimeDoubleFix(
-        ['tas_Amon_HadGEM3-GC31-LL_control-1950_r1i1p1f1_gn_195001-195012.nc'],
-        '/scratch/jseddon/sandbox/output'
+        ['tas_Amon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc'],
+        TMPDIR
     )
     fixer.apply_fix()
 
