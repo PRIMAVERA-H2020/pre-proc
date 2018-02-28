@@ -56,7 +56,7 @@ class TestStarBranchTimeDoubleFix(unittest.TestCase):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             'ncatted -h -a branch_time_in_parent,global,o,d,1080.0 '
-            '/a/1.nc /a/1.nc',
+            '/a/1.nc',
             stderr=subprocess.STDOUT,
             shell=True
         )
@@ -67,7 +67,7 @@ class TestStarBranchTimeDoubleFix(unittest.TestCase):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             'ncatted -h -a branch_time_in_child,global,o,d,0.0 '
-            '/a/1.nc /a/1.nc',
+            '/a/1.nc',
             stderr=subprocess.STDOUT,
             shell=True
         )
