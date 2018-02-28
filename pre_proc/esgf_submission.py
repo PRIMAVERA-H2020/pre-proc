@@ -5,12 +5,15 @@ The basic class that forms an ESGF submission
 """
 import os
 
+from pre_proc import ParentBranchTimeDoubleFix, ChildBranchTimeDoubleFix
+
+
 class EsgfSubmission(object):
     """
     The basic class that forms an ESGF submission
     """
     def __init__(self, source_id=None, experiment_id=None, table_id=None,
-                 cmor_name=None):
+                 cmor_name=None, filepath=None):
         """
         Initialise the class.
 
@@ -18,11 +21,14 @@ class EsgfSubmission(object):
         :param str experiment_id: The CMIP6 experiment_id
         :param str table_id: The CMIP6 table_id
         :param str cmor_name: The CMIP6 cmor_name
+        :param str filepath: The full path to the file to be fixed.
         """
         self.source_id = source_id
         self.experiment_id = experiment_id
         self.table_id = table_id
         self.cmor_name = cmor_name
+        self.filename = os.path.basename(filepath)
+        self.directory = os.path.dirname(filepath)
         self.fixes = []
 
     @classmethod
@@ -38,6 +44,8 @@ class EsgfSubmission(object):
         for cmpt_name, cmpt in zip(components, basename_cmpts):
             kwargs[cmpt_name] = cmpt
 
+        kwargs['filepath'] = filepath
+
         return cls(**kwargs)
 
     def determine_fixes(self):
@@ -45,10 +53,14 @@ class EsgfSubmission(object):
         Scan through the DB, determine the fixes that need to be run on
         this ESGF dataset and add them to the list
         """
-        pass
+        self.fixes.append(ParentBranchTimeDoubleFix(self.filename,
+                                                    self.directory))
+        self.fixes.append(ChildBranchTimeDoubleFix(self.filename,
+                                                   self.directory))
 
     def run_fixes(self):
         """
         Loop through the fixes and run each of them in turn
         """
-        pass
+        for fix in self.fixes:
+            fix.apply_fix()
