@@ -24,6 +24,25 @@ TMPDIR = '/var/tmp'
 logger = logging.getLogger(__name__)
 
 
+def move_file_to_temp(filepath):
+    """
+
+    :param str filepath:
+    :return:
+    """
+    pass
+
+
+def move_file_to_output(filepath):
+    """
+
+    :param str filepath:
+    :return:
+    """
+    pass
+
+
+
 def parse_args():
     """
     Parse command-line arguments
@@ -47,9 +66,11 @@ def main(args):
     Main entry point
     """
     for filepath in ilist_files(args.input_directory):
+        move_file_to_temp()
         esgf_submission = EsgfSubmission.from_file(filepath)
         esgf_submission.determine_fixes()
         esgf_submission.run_fixes()
+        move_file_to_output()
 
 
 if __name__ == "__main__":
