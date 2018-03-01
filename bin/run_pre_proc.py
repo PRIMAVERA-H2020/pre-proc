@@ -3,15 +3,15 @@
 run_pre_proc.py
 
 Run PRIMAVERA pre-processing as part of the CEDA CREPP workflow.
-
-This is currently a test and a single processing item has been hard-coded.
 """
 import argparse
 import logging.config
+import os
+import shutil
 import sys
+import tempfile
 
-from pre_proc import (EsgfSubmission, ParentBranchTimeDoubleFix,
-                      ChildBranchTimeDoubleFix)
+from pre_proc import EsgfSubmission
 from pre_proc.common import ilist_files
 
 __version__ = '0.1.0b1'
@@ -19,28 +19,54 @@ __version__ = '0.1.0b1'
 DEFAULT_LOG_LEVEL = logging.WARNING
 DEFAULT_LOG_FORMAT = '%(levelname)s: %(message)s'
 
-TMPDIR = '/var/tmp'
-
 logger = logging.getLogger(__name__)
 
+PROCESSING_DIRECTORY = '/group_workspaces/jasmin2/primavera3/cache/crepp'
 
-def move_file_to_temp(filepath):
+
+def create_temp_dir():
     """
+    Create a temporary directory to perform the processing in.
+
+    :returns: The path to directory created
+    :rtype: str
+    """
+    return tempfile.mkdtemp(prefix='crepp', dir=PROCESSING_DIRECTORY)
+
+
+def remove_temp_dir(temp_dir):
+    """
+    Delete the temporary directory created
+
+    :param str temp_dir: The full path of the temporary directory.
+    """
+    if not os.listdir(temp_dir):
+        os.rmdir(temp_dir)
+    else:
+        logger.warning('Unable to delete temporary directory as it is not '
+                       'empty {}'.format(temp_dir))
+
+
+def copy_file_to_temp_dir(filepath, temp_dir):
+    """
+    Copy the specified file into the temporary directory that's being used.
+
+    :param str filepath: The full path of the file to copy.
+    :param str temp_dir: The temporary directory to copy to.
+    """
+    shutil.copy(filepath, temp_dir)
+
+
+def move_file_to_output(filepath, temp_dir, output_dir):
+    """
+    Move the file from the temporary directory to the output directory. The
+    file is specified by its full original path.
 
     :param str filepath:
     :return:
     """
-    pass
-
-
-def move_file_to_output(filepath):
-    """
-
-    :param str filepath:
-    :return:
-    """
-    pass
-
+    basename = os.path.basename(filepath)
+    shutil.move(os.path.join(temp_dir, basename), output_dir)
 
 
 def parse_args():
@@ -65,13 +91,16 @@ def main(args):
     """
     Main entry point
     """
+    temp_dir = create_temp_dir()
+
     for filepath in ilist_files(args.input_directory):
-        move_file_to_temp()
+        copy_file_to_temp_dir(filepath, temp_dir)
         esgf_submission = EsgfSubmission.from_file(filepath)
         esgf_submission.determine_fixes()
         esgf_submission.run_fixes()
-        move_file_to_output()
+        move_file_to_output(filepath, temp_dir, args.output_directory)
 
+    remove_temp_dir(temp_dir)
 
 if __name__ == "__main__":
     cmd_args = parse_args()

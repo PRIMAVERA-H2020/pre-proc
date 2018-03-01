@@ -1,5 +1,4 @@
 db
-pdata_site/settings_local.py*
 setup*.sh
 *.pyc
 .idea

@@ -73,10 +73,12 @@ WSGI_APPLICATION = 'pre_proc_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+DATABASE_DIR = os.environ['DATABASE_DIR']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db', 'db.sqlite3'),
+        'NAME': os.path.join(DATABASE_DIR, 'pre-proc_db.sqlite3'),
     }
 }
 
