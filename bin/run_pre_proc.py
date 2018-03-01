@@ -53,20 +53,23 @@ def copy_file_to_temp_dir(filepath, temp_dir):
 
     :param str filepath: The full path of the file to copy.
     :param str temp_dir: The temporary directory to copy to.
+    :returns: The new path to the file.
+    :rtype: str
+
     """
     shutil.copy(filepath, temp_dir)
 
+    return os.path.join(temp_dir, os.path.basename(filepath))
 
-def move_file_to_output(filepath, temp_dir, output_dir):
-    """
-    Move the file from the temporary directory to the output directory. The
-    file is specified by its full original path.
 
-    :param str filepath:
-    :return:
+def move_file_to_output_dir(filepath, output_dir):
     """
-    basename = os.path.basename(filepath)
-    shutil.move(os.path.join(temp_dir, basename), output_dir)
+    Move the file from its current location to the output directory.
+
+    :param str filepath: The file's current full path.
+    :param str output_dir: The path to the output directory.
+    """
+    shutil.move(filepath, output_dir)
 
 
 def parse_args():
@@ -91,14 +94,19 @@ def main(args):
     """
     Main entry point
     """
+    logger.debug('Database directory is {}'.
+                 format(os.environ['DATABASE_DIR']))
+
     temp_dir = create_temp_dir()
+    logger.debug('Temporary directory is {}'.format(temp_dir))
 
     for filepath in ilist_files(args.input_directory):
-        copy_file_to_temp_dir(filepath, temp_dir)
-        esgf_submission = EsgfSubmission.from_file(filepath)
+        logger.debug('Processing {}'.format(filepath))
+        working_file = copy_file_to_temp_dir(filepath, temp_dir)
+        esgf_submission = EsgfSubmission.from_file(working_file)
         esgf_submission.determine_fixes()
         esgf_submission.run_fixes()
-        move_file_to_output(filepath, temp_dir, args.output_directory)
+        move_file_to_output_dir(working_file, args.output_directory)
 
     remove_temp_dir(temp_dir)
 
