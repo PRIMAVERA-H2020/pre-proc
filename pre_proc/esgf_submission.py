@@ -5,7 +5,8 @@ The basic class that forms an ESGF submission
 """
 import os
 
-from pre_proc.file_fix import ParentBranchTimeDoubleFix, ChildBranchTimeDoubleFix
+from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
+                               ChildBranchTimeDoubleFix)
 
 
 class EsgfSubmission(object):
