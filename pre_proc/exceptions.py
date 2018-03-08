@@ -51,3 +51,17 @@ class AttributeConversionError(PreProcError):
     def __str__(self):
         return ('Cannot convert attribute {} to new type {} in file {}'.
                 format(self.attribute, self.new_type, self.filename))
+
+
+class AttributeEditError(PreProcError):
+    """
+    When converting the attribute to the desired type fails.
+    """
+    def __init__(self, filename, attribute, message):
+        self.filename = filename
+        self.attribute = attribute
+        self.message = message
+
+    def __str__(self):
+        return ('Cannot edit attribute {} in file {}. {}'.
+                format(self.attribute, self.filename, self.message))

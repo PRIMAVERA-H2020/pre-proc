@@ -10,7 +10,8 @@ from netCDF4 import Dataset
 
 from pre_proc.common import run_command
 from pre_proc.exceptions import (AttributeNotFoundError,
-                                     AttributeConversionError)
+                                 AttributeConversionError,
+                                 AttributeEditError)
 
 
 class FileFix(object):
@@ -93,12 +94,17 @@ class AttEdFix(FileFix):
         """
         # Aiming for:
         # ncatted -h -a branch_time_in_parent,global,o,d,10800.0
-        cmd = 'ncatted -h -a {},{},{},{},{} {}'.format(
+
+        quote_mark = "'" if isinstance(self.new_value, str) else ""
+
+        cmd = 'ncatted -h -a {},{},{},{},{}{}{} {}'.format(
             self.attribute_name,
             self.attribute_visibility,
             'o',
             self.attribute_type,
+            quote_mark,
             self.new_value,
+            quote_mark,
             os.path.join(self.directory, self.filename)
         )
         run_command(cmd)
@@ -129,8 +135,8 @@ class ParentBranchTimeDoubleFix(AttEdFix):
         try:
             self.new_value = float(self.existing_value)
         except ValueError:
-            raise AttributeConversionError(self.attribute_name, 'float',
-                                           self.filename)
+            raise AttributeConversionError(self.filename, self.attribute_name,
+                                           'float')
 
 
 class ChildBranchTimeDoubleFix(AttEdFix):
@@ -158,5 +164,36 @@ class ChildBranchTimeDoubleFix(AttEdFix):
         try:
             self.new_value = float(self.existing_value)
         except ValueError:
-            raise AttributeConversionError(self.attribute_name, 'float',
-                                           self.filename)
+            raise AttributeConversionError(self.filename, self.attribute_name,
+                                           'float')
+
+
+class FurtherInfoUrlToHttps(AttEdFix):
+    """
+    Change the protocol in the further_info_url attribute from HTTP to
+    HTTPS.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param list filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(FurtherInfoUrlToHttps, self).__init__(filename, directory)
+        self.attribute_name = 'further_info_url'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'm'
+
+    def _calculate_new_value(self):
+        """
+        The new value is the existing string converted to a double.
+
+        :param str filename: The name of the input file to fix
+        """
+        if not self.existing_value.startswith('http:'):
+            raise AttributeEditError(self.filename, self.attribute_name,
+                                     'Existing further_info_url attribute does '
+                                     'not start with http:')
+
+        self.new_value = self.existing_value.replace('http:', 'https:', 1)

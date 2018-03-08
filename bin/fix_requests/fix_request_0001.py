@@ -1,8 +1,9 @@
 #!/usr/bin/env python2.7
 """
-add_file_fixes_to_db.py
+fix_request_0001.py
 
-Load the available file fixes into the database.
+Convert the further_info_url attribute on all Met Office data from HTTP to
+HTTPS.
 """
 import argparse
 import logging.config
@@ -11,9 +12,7 @@ import sys
 import django
 django.setup()
 
-from django.template.defaultfilters import pluralize
-
-from pre_proc_app.models import FileFix
+from pre_proc_app.models import DataRequest, FileFix
 
 
 __version__ = '0.1.0b1'
@@ -28,7 +27,7 @@ def parse_args():
     """
     Parse command-line arguments
     """
-    parser = argparse.ArgumentParser(description='Pre-process PRIMAVERA data.')
+    parser = argparse.ArgumentParser(description='Add pre-processing rules.')
     parser.add_argument('-l', '--log-level', help='set logging level to one '
                                                   'of debug, info, warn (the '
                                                   'default), or error')
@@ -39,25 +38,25 @@ def parse_args():
     return args
 
 
-def main():
+def main(args):
     """
     Main entry point
     """
-    file_fixes = [
-        'ParentBranchTimeDoubleFix',
-        'ChildBranchTimeDoubleFix',
-        'FurtherInfoUrlToHttps'
-    ]
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MOHC'
+    )
 
-    num_created = 0
-    for file_fix in file_fixes:
-        inst, created = FileFix.objects.get_or_create(name=file_fix)
-        if created:
-            num_created += 1
+    further_info_url_fix = FileFix.objects.get(name='FurtherInfoUrlToHttps')
 
-    logger.debug('Added {} new FileFix object{}.'.format(num_created,
-                                                         pluralize(
-                                                             num_created)))
+    # This next line could be done more quickly by:
+    # further_info_url_fix.datarequest_set.add(*data_reqs)
+    # but sqlite3 gives an error of:
+    # django.db.utils.OperationalError: too many SQL variables
+    for data_req in data_reqs:
+        data_req.fixes.add(further_info_url_fix)
+
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(further_info_url_fix.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
@@ -100,4 +99,4 @@ if __name__ == "__main__":
     })
 
     # run the code
-    main()
+    main(cmd_args)
