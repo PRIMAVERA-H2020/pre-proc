@@ -22,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 HTML_FILE = 'fix_requests.html'
 
+
 def _ouput_headers(fh):
     txt = """<html>
 <head><title>fix_requests</title></head>
@@ -47,15 +48,16 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Index the docstrings of the '
                                                  'fix_request_*.py scripts')
     parser.add_argument('-l', '--log-level', help='set logging level to one of '
-        'debug, info, warn (the default), or error')
+                                                  'debug, info, warn (the '
+                                                  'default), or error')
     parser.add_argument('--version', action='version',
-        version='%(prog)s {}'.format(__version__))
+                        version='%(prog)s {}'.format(__version__))
     args = parser.parse_args()
 
     return args
 
 
-def main(args):
+def main():
     """
     Main entry point
     """
@@ -73,7 +75,6 @@ def main(args):
             fh.write('<tr><td>{}</td><td>{}</td></tr>\n'.format(file_name,
                                                                 description))
         _ouput_footers(fh)
-
 
 
 if __name__ == "__main__":
@@ -116,4 +117,4 @@ if __name__ == "__main__":
     })
 
     # run the code
-    main(cmd_args)
+    main()

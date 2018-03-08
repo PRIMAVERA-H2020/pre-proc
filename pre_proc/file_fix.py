@@ -89,8 +89,6 @@ class AttEdFix(FileFix):
     def _run_ncatted(self):
         """
         Run the command
-
-        :param str filename: The name of the input file to fix
         """
         # Aiming for:
         # ncatted -h -a branch_time_in_parent,global,o,d,10800.0
@@ -129,8 +127,6 @@ class ParentBranchTimeDoubleFix(AttEdFix):
     def _calculate_new_value(self):
         """
         The new value is the existing string converted to a double.
-
-        :param str filename: The name of the input file to fix
         """
         try:
             self.new_value = float(self.existing_value)
@@ -158,8 +154,6 @@ class ChildBranchTimeDoubleFix(AttEdFix):
     def _calculate_new_value(self):
         """
         The new value is the existing string converted to a double.
-
-        :param str filename: The name of the input file to fix
         """
         try:
             self.new_value = float(self.existing_value)
@@ -188,8 +182,6 @@ class FurtherInfoUrlToHttps(AttEdFix):
     def _calculate_new_value(self):
         """
         The new value is the existing string converted to a double.
-
-        :param str filename: The name of the input file to fix
         """
         if not self.existing_value.startswith('http:'):
             raise AttributeEditError(self.filename, self.attribute_name,

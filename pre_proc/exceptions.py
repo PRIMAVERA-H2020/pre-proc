@@ -4,7 +4,8 @@ exceptions.py
 Custom exceptions for the pre-proc module
 """
 __all__ = ['PreProcError', 'CannotLoadSourceFileError',
-           'AttributeNotFoundError', 'AttributeConversionError']
+           'AttributeNotFoundError', 'AttributeConversionError',
+           'AttributeEditError']
 
 
 class PreProcError(Exception):

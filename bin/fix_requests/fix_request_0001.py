@@ -38,7 +38,7 @@ def parse_args():
     return args
 
 
-def main(args):
+def main():
     """
     Main entry point
     """
@@ -99,4 +99,4 @@ if __name__ == "__main__":
     })
 
     # run the code
-    main(cmd_args)
+    main()
