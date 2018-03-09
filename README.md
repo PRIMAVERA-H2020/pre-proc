@@ -12,7 +12,7 @@ To set up the system:
 1. In the DMT code: `./scripts/make_esgf_json.py -l debug <filename.json>` to get the data requests that files have been received for.
 1. `./bin/make_db_from_json.py -l debug <filename.json>` to add the data requests.
 1. `./bin/add_file_fixes_to_db.py -l debug` to add the file fixes to the database.
-1. Run all of the fix_request scripts, e.g. `./bin/fix_requests/fix_request_0001.py -l debug` to set-up the file fixes required for each data request.
+1. Run all of the fix_request scripts, e.g. `./bin/fix_requests/fix_request_0001.py -l debug` to set up the file fixes required for each data request.
 
 It should now be possible to run the main processing script:
 
