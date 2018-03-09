@@ -177,7 +177,7 @@ class FurtherInfoUrlToHttps(AttEdFix):
         super(FurtherInfoUrlToHttps, self).__init__(filename, directory)
         self.attribute_name = 'further_info_url'
         self.attribute_visibility = 'global'
-        self.attribute_type = 'm'
+        self.attribute_type = 'c'
 
     def _calculate_new_value(self):
         """

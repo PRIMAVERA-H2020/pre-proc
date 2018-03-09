@@ -60,8 +60,8 @@ class EsgfSubmission(object):
         Scan through the DB, determine the fixes that need to be run on
         this ESGF dataset and add them to the list.
         """
-        self.fixes = [getattr(pre_proc, fix_name)(self.filename,
-                                                  self.directory)
+        self.fixes = [getattr(pre_proc, fix_name.name)(self.filename,
+                                                       self.directory)
                       for fix_name in self._get_data_request().fixes.all()]
 
     def run_fixes(self):
