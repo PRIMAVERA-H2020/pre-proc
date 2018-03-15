@@ -44,7 +44,7 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name='MOHC',
-        experiment__short_name='highresSST-present'
+        experiment_id__name='highresSST-present'
     )
 
     branch_time_parent = FileFix.objects.get(name='ParentBranchTimeAdd')

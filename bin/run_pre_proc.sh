@@ -6,7 +6,7 @@ INSTALL_DIR=/home/users/jseddon/primavera/pre-proc
 
 source $INSTALL_DIR/../venvs/django/bin/activate
 export DJANGO_SETTINGS_MODULE=pre_proc_site.settings
-export PYTHONPATH=.
+export PYTHONPATH=$INSTALL_DIR
 
 
 export DATABASE_DIR=`mktemp -d /tmp/prima-crepp.XXXXXXX`
