@@ -162,6 +162,64 @@ class ChildBranchTimeDoubleFix(AttEdFix):
                                            'float')
 
 
+class ParentBranchTimeAdd(AttEdFix):
+    """
+    Make the global attribute `branch_time_in_parent` a double
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(ParentBranchTimeAdd, self).__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _get_existing_value(self):
+        """
+        We're setting a new value of zero and so don't do anything
+        """
+        pass
+
+    def _calculate_new_value(self):
+        """
+        The new value is zero.
+        """
+        self.new_value = 0.0
+
+
+class ChildBranchTimeAdd(AttEdFix):
+    """
+    Make the global attribute `branch_time_in_child` a double
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param list filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(ChildBranchTimeAdd, self).__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _get_existing_value(self):
+        """
+        We're setting a new value of zero and so don't do anything
+        """
+        pass
+
+    def _calculate_new_value(self):
+        """
+        The new value is zero.
+        """
+        self.new_value = 0.0
+
+
 class FurtherInfoUrlToHttps(AttEdFix):
     """
     Change the protocol in the further_info_url attribute from HTTP to

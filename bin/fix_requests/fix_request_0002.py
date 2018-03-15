@@ -1,8 +1,9 @@
 #!/usr/bin/env python2.7
 """
-add_file_fixes_to_db.py
+fix_request_0002.py
 
-Load the available file fixes into the database.
+Add a branch_time_in_parent and branch_time_in_child attribute on all
+Met Office highresSST-present data.
 """
 import argparse
 import logging.config
@@ -11,9 +12,7 @@ import sys
 import django
 django.setup()
 
-from django.template.defaultfilters import pluralize
-
-from pre_proc_app.models import FileFix
+from pre_proc_app.models import DataRequest, FileFix
 
 
 __version__ = '0.1.0b1'
@@ -28,7 +27,7 @@ def parse_args():
     """
     Parse command-line arguments
     """
-    parser = argparse.ArgumentParser(description='Pre-process PRIMAVERA data.')
+    parser = argparse.ArgumentParser(description='Add pre-processing rules.')
     parser.add_argument('-l', '--log-level', help='set logging level to one '
                                                   'of debug, info, warn (the '
                                                   'default), or error')
@@ -43,23 +42,27 @@ def main():
     """
     Main entry point
     """
-    file_fixes = [
-        'ParentBranchTimeDoubleFix',
-        'ChildBranchTimeDoubleFix',
-        'ParentBranchTimeAdd',
-        'ChildBranchTimeAdd',
-        'FurtherInfoUrlToHttps'
-    ]
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MOHC',
+        experiment__short_name='highresSST-present'
+    )
 
-    num_created = 0
-    for file_fix in file_fixes:
-        inst, created = FileFix.objects.get_or_create(name=file_fix)
-        if created:
-            num_created += 1
+    branch_time_parent = FileFix.objects.get(name='ParentBranchTimeAdd')
+    branch_time_child = FileFix.objects.get(name='ChildBranchTimeAdd')
 
-    logger.debug('Added {} new FileFix object{}.'.format(num_created,
-                                                         pluralize(
-                                                             num_created)))
+    # This next line could be done more quickly by:
+    # further_info_url_fix.datarequest_set.add(*data_reqs)
+    # but sqlite3 gives an error of:
+    # django.db.utils.OperationalError: too many SQL variables
+    for data_req in data_reqs:
+        data_req.fixes.add(branch_time_parent)
+        data_req.fixes.add(branch_time_child)
+
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(branch_time_parent.name, data_reqs.count()))
+
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(branch_time_child.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
