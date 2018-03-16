@@ -164,7 +164,7 @@ class ChildBranchTimeDoubleFix(AttEdFix):
 
 class ParentBranchTimeAdd(AttEdFix):
     """
-    Make the global attribute `branch_time_in_parent` a double
+   Add a global attribute `branch_time_in_parent` with a value of zero.
     """
     def __init__(self, filename, directory):
         """
@@ -193,7 +193,7 @@ class ParentBranchTimeAdd(AttEdFix):
 
 class ChildBranchTimeAdd(AttEdFix):
     """
-    Make the global attribute `branch_time_in_child` a double
+    Add a global attribute `branch_time_in_child` with a value of zero.
     """
     def __init__(self, filename, directory):
         """
@@ -218,6 +218,35 @@ class ChildBranchTimeAdd(AttEdFix):
         The new value is zero.
         """
         self.new_value = 0.0
+
+
+class CellMeasuresAreacellaAdd(AttEdFix):
+    """
+    Add a variable attribute `cellmeasures` with a value of `area: areacella`
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param list filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(CellMeasuresAreacellaAdd, self).__init__(filename, directory)
+        self.attribute_name = 'cell_measures'
+        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_type = 'c'
+
+    def _get_existing_value(self):
+        """
+        We're setting a new value so don't need to get anything.
+        """
+        pass
+
+    def _calculate_new_value(self):
+        """
+        The new value is zero.
+        """
+        self.new_value = 'area: areacella'
 
 
 class FurtherInfoUrlToHttps(AttEdFix):
