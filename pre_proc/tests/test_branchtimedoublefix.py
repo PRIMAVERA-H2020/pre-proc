@@ -94,7 +94,7 @@ class TestAttEdFix(unittest.TestCase):
         fix = FurtherInfoUrlToHttps('1.nc', '/a')
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
-            "ncatted -h -a further_info_url,global,o,m,"
+            "ncatted -h -a further_info_url,global,o,c,"
             "'https://furtherinfo.es-doc.org/part1.part2' "
             "/a/1.nc",
             stderr=subprocess.STDOUT,
