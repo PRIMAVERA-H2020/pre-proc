@@ -5,7 +5,7 @@ Custom exceptions for the pre-proc module
 """
 __all__ = ['PreProcError', 'CannotLoadSourceFileError',
            'AttributeNotFoundError', 'AttributeConversionError',
-           'AttributeEditError']
+           'ExistingAttributeError']
 
 
 class PreProcError(Exception):
@@ -54,9 +54,10 @@ class AttributeConversionError(PreProcError):
                 format(self.attribute, self.new_type, self.filename))
 
 
-class AttributeEditError(PreProcError):
+class ExistingAttributeError(PreProcError):
     """
-    When converting the attribute to the desired type fails.
+    When there is an issue with the existing attribute value that will
+    prevent the fix from being run.
     """
     def __init__(self, filename, attribute, message):
         self.filename = filename
