@@ -21,7 +21,7 @@ DEFAULT_LOG_FORMAT = '%(levelname)s: %(message)s'
 
 logger = logging.getLogger(__name__)
 
-PROCESSING_DIRECTORY = '/group_workspaces/jasmin2/primavera3/cache/crepp'
+PROCESSING_DIRECTORY = '/work/scratch-nompiio/jseddon'
 
 
 def create_temp_dir():
