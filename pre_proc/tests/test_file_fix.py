@@ -10,13 +10,15 @@ import mock
 
 from pre_proc.exceptions import (AttributeNotFoundError,
                                  AttributeConversionError,
-                                 ExistingAttributeError)
+                                 ExistingAttributeError,
+                                 InstanceVariableNotDefinedError)
 from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                ChildBranchTimeDoubleFix,
                                FurtherInfoUrlToHttps,
                                ParentBranchTimeAdd,
                                ChildBranchTimeAdd,
-                               CellMeasuresAreacellaAdd)
+                               CellMeasuresAreacellaAdd,
+                               CellMethodsAreaTimeMeanAdd)
 
 
 class BaseTest(unittest.TestCase):
@@ -59,6 +61,40 @@ class TestParentBranchTimeDoubleFix(BaseTest):
                           'new type float in file 1.nc')
         self.assertRaisesRegexp(AttributeConversionError, exception_text,
                                 fix.apply_fix)
+
+    def test_no_attribute_name_raises(self):
+        """ Test whether missing attribute_name handled """
+        self.mock_dataset.return_value.branch_time_in_parent = '1080.0'
+        fix = ParentBranchTimeDoubleFix('1.nc', '/a')
+        exception_text = ('ParentBranchTimeDoubleFix: attribute '
+                          'attribute_name is not defined')
+        fix._get_existing_value()
+        fix._calculate_new_value()
+        fix.attribute_name = None
+        self.assertRaisesRegexp(InstanceVariableNotDefinedError,
+                                exception_text, fix._run_ncatted)
+
+    def test_no_visibility_raises(self):
+        """ Test whether missing visibility handled """
+        self.mock_dataset.return_value.branch_time_in_parent = '1080.0'
+        fix = ParentBranchTimeDoubleFix('1.nc', '/a')
+        fix.attribute_visibility = None
+        exception_text = ('ParentBranchTimeDoubleFix: attribute '
+                          'attribute_visibility is not defined')
+        self.assertRaisesRegexp(InstanceVariableNotDefinedError,
+                                exception_text, fix.apply_fix)
+
+    def test_no_new_value_raises(self):
+        """ Test whether missing new_value handled """
+        self.mock_dataset.return_value.branch_time_in_parent = '1080.0'
+        fix = ParentBranchTimeDoubleFix('1.nc', '/a')
+        exception_text = ('ParentBranchTimeDoubleFix: attribute '
+                          'new_value is not defined')
+        fix._get_existing_value()
+        fix._calculate_new_value()
+        fix.new_value = None
+        self.assertRaisesRegexp(InstanceVariableNotDefinedError,
+                                exception_text, fix._run_ncatted)
 
     def test_subprocess_called_correctly(self):
         """
@@ -194,6 +230,23 @@ class TestCellMeasuresAreacellaAdd(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a cell_measures,tas,o,c,'area: areacella' "
+            "/a/tas_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsAreaTimeMeanAdd(BaseTest):
+    """ Test CellMethodsAreaTimeMeanAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaTimeMeanAdd
+        """
+        fix = CellMethodsAreaTimeMeanAdd('tas_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,global,o,c,'area: time: mean' "
             "/a/tas_components.nc",
             stderr=subprocess.STDOUT,
             shell=True

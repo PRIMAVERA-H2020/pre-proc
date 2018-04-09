@@ -67,3 +67,16 @@ class ExistingAttributeError(PreProcError):
     def __str__(self):
         return ('Cannot edit attribute {} in file {}. {}'.
                 format(self.attribute, self.filename, self.message))
+
+
+class InstanceVariableNotDefinedError(PreProcError):
+    """
+    When an instance variable has not been defined correctly.
+    """
+    def __init__(self, class_name, attribute_name):
+        self.class_name = class_name
+        self.attribute_name = attribute_name
+
+    def __str__(self):
+        return ('{}: attribute {} is not defined'.
+                format(self.class_name, self.attribute_name))
