@@ -49,7 +49,8 @@ def main():
         'ParentBranchTimeAdd',
         'ChildBranchTimeAdd',
         'FurtherInfoUrlToHttps',
-        'CellMeasuresAreacellaAdd'
+        'CellMeasuresAreacellaAdd',
+        'CellMethodsAreaTimeMeanAdd'
     ]
 
     num_created = 0
