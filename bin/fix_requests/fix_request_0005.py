@@ -93,6 +93,29 @@ def main():
     logger.debug('FileFix {} added to {} data requests.'.
                  format(cell_methods.name, all_reqs.count()))
 
+    # update three attributes on a single variable in
+    # spinup-1950
+
+    phys_index = FileFix.objects.get(name='PhysicsIndexIntFix')
+    branch_time_parent = FileFix.objects.get(name='ParentBranchTimeDoubleFix')
+    branch_time_child = FileFix.objects.get(name='ChildBranchTimeDoubleFix')
+
+    # This next line could be done more quickly by:
+    # further_info_url_fix.datarequest_set.add(*data_reqs)
+    # but sqlite3 gives an error of:
+    # django.db.utils.OperationalError: too many SQL variables
+    for data_req in data_reqs_spinup:
+        data_req.fixes.add(phys_index)
+        data_req.fixes.add(branch_time_parent)
+        data_req.fixes.add(branch_time_child)
+
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(phys_index.name, all_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(branch_time_parent.name, all_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(branch_time_child.name, all_reqs.count()))
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()
