@@ -246,7 +246,7 @@ class TestCellMethodsAreaTimeMeanAdd(BaseTest):
         fix = CellMethodsAreaTimeMeanAdd('tas_components.nc', '/a')
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
-            "ncatted -h -a cell_methods,global,o,c,'area: time: mean' "
+            "ncatted -h -a cell_methods,tas,o,c,'area: time: mean' "
             "/a/tas_components.nc",
             stderr=subprocess.STDOUT,
             shell=True

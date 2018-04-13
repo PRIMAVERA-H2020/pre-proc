@@ -327,7 +327,7 @@ class CellMethodsAreaTimeMeanAdd(AttributeAdd):
         """
         super(CellMethodsAreaTimeMeanAdd, self).__init__(filename, directory)
         self.attribute_name = 'cell_methods'
-        self.attribute_visibility = 'global'
+        self.attribute_visibility = filename.split('_')[0]
         self.attribute_type = 'c'
 
     def _calculate_new_value(self):
