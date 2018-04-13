@@ -13,6 +13,7 @@ django.setup()
 
 from django.template.defaultfilters import pluralize
 
+import pre_proc
 from pre_proc.common import get_concrete_subclasses
 from pre_proc_app.models import FileFix
 
@@ -44,7 +45,10 @@ def main():
     """
     Main entry point
     """
-    file_fixes = [klass.__name__ for klass in get_concrete_subclasses(FileFix)]
+    file_fixes = [
+        klass.__name__
+        for klass in get_concrete_subclasses(pre_proc.file_fix.FileFix)
+    ]
 
     num_created = 0
     added_names = []
