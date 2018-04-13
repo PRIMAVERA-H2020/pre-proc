@@ -18,7 +18,8 @@ from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                ParentBranchTimeAdd,
                                ChildBranchTimeAdd,
                                CellMeasuresAreacellaAdd,
-                               CellMethodsAreaTimeMeanAdd)
+                               CellMethodsAreaTimeMeanAdd,
+                               PhysicsIndexIntFix)
 
 
 class BaseTest(unittest.TestCase):
@@ -111,6 +112,21 @@ class TestParentBranchTimeDoubleFix(BaseTest):
             shell=True
         )
 
+    def test_subprocess_called_correctly_with_trailing_letter(self):
+        """
+        Test that an external call's been made correctly for
+        ParentBranchTimeDoubleFix when there is a trailing letter
+        """
+        self.mock_dataset.return_value.branch_time_in_parent = '0.0D'
+        fix = ParentBranchTimeDoubleFix('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_parent,global,o,d,0.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
 
 class TestChildBranchTimeDoubleFix(BaseTest):
     """ Test ChildBranchTimeDoubleFix """
@@ -141,6 +157,41 @@ class TestChildBranchTimeDoubleFix(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             'ncatted -h -a branch_time_in_child,global,o,d,0.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestPhysicsIndexIntFix(BaseTest):
+    """ Test PhysicsIndexIntFix """
+    def test_no_attribute_raises(self):
+        """ Test if the required attribute isn't found in the netCDF """
+        fix = PhysicsIndexIntFix('1.nc', '/a')
+        exception_text = ('Cannot find attribute physics_index in '
+                          'file 1.nc')
+        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+                                fix.apply_fix)
+
+    def test_wrong_attribute_type_raises(self):
+        """ Test if the required attribute can't be converted """
+        self.mock_dataset.return_value.physics_index = 'pure_text'
+        fix = PhysicsIndexIntFix('1.nc', '/a')
+        exception_text = ('Cannot convert attribute physics_index to '
+                          'new type int in file 1.nc')
+        self.assertRaisesRegexp(AttributeConversionError, exception_text,
+                                fix.apply_fix)
+
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        PhysicsIndexIntFix
+        """
+        self.mock_dataset.return_value.physics_index = '99'
+        fix = PhysicsIndexIntFix('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a physics_index,global,o,s,99 '
             '/a/1.nc',
             stderr=subprocess.STDOUT,
             shell=True

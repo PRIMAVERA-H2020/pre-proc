@@ -5,6 +5,7 @@ The workers that fix the netCDF files
 """
 from abc import ABCMeta, abstractmethod
 import os
+import re
 
 from netCDF4 import Dataset
 
@@ -160,7 +161,7 @@ class ParentBranchTimeDoubleFix(AttributeUpdate):
         The new value is the existing string converted to a double.
         """
         try:
-            self.new_value = float(self.existing_value)
+            self.new_value = _to_float(self.existing_value)
         except ValueError:
             raise AttributeConversionError(self.filename, self.attribute_name,
                                            'float')
@@ -187,10 +188,37 @@ class ChildBranchTimeDoubleFix(AttributeUpdate):
         The new value is the existing string converted to a double.
         """
         try:
-            self.new_value = float(self.existing_value)
+            self.new_value = _to_float(self.existing_value)
         except ValueError:
             raise AttributeConversionError(self.filename, self.attribute_name,
                                            'float')
+
+
+class PhysicsIndexIntFix(AttributeUpdate):
+    """
+    Make the global attribute `physics_index` an int.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(PhysicsIndexIntFix, self).__init__(filename, directory)
+        self.attribute_name = 'physics_index'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 's'
+
+    def _calculate_new_value(self):
+        """
+        The new value is the existing string converted to a double.
+        """
+        try:
+            self.new_value = _to_int(self.existing_value)
+        except ValueError:
+            raise AttributeConversionError(self.filename, self.attribute_name,
+                                           'int')
 
 
 class FurtherInfoUrlToHttps(AttributeUpdate):
@@ -335,3 +363,39 @@ class CellMethodsAreaTimeMeanAdd(AttributeAdd):
         The new value is zero.
         """
         self.new_value = 'area: time: mean'
+
+
+def _to_float(string_value):
+    """
+    Convert a string starting with a float to a float and return this.
+
+    :param str string_value: The string to convert.
+    :returns: The float from the start of the string.
+    :rtype: float
+    :raises ValueError: if a float cannot be found.
+    """
+    float_regexp = r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?'
+    try:
+        float_component = re.match(float_regexp, string_value).group(0)
+    except AttributeError:
+        raise ValueError('Cannot find float in {}'.format(string_value))
+
+    return float(float_component)
+
+
+def _to_int(string_value):
+    """
+    Convert a string starting with an int to an int and return this.
+
+    :param str string_value: The string to convert.
+    :returns: The int from the start of the string.
+    :rtype: int
+    :raises ValueError: if an int cannot be found.
+    """
+    int_regexp = r'[+-]?(\d+)'
+    try:
+        int_component = re.match(int_regexp, string_value).group(0)
+    except AttributeError:
+        raise ValueError('Cannot find int in {}'.format(string_value))
+
+    return int(int_component)

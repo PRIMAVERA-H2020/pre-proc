@@ -8,6 +8,7 @@ import unittest
 
 from pre_proc.common import get_concrete_subclasses
 
+
 class AbstractParent(object):
     """ Test parent abstract class """
     __metaclass__ = ABCMeta
