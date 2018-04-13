@@ -13,6 +13,7 @@ django.setup()
 
 from django.template.defaultfilters import pluralize
 
+from pre_proc.common import get_concrete_subclasses
 from pre_proc_app.models import FileFix
 
 
@@ -43,25 +44,21 @@ def main():
     """
     Main entry point
     """
-    file_fixes = [
-        'ParentBranchTimeDoubleFix',
-        'ChildBranchTimeDoubleFix',
-        'ParentBranchTimeAdd',
-        'ChildBranchTimeAdd',
-        'FurtherInfoUrlToHttps',
-        'CellMeasuresAreacellaAdd',
-        'CellMethodsAreaTimeMeanAdd'
-    ]
+    file_fixes = [klass.__name__ for klass in get_concrete_subclasses(FileFix)]
 
     num_created = 0
-    for file_fix in file_fixes:
-        inst, created = FileFix.objects.get_or_create(name=file_fix)
+    added_names = []
+    for file_fix_name in file_fixes:
+        inst, created = FileFix.objects.get_or_create(name=file_fix_name)
         if created:
             num_created += 1
+            added_names.append(file_fix_name)
 
     logger.debug('Added {} new FileFix object{}.'.format(num_created,
                                                          pluralize(
                                                              num_created)))
+    if num_created:
+        logger.debug('Added: {}'.format(', '.join(added_names)))
 
 
 if __name__ == "__main__":

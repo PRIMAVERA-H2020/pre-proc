@@ -5,7 +5,7 @@ Custom exceptions for the pre-proc module
 """
 __all__ = ['PreProcError', 'CannotLoadSourceFileError',
            'AttributeNotFoundError', 'AttributeConversionError',
-           'ExistingAttributeError']
+           'ExistingAttributeError', 'InstanceVariableNotDefinedError']
 
 
 class PreProcError(Exception):

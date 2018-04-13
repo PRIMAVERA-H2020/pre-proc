@@ -3,6 +3,7 @@ common.py
 
 Library code used by many functions.
 """
+import inspect
 import logging.config
 import os
 import subprocess
@@ -50,3 +51,25 @@ def ilist_files(directory, suffix='.nc'):
                 yield ifile
         elif file_path.endswith(suffix):
             yield file_path
+
+
+def get_concrete_subclasses(parent_object):
+    """
+    Return a list of the all the concrete (non-abstract) subclasses of
+    `parent_object`. It recursively works its way to the bottom
+    of the class hierarchy.
+
+    :param object parent_object: The parent object
+    :return: List of objects found
+    :rtype: list
+    """
+    if not parent_object.__subclasses__:
+        return []
+    sub_classes = []
+    for sub_class in parent_object.__subclasses__():
+        if inspect.isabstract(sub_class):
+            sub_classes.extend(get_concrete_subclasses(sub_class))
+        else:
+            sub_classes.append(sub_class)
+
+    return sub_classes
