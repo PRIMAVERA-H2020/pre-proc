@@ -77,7 +77,7 @@ class DataRequest(models.Model):
                                       on_delete=models.CASCADE)
 
     table_id = models.CharField(max_length=50, null=False, blank=False,
-                                verbose_name='CMOR variable name')
+                                verbose_name='Table name')
     cmor_name = models.CharField(max_length=50, null=False, blank=False,
                                  verbose_name='CMOR variable name')
 
