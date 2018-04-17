@@ -26,7 +26,8 @@ from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                RealizationIndexIntFix,
                                SeaWaterSalinityStandardNameAdd,
                                CellMethodsSeaAreaTimeMeanAdd,
-                               CellMeasuresAreacelloVolcelloAdd)
+                               CellMeasuresAreacelloVolcelloAdd,
+                               VarUnitsToThousandths)
 
 
 class BaseTest(unittest.TestCase):
@@ -489,6 +490,23 @@ class TestSeaWaterSalinityStandardNameAdd(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a standard_name,so,o,c,'sea_water_salinity' "
+            "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVarUnitsToThousandths(BaseTest):
+    """ Test VarUnitsToThousandths """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VarUnitsToThousandths.
+        """
+        fix = VarUnitsToThousandths('so_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a units,so,o,c,'0.001' "
             "/a/so_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
