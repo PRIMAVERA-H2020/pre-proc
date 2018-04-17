@@ -331,6 +331,53 @@ class FurtherInfoUrlToHttps(AttributeUpdate):
         self.new_value = self.existing_value.replace('http:', 'https:', 1)
 
 
+class FurtherInfoUrlAWISourceIdAndHttps(AttributeUpdate):
+    """
+    Change the protocol in the further_info_url attribute from HTTP to
+    HTTPS.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(FurtherInfoUrlAWISourceIdAndHttps, self).__init__(filename,
+                                                                directory)
+        self.attribute_name = 'further_info_url'
+        self.source_id = None
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        The new value is the existing string converted to a double.
+        """
+        if not self.existing_value.startswith('http:'):
+            raise ExistingAttributeError(self.filename, self.attribute_name,
+                                         'Existing further_info_url attribute '
+                                         'does not start with http:')
+
+        self.new_value = self.existing_value.replace('http:', 'https:', 1)
+        self.new_value = self.new_value.replace('AWI-CM-1-0', self.source_id)
+
+    def _get_existing_value(self):
+        """
+        Get the value of the existing attribute from the current file
+        """
+        filepath = os.path.join(self.directory, self.filename)
+        with Dataset(filepath) as rootgrp:
+            self.existing_value = getattr(rootgrp, self.attribute_name, None)
+            self.source_id = getattr(rootgrp, 'source_id', None)
+
+        if self.existing_value is None:
+            raise AttributeNotFoundError(self.filename, self.attribute_name)
+
+        if self.source_id is None:
+            raise AttributeNotFoundError(self.filename, 'source_id')
+
+
 class CopyAttribute(AttributeEdit):
     """
     An abstract base class for fixes that require the use of `ncatted` to

@@ -27,7 +27,8 @@ from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                SeaWaterSalinityStandardNameAdd,
                                CellMethodsSeaAreaTimeMeanAdd,
                                CellMeasuresAreacelloVolcelloAdd,
-                               VarUnitsToThousandths)
+                               VarUnitsToThousandths,
+                               FurtherInfoUrlAWISourceIdAndHttps)
 
 
 class BaseTest(unittest.TestCase):
@@ -349,6 +350,62 @@ class TestFurtherInfoUrlToHttps(BaseTest):
         )
 
 
+class TestFurtherInfoUrlAWISourceIdAndHttps(BaseTest):
+    """ Test FurtherInfoUrlAWISourceIdAndHttps """
+    def test_no_further_info_raises(self):
+        """ Test whether missing further_info_url handled """
+        self.mock_dataset.return_value.source_id = 'AWI-CM-1-0-LR'
+        fix = FurtherInfoUrlAWISourceIdAndHttps('1.nc', '/a')
+        exception_text = ('Cannot find attribute further_info_url in file '
+                          '1.nc')
+        self.assertRaisesRegexp(AttributeNotFoundError,
+                                exception_text, fix._get_existing_value)
+
+    def test_no_source_id_raises(self):
+        """ Test whether missing source_id handled """
+        self.mock_dataset.return_value.further_info_url = (
+            'http://furtherinfo.es-doc.org/CMIP6.AWI.AWI-CM-1-0.hist-1950.'
+            'none.r1i1p1f002'
+        )
+        fix = FurtherInfoUrlAWISourceIdAndHttps('1.nc', '/a')
+        exception_text = ('Cannot find attribute source_id in file '
+                          '1.nc')
+        self.assertRaisesRegexp(AttributeNotFoundError,
+                                exception_text, fix._get_existing_value)
+
+    def test_wrong_existing_value_raises(self):
+        """ Test whether invalid existing_value handled """
+        self.mock_dataset.return_value.further_info_url = 'apples'
+        self.mock_dataset.return_value.source_id = 'pairs'
+        fix = FurtherInfoUrlAWISourceIdAndHttps('1.nc', '/a')
+        exception_text = ('Cannot edit attribute further_info_url in file '
+                          '1.nc. Existing further_info_url attribute '
+                          'does not start with http:')
+        fix._get_existing_value()
+        self.assertRaisesRegexp(ExistingAttributeError,
+                                exception_text, fix._calculate_new_value)
+
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        FurtherInfoUrlAWISourceIdAndHttps
+        """
+        self.mock_dataset.return_value.source_id = 'AWI-CM-1-0-LR'
+        self.mock_dataset.return_value.further_info_url = (
+            'http://furtherinfo.es-doc.org/CMIP6.AWI.AWI-CM-1-0.hist-1950.'
+            'none.r1i1p1f002'
+        )
+        fix = FurtherInfoUrlAWISourceIdAndHttps('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a further_info_url,global,o,c,"
+            "'https://furtherinfo.es-doc.org/CMIP6.AWI.AWI-CM-1-0-LR."
+            "hist-1950.none.r1i1p1f002' /a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestParentSourceIdFromSourceId(BaseTest):
     """ Test ParentSourceIdFromSourceId """
     def test_no_attribute_raises(self):
@@ -362,7 +419,7 @@ class TestParentSourceIdFromSourceId(BaseTest):
     def test_subprocess_called_correctly(self):
         """
         Test that an external call's been made correctly for
-        FurtherInfoUrlToHttps
+        ParentSourceIdFromSourceId
         """
         self.mock_dataset.return_value.source_id = 'some-model'
         self.mock_dataset.return_value.parent_source_id = 'a-model'
