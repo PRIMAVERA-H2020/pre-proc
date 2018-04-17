@@ -47,17 +47,19 @@ def main():
         institution_id__name='AWI',
     )
 
-    further_info_https = FileFix.objects.get(name='FurtherInfoUrlToHttps')
+    further_info = FileFix.objects.get(
+        name='FurtherInfoUrlAWISourceIdAndHttps'
+    )
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(further_info_https)
+        data_req.fixes.add(further_info)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(further_info_https.name, data_reqs.count()))
+                 format(further_info.name, data_reqs.count()))
 
     # update cell_methods on day/sfcWind in
     # three experiments
@@ -77,6 +79,9 @@ def main():
     f_fix = FileFix.objects.get(name='ForcingIndexIntFix')
     parent_source_id = FileFix.objects.get(name='ParentSourceIdFromSourceId')
     salinity = FileFix.objects.get(name='SeaWaterSalinityStandardNameAdd')
+    cell_methdods = FileFix.objects.get(name='CellMethodsSeaAreaTimeMeanAdd')
+    cell_measures = FileFix.objects.get(name='CellMeasuresAreacelloVolcelloAdd')
+    var_units = FileFix.objects.get(name='VarUnitsToThousandths')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
@@ -91,6 +96,9 @@ def main():
         data_req.fixes.add(f_fix)
         data_req.fixes.add(parent_source_id)
         data_req.fixes.add(salinity)
+        data_req.fixes.add(cell_methdods)
+        data_req.fixes.add(cell_measures)
+        data_req.fixes.add(var_units)
 
     logger.debug('FileFix {} added to {} data requests.'.
                  format(parent_branch_time.name, data_reqs_so.count()))
@@ -108,6 +116,12 @@ def main():
                  format(parent_source_id.name, data_reqs_so.count()))
     logger.debug('FileFix {} added to {} data requests.'.
                  format(salinity.name, data_reqs_so.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(cell_methdods.name, data_reqs_so.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(cell_measures.name, data_reqs_so.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(var_units.name, data_reqs_so.count()))
 
 
 if __name__ == "__main__":
