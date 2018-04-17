@@ -3,7 +3,8 @@
 fix_request_0005.py
 
 Convert the further_info_url attribute on all EC-Earth data from HTTP to HTTPS.
-Add a few other fixes to EC-Earth Amon/tas data for the current tests.
+Add a few other fixes to EC-Earth Amon/tas and day/sfcWind data for the current
+tests.
 """
 import argparse
 import logging.config
@@ -115,6 +116,28 @@ def main():
                  format(branch_time_parent.name, all_reqs.count()))
     logger.debug('FileFix {} added to {} data requests.'.
                  format(branch_time_child.name, all_reqs.count()))
+
+    # update cell_methods on day/sfcWind in
+    # three experiments
+
+    data_reqs_sfcWind = DataRequest.objects.filter(
+        institution_id__name='EC-Earth-Consortium',
+        experiment_id__name='highresSST-present',
+        table_id='day',
+        cmor_name='sfcWind'
+    )
+
+    cell_methods = FileFix.objects.get(name='CellMethodsAreaTimeMeanAdd')
+
+    # This next line could be done more quickly by:
+    # further_info_url_fix.datarequest_set.add(*data_reqs)
+    # but sqlite3 gives an error of:
+    # django.db.utils.OperationalError: too many SQL variables
+    for data_req in data_reqs_sfcWind:
+        data_req.fixes.add(cell_methods)
+
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(cell_methods.name, all_reqs.count()))
 
 
 if __name__ == "__main__":
