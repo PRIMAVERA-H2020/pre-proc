@@ -474,9 +474,34 @@ class CellMeasuresAreacellaAdd(AttributeAdd):
         self.new_value = 'area: areacella'
 
 
+class CellMeasuresAreacelloVolcelloAdd(AttributeAdd):
+    """
+    Add a variable attribute `cellmeasures` with a value of
+    `area: areacello volume: volcello`
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(CellMeasuresAreacelloVolcelloAdd, self).__init__(filename,
+                                                               directory)
+        self.attribute_name = 'cell_measures'
+        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        The new value is zero.
+        """
+        self.new_value = 'area: areacello volume: volcello'
+
+
 class CellMethodsAreaTimeMeanAdd(AttributeAdd):
     """
-    Add a variable attribute `cellmethods` with a value of `area: areacella`.
+    Add a variable attribute `cellmethods` with a value of `area: time: mean`.
     This is done in overwrite mode and so will work irrespective of whether
     there is an existing cellmethods attribute.
     """
@@ -499,6 +524,32 @@ class CellMethodsAreaTimeMeanAdd(AttributeAdd):
         self.new_value = 'area: time: mean'
 
 
+class CellMethodsSeaAreaTimeMeanAdd(AttributeAdd):
+    """
+    Add a variable attribute `cellmethods` with a value of
+    `area: mean where sea time: mean`. This is done in overwrite mode
+    and so will work irrespective of whether there is an existing
+    cellmethods attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(CellMethodsSeaAreaTimeMeanAdd, self).__init__(filename, directory)
+        self.attribute_name = 'cell_methods'
+        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        The new value is zero.
+        """
+        self.new_value = 'area: mean where sea time: mean'
+
+
 class SeaWaterSalinityStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
@@ -512,7 +563,8 @@ class SeaWaterSalinityStandardNameAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(SeaWaterSalinityStandardNameAdd, self).__init__(filename, directory)
+        super(SeaWaterSalinityStandardNameAdd, self).__init__(filename,
+                                                              directory)
         self.attribute_name = 'standard_name'
         self.attribute_visibility = filename.split('_')[0]
         self.attribute_type = 'c'

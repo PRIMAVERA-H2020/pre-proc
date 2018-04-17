@@ -24,7 +24,9 @@ from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                ForcingIndexIntFix,
                                PhysicsIndexIntFix,
                                RealizationIndexIntFix,
-                               SeaWaterSalinityStandardNameAdd)
+                               SeaWaterSalinityStandardNameAdd,
+                               CellMethodsSeaAreaTimeMeanAdd,
+                               CellMeasuresAreacelloVolcelloAdd)
 
 
 class BaseTest(unittest.TestCase):
@@ -423,6 +425,24 @@ class TestCellMeasuresAreacellaAdd(BaseTest):
         )
 
 
+class TestCellMeasuresAreacelloVolcelloAdd(BaseTest):
+    """ Test CellMeasuresAreacelloVolcelloAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMeasuresAreacelloVolcelloAdd
+        """
+        fix = CellMeasuresAreacelloVolcelloAdd('so_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_measures,so,o,c,"
+            "'area: areacello volume: volcello' "
+            "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestCellMethodsAreaTimeMeanAdd(BaseTest):
     """ Test CellMethodsAreaTimeMeanAdd """
     def test_subprocess_called_correctly(self):
@@ -435,6 +455,24 @@ class TestCellMethodsAreaTimeMeanAdd(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a cell_methods,tas,o,c,'area: time: mean' "
             "/a/tas_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsSeaAreaTimeMeanAdd(BaseTest):
+    """ Test CellMethodsSeaAreaTimeMeanAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsSeaAreaTimeMeanAdd
+        """
+        fix = CellMethodsSeaAreaTimeMeanAdd('so_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,so,o,c,"
+            "'area: mean where sea time: mean' "
+            "/a/so_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
