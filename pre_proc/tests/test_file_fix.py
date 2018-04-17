@@ -19,7 +19,10 @@ from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                ChildBranchTimeAdd,
                                CellMeasuresAreacellaAdd,
                                CellMethodsAreaTimeMeanAdd,
-                               PhysicsIndexIntFix)
+                               InitializationIndexIntFix,
+                               ForcingIndexIntFix,
+                               PhysicsIndexIntFix,
+                               RealizationIndexIntFix)
 
 
 class BaseTest(unittest.TestCase):
@@ -163,6 +166,76 @@ class TestChildBranchTimeDoubleFix(BaseTest):
         )
 
 
+class TestInitializationIndexIntFix(BaseTest):
+    """ Test InitializationIndexIntFix """
+    def test_no_attribute_raises(self):
+        """ Test if the required attribute isn't found in the netCDF """
+        fix = InitializationIndexIntFix('1.nc', '/a')
+        exception_text = ('Cannot find attribute initialization_index in '
+                          'file 1.nc')
+        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+                                fix.apply_fix)
+
+    def test_wrong_attribute_type_raises(self):
+        """ Test if the required attribute can't be converted """
+        self.mock_dataset.return_value.initialization_index = 'pure_text'
+        fix = InitializationIndexIntFix('1.nc', '/a')
+        exception_text = ('Cannot convert attribute initialization_index to '
+                          'new type int in file 1.nc')
+        self.assertRaisesRegexp(AttributeConversionError, exception_text,
+                                fix.apply_fix)
+
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        InitializationIndexIntFix
+        """
+        self.mock_dataset.return_value.initialization_index = '99'
+        fix = InitializationIndexIntFix('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a initialization_index,global,o,s,99 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestForcingIndexIntFix(BaseTest):
+    """ Test ForcingIndexIntFix """
+    def test_no_attribute_raises(self):
+        """ Test if the required attribute isn't found in the netCDF """
+        fix = ForcingIndexIntFix('1.nc', '/a')
+        exception_text = ('Cannot find attribute forcing_index in '
+                          'file 1.nc')
+        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+                                fix.apply_fix)
+
+    def test_wrong_attribute_type_raises(self):
+        """ Test if the required attribute can't be converted """
+        self.mock_dataset.return_value.forcing_index = 'pure_text'
+        fix = ForcingIndexIntFix('1.nc', '/a')
+        exception_text = ('Cannot convert attribute forcing_index to '
+                          'new type int in file 1.nc')
+        self.assertRaisesRegexp(AttributeConversionError, exception_text,
+                                fix.apply_fix)
+
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ForcingIndexIntFix
+        """
+        self.mock_dataset.return_value.forcing_index = '99'
+        fix = ForcingIndexIntFix('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a forcing_index,global,o,s,99 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestPhysicsIndexIntFix(BaseTest):
     """ Test PhysicsIndexIntFix """
     def test_no_attribute_raises(self):
@@ -192,6 +265,41 @@ class TestPhysicsIndexIntFix(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             'ncatted -h -a physics_index,global,o,s,99 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestRealizationIndexIntFix(BaseTest):
+    """ Test RealizationIndexIntFix """
+    def test_no_attribute_raises(self):
+        """ Test if the required attribute isn't found in the netCDF """
+        fix = RealizationIndexIntFix('1.nc', '/a')
+        exception_text = ('Cannot find attribute realization_index in '
+                          'file 1.nc')
+        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+                                fix.apply_fix)
+
+    def test_wrong_attribute_type_raises(self):
+        """ Test if the required attribute can't be converted """
+        self.mock_dataset.return_value.realization_index = 'pure_text'
+        fix = RealizationIndexIntFix('1.nc', '/a')
+        exception_text = ('Cannot convert attribute realization_index to '
+                          'new type int in file 1.nc')
+        self.assertRaisesRegexp(AttributeConversionError, exception_text,
+                                fix.apply_fix)
+
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        RealizationIndexIntFix
+        """
+        self.mock_dataset.return_value.realization_index = '99'
+        fix = RealizationIndexIntFix('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a realization_index,global,o,s,99 '
             '/a/1.nc',
             stderr=subprocess.STDOUT,
             shell=True

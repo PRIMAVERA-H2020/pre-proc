@@ -194,6 +194,60 @@ class ChildBranchTimeDoubleFix(AttributeUpdate):
                                            'float')
 
 
+class ForcingIndexIntFix(AttributeUpdate):
+    """
+    Make the global attribute `forcing_index` an int.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(ForcingIndexIntFix, self).__init__(filename, directory)
+        self.attribute_name = 'forcing_index'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 's'
+
+    def _calculate_new_value(self):
+        """
+        The new value is the existing string converted to a double.
+        """
+        try:
+            self.new_value = _to_int(self.existing_value)
+        except ValueError:
+            raise AttributeConversionError(self.filename, self.attribute_name,
+                                           'int')
+
+
+class InitializationIndexIntFix(AttributeUpdate):
+    """
+    Make the global attribute `initialization_index` an int.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(InitializationIndexIntFix, self).__init__(filename, directory)
+        self.attribute_name = 'initialization_index'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 's'
+
+    def _calculate_new_value(self):
+        """
+        The new value is the existing string converted to a double.
+        """
+        try:
+            self.new_value = _to_int(self.existing_value)
+        except ValueError:
+            raise AttributeConversionError(self.filename, self.attribute_name,
+                                           'int')
+
+
 class PhysicsIndexIntFix(AttributeUpdate):
     """
     Make the global attribute `physics_index` an int.
@@ -207,6 +261,33 @@ class PhysicsIndexIntFix(AttributeUpdate):
         """
         super(PhysicsIndexIntFix, self).__init__(filename, directory)
         self.attribute_name = 'physics_index'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 's'
+
+    def _calculate_new_value(self):
+        """
+        The new value is the existing string converted to a double.
+        """
+        try:
+            self.new_value = _to_int(self.existing_value)
+        except ValueError:
+            raise AttributeConversionError(self.filename, self.attribute_name,
+                                           'int')
+
+
+class RealizationIndexIntFix(AttributeUpdate):
+    """
+    Make the global attribute `realization_index` an int.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(RealizationIndexIntFix, self).__init__(filename, directory)
+        self.attribute_name = 'realization_index'
         self.attribute_visibility = 'global'
         self.attribute_type = 's'
 
