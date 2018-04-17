@@ -23,7 +23,8 @@ from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                InitializationIndexIntFix,
                                ForcingIndexIntFix,
                                PhysicsIndexIntFix,
-                               RealizationIndexIntFix)
+                               RealizationIndexIntFix,
+                               SeaWaterSalinityStandardNameAdd)
 
 
 class BaseTest(unittest.TestCase):
@@ -434,6 +435,23 @@ class TestCellMethodsAreaTimeMeanAdd(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a cell_methods,tas,o,c,'area: time: mean' "
             "/a/tas_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSeaWaterSalinityStandardNameAdd(BaseTest):
+    """ Test SeaWaterSalinityStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SeaWaterSalinityStandardNameAdd
+        """
+        fix = SeaWaterSalinityStandardNameAdd('so_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,so,o,c,'sea_water_salinity' "
+            "/a/so_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

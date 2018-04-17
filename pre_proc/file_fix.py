@@ -499,6 +499,31 @@ class CellMethodsAreaTimeMeanAdd(AttributeAdd):
         self.new_value = 'area: time: mean'
 
 
+class SeaWaterSalinityStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `sea_water_salinity`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(SeaWaterSalinityStandardNameAdd, self).__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        The new value is zero.
+        """
+        self.new_value = 'sea_water_salinity'
+
+
 def _to_float(string_value):
     """
     Convert a string starting with a float to a float and return this.
