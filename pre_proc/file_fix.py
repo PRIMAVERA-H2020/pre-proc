@@ -331,10 +331,63 @@ class FurtherInfoUrlToHttps(AttributeUpdate):
         self.new_value = self.existing_value.replace('http:', 'https:', 1)
 
 
+class CopyAttribute(AttributeEdit):
+    """
+    An abstract base class for fixes that require the use of `ncatted` to
+    copy a metadata value from one attribute to another.
+    """
+    __metaclass__ = ABCMeta
+
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super(CopyAttribute, self).__init__(filename, directory)
+
+        # The name of the attribute to copy
+        self.source_attribute = None
+
+    def apply_fix(self):
+        """
+        Fix the specified attribute on the file
+        """
+        self._calculate_new_value()
+        self._run_ncatted()
+
+    def _calculate_new_value(self):
+        """
+        Get the value of the existing attribute from the current file
+        """
+        filepath = os.path.join(self.directory, self.filename)
+        with Dataset(filepath) as rootgrp:
+            self.new_value = getattr(rootgrp, self.source_attribute, None)
+
+        if self.new_value is None:
+            raise AttributeNotFoundError(self.filename, self.source_attribute)
+
+
+class ParentSourceIdFromSourceId(CopyAttribute):
+    """
+    Replace the parent_source_id attribute value with the source_id value.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(ParentSourceIdFromSourceId, self).__init__(filename, directory)
+        self.source_attribute = 'source_id'
+        self.attribute_name = 'parent_source_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+
 class AttributeAdd(AttributeEdit):
     """
     An abstract base class for fixes that require the use of `ncatted` to
-    fix a metadata attribute.
+    add a new metadata attribute.
     """
     __metaclass__ = ABCMeta
 

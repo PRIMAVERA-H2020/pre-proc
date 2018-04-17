@@ -15,6 +15,7 @@ from pre_proc.exceptions import (AttributeNotFoundError,
 from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                ChildBranchTimeDoubleFix,
                                FurtherInfoUrlToHttps,
+                               ParentSourceIdFromSourceId,
                                ParentBranchTimeAdd,
                                ChildBranchTimeAdd,
                                CellMeasuresAreacellaAdd,
@@ -339,6 +340,32 @@ class TestFurtherInfoUrlToHttps(BaseTest):
             "ncatted -h -a further_info_url,global,o,c,"
             "'https://furtherinfo.es-doc.org/part1.part2' "
             "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestParentSourceIdFromSourceId(BaseTest):
+    """ Test ParentSourceIdFromSourceId """
+    def test_no_attribute_raises(self):
+        """ Test if the required attribute isn't found in the netCDF """
+        fix = ParentSourceIdFromSourceId('1.nc', '/a')
+        exception_text = ('Cannot find attribute source_id in '
+                          'file 1.nc')
+        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+                                fix.apply_fix)
+
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        FurtherInfoUrlToHttps
+        """
+        self.mock_dataset.return_value.source_id = 'some-model'
+        self.mock_dataset.return_value.parent_source_id = 'a-model'
+        fix = ParentSourceIdFromSourceId('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a parent_source_id,global,o,c,'some-model' /a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
