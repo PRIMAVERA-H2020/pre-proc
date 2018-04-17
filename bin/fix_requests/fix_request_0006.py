@@ -1,10 +1,10 @@
 #!/usr/bin/env python2.7
 """
-fix_request_0005.py
+fix_request_0006.py
 
-Convert the further_info_url attribute on all EC-Earth data from HTTP to HTTPS.
-Add a few other fixes to EC-Earth Amon/tas and day/sfcWind data for the current
-tests.
+Fix some AWI data. Convert the further_info_url attribute on all AWI data
+from HTTP to HTTPS.
+Fix additional items for variable Omon/so.
 """
 import argparse
 import logging.config
@@ -44,7 +44,7 @@ def main():
     Main entry point
     """
     data_reqs = DataRequest.objects.filter(
-        institution_id__name='EC-Earth-Consortium',
+        institution_id__name='AWI',
     )
 
     further_info_https = FileFix.objects.get(name='FurtherInfoUrlToHttps')
@@ -59,85 +59,55 @@ def main():
     logger.debug('FileFix {} added to {} data requests.'.
                  format(further_info_https.name, data_reqs.count()))
 
-    # update cell_methods and cell_measures on a single variable in
-    # three experiments
-
-    data_reqs_amip = DataRequest.objects.filter(
-        institution_id__name='EC-Earth-Consortium',
-        experiment_id__name='highresSST-present',
-        table_id='Amon',
-        cmor_name='tas'
-    )
-    data_reqs_spinup = DataRequest.objects.filter(
-        institution_id__name='EC-Earth-Consortium',
-        experiment_id__name='spinup-1950',
-        source_id__name='EC-Earth3-HR',
-        table_id='Amon',
-        cmor_name='tas'
-    )
-
-    all_reqs = data_reqs_amip.union(data_reqs_spinup)
-
-    cell_measures = FileFix.objects.get(name='CellMeasuresAreacellaAdd')
-    cell_methods = FileFix.objects.get(name='CellMethodsAreaTimeMeanAdd')
-
-    # This next line could be done more quickly by:
-    # further_info_url_fix.datarequest_set.add(*data_reqs)
-    # but sqlite3 gives an error of:
-    # django.db.utils.OperationalError: too many SQL variables
-    for data_req in all_reqs:
-        data_req.fixes.add(cell_measures)
-        data_req.fixes.add(cell_methods)
-
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(cell_measures.name, all_reqs.count()))
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(cell_methods.name, all_reqs.count()))
-
-    # update three attributes on a single variable in
-    # spinup-1950
-
-    phys_index = FileFix.objects.get(name='PhysicsIndexIntFix')
-    branch_time_parent = FileFix.objects.get(name='ParentBranchTimeDoubleFix')
-    branch_time_child = FileFix.objects.get(name='ChildBranchTimeDoubleFix')
-
-    # This next line could be done more quickly by:
-    # further_info_url_fix.datarequest_set.add(*data_reqs)
-    # but sqlite3 gives an error of:
-    # django.db.utils.OperationalError: too many SQL variables
-    for data_req in data_reqs_spinup:
-        data_req.fixes.add(phys_index)
-        data_req.fixes.add(branch_time_parent)
-        data_req.fixes.add(branch_time_child)
-
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(phys_index.name, all_reqs.count()))
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(branch_time_parent.name, all_reqs.count()))
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(branch_time_child.name, all_reqs.count()))
-
     # update cell_methods on day/sfcWind in
     # three experiments
 
-    data_reqs_sfcWind = DataRequest.objects.filter(
-        institution_id__name='EC-Earth-Consortium',
-        experiment_id__name='highresSST-present',
-        table_id='day',
-        cmor_name='sfcWind'
+    data_reqs_so = DataRequest.objects.filter(
+        institution_id__name='AWI',
+        experiment_id__name__in=['spinup-1950', 'hist-1950', 'control-1950'],
+        table_id='Omon',
+        cmor_name='so'
     )
 
-    cell_methods = FileFix.objects.get(name='CellMethodsAreaTimeMeanAdd')
+    parent_branch_time = FileFix.objects.get(name='ParentBranchTimeDoubleFix')
+    child_branch_time = FileFix.objects.get(name='ChildBranchTimeDoubleFix')
+    r_fix = FileFix.objects.get(name='RealizationIndexIntFix')
+    i_fix = FileFix.objects.get(name='InitializationIndexIntFix')
+    p_fix = FileFix.objects.get(name='PhysicsIndexIntFix')
+    f_fix = FileFix.objects.get(name='ForcingIndexIntFix')
+    parent_source_id = FileFix.objects.get(name='ParentSourceIdFromSourceId')
+    salinity = FileFix.objects.get(name='SeaWaterSalinityStandardNameAdd')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
-    for data_req in data_reqs_sfcWind:
-        data_req.fixes.add(cell_methods)
+    for data_req in data_reqs_so:
+        data_req.fixes.add(parent_branch_time)
+        data_req.fixes.add(child_branch_time)
+        data_req.fixes.add(r_fix)
+        data_req.fixes.add(i_fix)
+        data_req.fixes.add(p_fix)
+        data_req.fixes.add(f_fix)
+        data_req.fixes.add(parent_source_id)
+        data_req.fixes.add(salinity)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(cell_methods.name, all_reqs.count()))
+                 format(parent_branch_time.name, data_reqs_so.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(child_branch_time.name, data_reqs_so.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(r_fix.name, data_reqs_so.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(i_fix.name, data_reqs_so.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(p_fix.name, data_reqs_so.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(f_fix.name, data_reqs_so.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(parent_source_id.name, data_reqs_so.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(salinity.name, data_reqs_so.count()))
 
 
 if __name__ == "__main__":
