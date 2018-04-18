@@ -439,9 +439,9 @@ class TestFillValueFromMissingValue(BaseTest):
     """ Test FillValueFromMissingValue """
     def test_no_attribute_raises(self):
         """ Test if the required attribute isn't found in the netCDF """
-        fix = FillValueFromMissingValue('1.nc', '/a')
-        exception_text = ('Cannot find attribute missing_value in '
-                          'file 1.nc')
+        fix = FillValueFromMissingValue('tos_blah.nc', '/a')
+        exception_text = ('Cannot find attribute tos.missing_value in '
+                          'file tos_blah.nc')
         self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
                                 fix.apply_fix)
 
@@ -450,7 +450,9 @@ class TestFillValueFromMissingValue(BaseTest):
         Test that an external call's been made correctly for
         FillValueFromMissingValue
         """
-        self.mock_dataset.return_value.missing_value = 1e-7
+        class MissingValue(object):
+            missing_value = 1e-7
+        self.mock_dataset.return_value.variables = {'tos': MissingValue()}
         fix = FillValueFromMissingValue('tos_gubbins.nc', '/a')
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(

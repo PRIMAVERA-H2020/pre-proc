@@ -31,6 +31,7 @@ class FileFix(object):
         """
         self.filename = filename
         self.directory = directory
+        self.variable_name = self.filename.split('_')[0]
 
     @abstractmethod
     def apply_fix(self):
@@ -402,6 +403,28 @@ class CopyAttribute(AttributeEdit):
         self._calculate_new_value()
         self._run_ncatted()
 
+    @abstractmethod
+    def _calculate_new_value(self):
+        """
+        Get the value of the existing attribute from the current file
+        """
+        raise NotImplementedError()
+
+
+class CopyGlobalAttribute(CopyAttribute):
+    """
+    An abstract base class for fixes that require the use of `ncatted` to
+    copy a metadata value from one attribute to another.
+    """
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super(CopyGlobalAttribute, self).__init__(filename, directory)
+
     def _calculate_new_value(self):
         """
         Get the value of the existing attribute from the current file
@@ -414,7 +437,7 @@ class CopyAttribute(AttributeEdit):
             raise AttributeNotFoundError(self.filename, self.source_attribute)
 
 
-class ParentSourceIdFromSourceId(CopyAttribute):
+class ParentSourceIdFromSourceId(CopyGlobalAttribute):
     """
     Replace the parent_source_id attribute value with the source_id value.
     """
@@ -432,7 +455,44 @@ class ParentSourceIdFromSourceId(CopyAttribute):
         self.attribute_type = 'c'
 
 
-class FillValueFromMissingValue(CopyAttribute):
+class CopyVariableAttribute(CopyAttribute):
+    """
+    An abstract base class for fixes that require the use of `ncatted` to
+    copy a metadata value from one attribute to another.
+    """
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super(CopyVariableAttribute, self).__init__(filename, directory)
+
+    def _calculate_new_value(self):
+        """
+        Get the value of the existing attribute from the current file
+        """
+        def raise_error():
+            """ Raise AttributeNotFoundError """
+            raise AttributeNotFoundError(
+                self.filename,
+                '{}.{}'.format(self.variable_name, self.source_attribute)
+            )
+        filepath = os.path.join(self.directory, self.filename)
+        with Dataset(filepath) as rootgrp:
+            netcdf_vars = getattr(rootgrp, 'variables', None)
+            if netcdf_vars is None:
+                raise_error()
+            if self.variable_name not in netcdf_vars:
+                raise_error()
+            self.new_value = getattr(netcdf_vars[self.variable_name],
+                                     self.source_attribute, None)
+        if self.new_value is None:
+            raise_error()
+
+
+class FillValueFromMissingValue(CopyVariableAttribute):
     """
     Replace the _FillValue attribute value with the missing_value value.
     """
@@ -446,7 +506,7 @@ class FillValueFromMissingValue(CopyAttribute):
         super(FillValueFromMissingValue, self).__init__(filename, directory)
         self.source_attribute = 'missing_value'
         self.attribute_name = '_FillValue'
-        self.attribute_visibility = self.filename.split('_')[0]
+        self.attribute_visibility = self.variable_name
         self.attribute_type = 'f'
 
 
@@ -530,7 +590,7 @@ class CellMeasuresAreacellaAdd(AttributeAdd):
         """
         super(CellMeasuresAreacellaAdd, self).__init__(filename, directory)
         self.attribute_name = 'cell_measures'
-        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
 
     def _calculate_new_value(self):
@@ -553,7 +613,7 @@ class CellMeasuresAreacelloAdd(AttributeAdd):
         """
         super(CellMeasuresAreacelloAdd, self).__init__(filename, directory)
         self.attribute_name = 'cell_measures'
-        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
 
     def _calculate_new_value(self):
@@ -578,7 +638,7 @@ class CellMeasuresAreacelloVolcelloAdd(AttributeAdd):
         super(CellMeasuresAreacelloVolcelloAdd, self).__init__(filename,
                                                                directory)
         self.attribute_name = 'cell_measures'
-        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
 
     def _calculate_new_value(self):
@@ -603,7 +663,7 @@ class CellMethodsAreaTimeMeanAdd(AttributeAdd):
         """
         super(CellMethodsAreaTimeMeanAdd, self).__init__(filename, directory)
         self.attribute_name = 'cell_methods'
-        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
 
     def _calculate_new_value(self):
@@ -629,7 +689,7 @@ class CellMethodsSeaAreaTimeMeanAdd(AttributeAdd):
         """
         super(CellMethodsSeaAreaTimeMeanAdd, self).__init__(filename, directory)
         self.attribute_name = 'cell_methods'
-        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
 
     def _calculate_new_value(self):
@@ -655,7 +715,7 @@ class SeaWaterSalinityStandardNameAdd(AttributeAdd):
         super(SeaWaterSalinityStandardNameAdd, self).__init__(filename,
                                                               directory)
         self.attribute_name = 'standard_name'
-        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
 
     def _calculate_new_value(self):
@@ -680,7 +740,7 @@ class SeaSurfaceTemperatureNameAdd(AttributeAdd):
         """
         super(SeaSurfaceTemperatureNameAdd, self).__init__(filename, directory)
         self.attribute_name = 'standard_name'
-        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
 
     def _calculate_new_value(self):
@@ -705,7 +765,7 @@ class VarUnitsToThousandths(AttributeAdd):
         """
         super(VarUnitsToThousandths, self).__init__(filename, directory)
         self.attribute_name = 'units'
-        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
 
     def _calculate_new_value(self):
