@@ -28,7 +28,10 @@ from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                CellMethodsSeaAreaTimeMeanAdd,
                                CellMeasuresAreacelloVolcelloAdd,
                                VarUnitsToThousandths,
-                               FurtherInfoUrlAWISourceIdAndHttps)
+                               FurtherInfoUrlAWISourceIdAndHttps,
+                               SeaSurfaceTemperatureNameAdd,
+                               FillValueFromMissingValue,
+                               CellMeasuresAreacelloAdd)
 
 
 class BaseTest(unittest.TestCase):
@@ -432,6 +435,31 @@ class TestParentSourceIdFromSourceId(BaseTest):
         )
 
 
+class TestFillValueFromMissingValue(BaseTest):
+    """ Test FillValueFromMissingValue """
+    def test_no_attribute_raises(self):
+        """ Test if the required attribute isn't found in the netCDF """
+        fix = FillValueFromMissingValue('1.nc', '/a')
+        exception_text = ('Cannot find attribute missing_value in '
+                          'file 1.nc')
+        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+                                fix.apply_fix)
+
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        FillValueFromMissingValue
+        """
+        self.mock_dataset.return_value.missing_value = 1e-7
+        fix = FillValueFromMissingValue('tos_gubbins.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a _FillValue,tos,o,f,1e-07 /a/tos_gubbins.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestParentBranchTimeAdd(BaseTest):
     """ Test ParentBranchTimeAdd """
     def test_subprocess_called_correctly(self):
@@ -478,6 +506,23 @@ class TestCellMeasuresAreacellaAdd(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a cell_measures,tas,o,c,'area: areacella' "
             "/a/tas_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMeasuresAreacelloAdd(BaseTest):
+    """ Test CellMeasuresAreacelloAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMeasuresAreacelloAdd
+        """
+        fix = CellMeasuresAreacelloAdd('tos_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_measures,tos,o,c,'area: areacello' "
+            "/a/tos_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
@@ -548,6 +593,23 @@ class TestSeaWaterSalinityStandardNameAdd(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a standard_name,so,o,c,'sea_water_salinity' "
             "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSeaSurfaceTemperatureNameAdd(BaseTest):
+    """ Test SeaSurfaceTemperatureNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SeaSurfaceTemperatureNameAdd
+        """
+        fix = SeaSurfaceTemperatureNameAdd('tos_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,tos,o,c,'sea_surface_temperature' "
+            "/a/tos_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

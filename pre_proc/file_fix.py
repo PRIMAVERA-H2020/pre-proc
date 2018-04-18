@@ -432,6 +432,24 @@ class ParentSourceIdFromSourceId(CopyAttribute):
         self.attribute_type = 'c'
 
 
+class FillValueFromMissingValue(CopyAttribute):
+    """
+    Replace the _FillValue attribute value with the missing_value value.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(FillValueFromMissingValue, self).__init__(filename, directory)
+        self.source_attribute = 'missing_value'
+        self.attribute_name = '_FillValue'
+        self.attribute_visibility = self.filename.split('_')[0]
+        self.attribute_type = 'f'
+
+
 class AttributeAdd(AttributeEdit):
     """
     An abstract base class for fixes that require the use of `ncatted` to
@@ -520,6 +538,29 @@ class CellMeasuresAreacellaAdd(AttributeAdd):
         The new value is zero.
         """
         self.new_value = 'area: areacella'
+
+
+class CellMeasuresAreacelloAdd(AttributeAdd):
+    """
+    Add a variable attribute `cellmeasures` with a value of `area: areacello`
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(CellMeasuresAreacelloAdd, self).__init__(filename, directory)
+        self.attribute_name = 'cell_measures'
+        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        The new value is zero.
+        """
+        self.new_value = 'area: areacello'
 
 
 class CellMeasuresAreacelloVolcelloAdd(AttributeAdd):
@@ -622,6 +663,31 @@ class SeaWaterSalinityStandardNameAdd(AttributeAdd):
         The new value is zero.
         """
         self.new_value = 'sea_water_salinity'
+
+
+class SeaSurfaceTemperatureNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `sea_surface_temperature`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(SeaSurfaceTemperatureNameAdd, self).__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = filename.split('_')[0]
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        The new value is zero.
+        """
+        self.new_value = 'sea_surface_temperature'
 
 
 class VarUnitsToThousandths(AttributeAdd):
