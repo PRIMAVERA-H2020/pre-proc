@@ -385,6 +385,7 @@ class CopyAttribute(AttributeEdit):
     """
     __metaclass__ = ABCMeta
 
+    @abstractmethod
     def __init__(self, filename, directory):
         """
         Initialise the class
