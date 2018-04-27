@@ -577,6 +577,55 @@ class ChildBranchTimeAdd(AttributeAdd):
         self.new_value = 0.0
 
 
+class BranchMethodAdd(AttributeAdd):
+    """
+    Add a global attribute `branch_method` with a value of 'no_parent'.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(BranchMethodAdd, self).__init__(filename, directory)
+        self.attribute_name = 'branch_method'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        The new value is zero.
+        """
+        self.new_value = 'no parent'
+
+
+class DataSpecsVersionAdd(AttributeAdd):
+    """
+    Add a global attribute `data_specs_version` with a value of '01.00.23'.
+
+    This will probably already exist but the parent abstract class uses
+    overwrite and so this should be fine.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(DataSpecsVersionAdd, self).__init__(filename, directory)
+        self.attribute_name = 'data_specs_version'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        The new value is zero.
+        """
+        self.new_value = '01.00.23'
+
+
 class CellMeasuresAreacellaAdd(AttributeAdd):
     """
     Add a variable attribute `cellmeasures` with a value of `area: areacella`

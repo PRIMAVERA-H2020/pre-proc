@@ -18,6 +18,8 @@ from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                ParentSourceIdFromSourceId,
                                ParentBranchTimeAdd,
                                ChildBranchTimeAdd,
+                               BranchMethodAdd,
+                               DataSpecsVersionAdd,
                                CellMeasuresAreacellaAdd,
                                CellMethodsAreaTimeMeanAdd,
                                InitializationIndexIntFix,
@@ -491,6 +493,40 @@ class TestChildBranchTimeAdd(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             'ncatted -h -a branch_time_in_child,global,o,d,0.0 '
             '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestBranchMethodAdd(BaseTest):
+    """ Test BranchMethodAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTimeAdd
+        """
+        fix = BranchMethodAdd('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a branch_method,global,o,c,'no parent' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestDataSpecsVersionAdd(BaseTest):
+    """ Test DataSpecsVersion """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTimeAdd
+        """
+        fix = DataSpecsVersionAdd('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a data_specs_version,global,o,c,'01.00.23' "
+            "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
