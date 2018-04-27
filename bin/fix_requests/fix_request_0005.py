@@ -3,6 +3,8 @@
 fix_request_0005.py
 
 Convert the further_info_url attribute on all EC-Earth data from HTTP to HTTPS.
+Also, update branch_method and data_specs_version.
+
 Add a few other fixes to EC-Earth Amon/tas and day/sfcWind data for the current
 tests.
 """
@@ -48,6 +50,8 @@ def main():
     )
 
     further_info_https = FileFix.objects.get(name='FurtherInfoUrlToHttps')
+    branch_method = FileFix.objects.get(name='BranchMethodAdd')
+    data_specs = FileFix.objects.get(name='DataSpecsVersionAdd')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
@@ -55,9 +59,15 @@ def main():
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
         data_req.fixes.add(further_info_https)
+        data_req.fixes.add(branch_method)
+        data_req.fixes.add(data_specs)
 
     logger.debug('FileFix {} added to {} data requests.'.
                  format(further_info_https.name, data_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(branch_method.name, data_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(data_specs.name, data_reqs.count()))
 
     # update cell_methods and cell_measures on a single variable in
     # three experiments

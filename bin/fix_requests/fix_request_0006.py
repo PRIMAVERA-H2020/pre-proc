@@ -3,7 +3,7 @@
 fix_request_0006.py
 
 Fix some AWI data. Convert the further_info_url attribute on all AWI data
-from HTTP to HTTPS.
+from HTTP to HTTPS and update the data_specs_version.
 Fix additional items for variable Omon/so and Omon/tos.
 """
 import argparse
@@ -50,6 +50,7 @@ def main():
     further_info = FileFix.objects.get(
         name='FurtherInfoUrlAWISourceIdAndHttps'
     )
+    data_specs = FileFix.objects.get(name='DataSpecsVersionAdd')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
@@ -57,9 +58,12 @@ def main():
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
         data_req.fixes.add(further_info)
+        data_req.fixes.add(data_specs)
 
     logger.debug('FileFix {} added to {} data requests.'.
                  format(further_info.name, data_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(data_specs.name, data_reqs.count()))
 
     # update cell_methods on day/sfcWind in
     # three experiments

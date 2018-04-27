@@ -41,13 +41,11 @@ def main():
     """
     Main entry point
     """
-    data_reqs = DataRequest.objects.filter(
-        institution_id__name='CMCC',
-    )
+    data_reqs = DataRequest.objects.filter(institution_id__name='CMCC')
 
-    further_info = FileFix.objects.get(
-        name='FurtherInfoUrlToHttps'
-    )
+    further_info = FileFix.objects.get(name='FurtherInfoUrlToHttps')
+    branch_method = FileFix.objects.get(name='BranchMethodAdd')
+    data_specs = FileFix.objects.get(name='DataSpecsVersionAdd')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
@@ -55,9 +53,15 @@ def main():
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
         data_req.fixes.add(further_info)
+        data_req.fixes.add(branch_method)
+        data_req.fixes.add(data_specs)
 
     logger.debug('FileFix {} added to {} data requests.'.
                  format(further_info.name, data_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(branch_method.name, data_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(data_specs.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
