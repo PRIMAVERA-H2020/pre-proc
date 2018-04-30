@@ -12,7 +12,8 @@ import sys
 import tempfile
 
 from pre_proc import EsgfSubmission
-from pre_proc.common import ilist_files
+from pre_proc.common import list_files
+from pre_proc.exceptions import PreProcError
 
 __version__ = '0.1.0b1'
 
@@ -82,9 +83,10 @@ def parse_args():
     parser.add_argument('output_directory', help='the directory to write '
                                                  'files to', type=str)
     parser.add_argument('-l', '--log-level', help='set logging level to one '
-        'of debug, info, warn (the default), or error')
+                                                  'of debug, info, warn (the '
+                                                  'default), or error')
     parser.add_argument('--version', action='version',
-        version='%(prog)s {}'.format(__version__))
+                        version='%(prog)s {}'.format(__version__))
     args = parser.parse_args()
 
     return args
@@ -100,15 +102,26 @@ def main(args):
     temp_dir = create_temp_dir()
     logger.debug('Temporary directory is {}'.format(temp_dir))
 
-    for filepath in ilist_files(args.input_directory):
+    for filepath in sorted(list_files(args.input_directory)):
         logger.debug('Processing {}'.format(filepath))
         working_file = copy_file_to_temp_dir(filepath, temp_dir)
-        esgf_submission = EsgfSubmission.from_file(working_file)
-        esgf_submission.determine_fixes()
-        esgf_submission.run_fixes()
+        try:
+            esgf_submission = EsgfSubmission.from_file(working_file)
+            esgf_submission.determine_fixes()
+            esgf_submission.run_fixes()
+            esgf_submission.update_history()
+        except RuntimeError:
+            logger.error('Processing file {} failed'.format(filepath))
+            sys.exit(1)
+        except PreProcError as exc:
+            logger.warning(exc)
+            logger.error('Processing file {} failed'.format(filepath))
+            sys.exit(1)
+
         move_file_to_output_dir(working_file, args.output_directory)
 
     remove_temp_dir(temp_dir)
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()

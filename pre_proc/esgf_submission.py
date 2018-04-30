@@ -3,13 +3,22 @@ esgf_sumbission.py
 
 The basic class that forms an ESGF submission.
 """
+import datetime
+import logging
 import os
 
+from netCDF4 import Dataset
+
 import django
+
 django.setup()
 
 import pre_proc
+from pre_proc.common import run_command
 from pre_proc_app.models import DataRequest
+
+
+logger = logging.getLogger(__name__)
 
 
 class EsgfSubmission(object):
@@ -61,7 +70,7 @@ class EsgfSubmission(object):
         this ESGF dataset and add them to the list.
         """
         self.fixes = [getattr(pre_proc.file_fix, fix_name.name)(self.filename,
-                                                       self.directory)
+                                                                self.directory)
                       for fix_name in self._get_data_request().fixes.all()]
 
     def run_fixes(self):
@@ -71,12 +80,32 @@ class EsgfSubmission(object):
         for fix in self.fixes:
             fix.apply_fix()
 
+    def update_history(self):
+        """
+        Add the fixes run to the history attribute.
+        """
+        fix_names = [fix.__class__.__name__ for fix in self.fixes]
+        fix_names.sort()
+        filepath = os.path.join(self.directory, self.filename)
+
+        time_now = datetime.datetime.utcnow().replace(microsecond=0)
+        filefix_history = '{}Z {}'.format(time_now.isoformat(),
+                                          ', '.join(fix_names))
+
+        existing_history = _get_attribute(filepath, 'history')
+        if existing_history:
+            new_history = '{}; {}'.format(existing_history, filefix_history)
+        else:
+            new_history = filefix_history
+
+        _set_attribute(filepath, 'history', new_history)
+
     def _get_data_request(self):
         """
         Return the DataRequest object from the database that corresponds to
         this ESGF submission.
 
-        :returns: the data request object corresponding to this submission.
+        :returns: the data request object corresponding to this submission
         :rtype: pre_proc_app.models.DataRequest
         """
         return DataRequest.objects.get(
@@ -85,3 +114,39 @@ class EsgfSubmission(object):
             table_id=self.table_id,
             cmor_name=self.cmor_name
         )
+
+
+def _get_attribute(filepath, attr_name):
+    """
+    Return the specified global attribute value from the specified file.
+
+    :param str filepath: The name of the netCDF file to load
+    :param str attr_name: The name of the attribute to get
+    :returns: The value of the specified attribute, None is it doesn't exist
+    :rtype: str
+    :raises RunTimeError: if unable to open the file
+    """
+    try:
+        with Dataset(filepath) as rootgrp:
+            attr_value = getattr(rootgrp, attr_name, None)
+    except IOError:
+        msg = 'Unable to open file {}'.format(filepath)
+        logger.warning(msg)
+        raise RuntimeError(msg)
+
+    return attr_value
+
+
+def _set_attribute(filepath, attr_name, attr_value):
+    """
+    Overwrite the specified global attribute value on the specified netCDF
+    file.
+
+    :param str filepath: The name of the netCDF file to update
+    :param str attr_name: The name of the attribute to set
+    :param str attr_value: The new value of the specified attribute
+    :raises RunTimeError: if ncatted doesn't complete successfully
+    """
+    cmd = "ncatted -h -a {},global,o,c,'{}' {}".format(attr_name, attr_value,
+                                                       filepath)
+    run_command(cmd)
