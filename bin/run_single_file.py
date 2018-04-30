@@ -10,6 +10,7 @@ import os
 import sys
 
 from pre_proc import EsgfSubmission
+from pre_proc.exceptions import PreProcError
 
 __version__ = '0.1.0b1'
 
@@ -43,9 +44,18 @@ def main(args):
     logger.debug('Database directory is {}'.
                  format(os.environ['DATABASE_DIR']))
 
-    esgf_submission = EsgfSubmission.from_file(args.file_path)
-    esgf_submission.determine_fixes()
-    esgf_submission.run_fixes()
+    try:
+        esgf_submission = EsgfSubmission.from_file(args.file_path)
+        esgf_submission.determine_fixes()
+        esgf_submission.run_fixes()
+        esgf_submission.update_history()
+    except RuntimeError:
+        logger.error('File processing failed')
+        sys.exit(1)
+    except PreProcError as exc:
+        logger.warning(exc)
+        logger.error('File processing failed')
+        sys.exit(1)
 
 if __name__ == "__main__":
     cmd_args = parse_args()
