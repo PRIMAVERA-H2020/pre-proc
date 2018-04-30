@@ -3,7 +3,7 @@
 fix_request_0001.py
 
 Convert the further_info_url attribute on all Met Office data from HTTP to
-HTTPS.
+HTTPS. Update data_specs_version to 01.00.23.
 """
 import argparse
 import logging.config
@@ -47,6 +47,7 @@ def main():
     )
 
     further_info_url_fix = FileFix.objects.get(name='FurtherInfoUrlToHttps')
+    data_specs = FileFix.objects.get(name='DataSpecsVersionAdd')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
@@ -54,9 +55,12 @@ def main():
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
         data_req.fixes.add(further_info_url_fix)
+        data_req.fixes.add(data_specs)
 
     logger.debug('FileFix {} added to {} data requests.'.
                  format(further_info_url_fix.name, data_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(data_specs.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
