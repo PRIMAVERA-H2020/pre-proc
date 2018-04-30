@@ -12,7 +12,7 @@ import sys
 import tempfile
 
 from pre_proc import EsgfSubmission
-from pre_proc.common import ilist_files
+from pre_proc.common import list_files
 from pre_proc.exceptions import PreProcError
 
 __version__ = '0.1.0b1'
@@ -102,7 +102,7 @@ def main(args):
     temp_dir = create_temp_dir()
     logger.debug('Temporary directory is {}'.format(temp_dir))
 
-    for filepath in ilist_files(args.input_directory):
+    for filepath in sorted(list_files(args.input_directory)):
         logger.debug('Processing {}'.format(filepath))
         working_file = copy_file_to_temp_dir(filepath, temp_dir)
         try:
