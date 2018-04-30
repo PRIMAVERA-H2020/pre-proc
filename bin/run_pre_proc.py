@@ -83,9 +83,10 @@ def parse_args():
     parser.add_argument('output_directory', help='the directory to write '
                                                  'files to', type=str)
     parser.add_argument('-l', '--log-level', help='set logging level to one '
-        'of debug, info, warn (the default), or error')
+                                                  'of debug, info, warn (the '
+                                                  'default), or error')
     parser.add_argument('--version', action='version',
-        version='%(prog)s {}'.format(__version__))
+                        version='%(prog)s {}'.format(__version__))
     args = parser.parse_args()
 
     return args
@@ -120,6 +121,7 @@ def main(args):
         move_file_to_output_dir(working_file, args.output_directory)
 
     remove_temp_dir(temp_dir)
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()

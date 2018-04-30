@@ -29,9 +29,10 @@ def parse_args():
     parser.add_argument('file_path', help='the full path of the file to '
                                           'process', type=str)
     parser.add_argument('-l', '--log-level', help='set logging level to one '
-        'of debug, info, warn (the default), or error')
+                                                  'of debug, info, warn (the '
+                                                  'default), or error')
     parser.add_argument('--version', action='version',
-        version='%(prog)s {}'.format(__version__))
+                        version='%(prog)s {}'.format(__version__))
     args = parser.parse_args()
 
     return args
@@ -56,6 +57,7 @@ def main(args):
         logger.warning(exc)
         logger.error('File processing failed')
         sys.exit(1)
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()
