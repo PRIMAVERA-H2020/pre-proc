@@ -3,7 +3,7 @@
 fix_request_0004.py
 
 Convert the branch_time_in_parent and branch_time_in_child attributes on all
-Met Office hist-1950 and control-1950 data from string to double.
+MOHC and NERC hist-1950 and control-1950 data from string to double.
 """
 import argparse
 import logging.config
@@ -43,7 +43,7 @@ def main():
     Main entry point
     """
     coupled = DataRequest.objects.filter(
-        institution_id__name='MOHC',
+        institution_id__name__in=['MOHC', 'NERC'],
         experiment_id__name__in=['hist-1950', 'control-1950']
     )
 
@@ -63,21 +63,6 @@ def main():
 
     logger.debug('FileFix {} added to {} data requests.'.
                  format(branch_time_child.name, coupled.count()))
-
-    spinup = DataRequest.objects.filter(
-        institution_id__name='MOHC',
-        experiment_id__name='spinup-1950'
-    )
-
-    for data_req in spinup:
-        data_req.fixes.remove(branch_time_child)
-        data_req.fixes.remove(branch_time_parent)
-
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(branch_time_parent.name, spinup.count()))
-
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(branch_time_child.name, spinup.count()))
 
 
 if __name__ == "__main__":
