@@ -2,8 +2,8 @@
 """
 fix_request_0001.py
 
-Convert the further_info_url attribute on all Met Office data from HTTP to
-HTTPS.
+Convert the further_info_url attribute on all MOHC and NERC data from HTTP to
+HTTPS. Update data_specs_version to 01.00.23.
 """
 import argparse
 import logging.config
@@ -43,7 +43,7 @@ def main():
     Main entry point
     """
     data_reqs = DataRequest.objects.filter(
-        institution_id__name='MOHC'
+        institution_id__name__in=['MOHC', 'NERC']
     )
 
     further_info_url_fix = FileFix.objects.get(name='FurtherInfoUrlToHttps')
