@@ -10,6 +10,7 @@ import os
 import sys
 
 from pre_proc import EsgfSubmission
+from pre_proc.exceptions import PreProcError
 
 __version__ = '0.1.0b1'
 
@@ -28,9 +29,10 @@ def parse_args():
     parser.add_argument('file_path', help='the full path of the file to '
                                           'process', type=str)
     parser.add_argument('-l', '--log-level', help='set logging level to one '
-        'of debug, info, warn (the default), or error')
+                                                  'of debug, info, warn (the '
+                                                  'default), or error')
     parser.add_argument('--version', action='version',
-        version='%(prog)s {}'.format(__version__))
+                        version='%(prog)s {}'.format(__version__))
     args = parser.parse_args()
 
     return args
@@ -43,9 +45,19 @@ def main(args):
     logger.debug('Database directory is {}'.
                  format(os.environ['DATABASE_DIR']))
 
-    esgf_submission = EsgfSubmission.from_file(args.file_path)
-    esgf_submission.determine_fixes()
-    esgf_submission.run_fixes()
+    try:
+        esgf_submission = EsgfSubmission.from_file(args.file_path)
+        esgf_submission.determine_fixes()
+        esgf_submission.run_fixes()
+        esgf_submission.update_history()
+    except RuntimeError:
+        logger.error('File processing failed')
+        sys.exit(1)
+    except PreProcError as exc:
+        logger.warning(exc)
+        logger.error('File processing failed')
+        sys.exit(1)
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()
