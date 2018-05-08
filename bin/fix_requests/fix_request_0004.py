@@ -3,7 +3,7 @@
 fix_request_0004.py
 
 Convert the branch_time_in_parent and branch_time_in_child attributes on all
-Met Office coupled data from string to double.
+Met Office hist-1950 and control-1950 data from string to double.
 """
 import argparse
 import logging.config
@@ -42,9 +42,9 @@ def main():
     """
     Main entry point
     """
-    data_reqs = DataRequest.objects.filter(
+    coupled = DataRequest.objects.filter(
         institution_id__name='MOHC',
-        experiment_id__name__in=['hist-1950', 'control-1950', 'spinup-1950']
+        experiment_id__name__in=['hist-1950', 'control-1950']
     )
 
     branch_time_parent = FileFix.objects.get(name='ParentBranchTimeDoubleFix')
@@ -54,15 +54,30 @@ def main():
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
-    for data_req in data_reqs:
+    for data_req in coupled:
         data_req.fixes.add(branch_time_parent)
         data_req.fixes.add(branch_time_child)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(branch_time_parent.name, data_reqs.count()))
+                 format(branch_time_parent.name, coupled.count()))
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(branch_time_child.name, data_reqs.count()))
+                 format(branch_time_child.name, coupled.count()))
+
+    spinup = DataRequest.objects.filter(
+        institution_id__name='MOHC',
+        experiment_id__name='spinup-1950'
+    )
+
+    for data_req in spinup:
+        data_req.fixes.remove(branch_time_child)
+        data_req.fixes.remove(branch_time_parent)
+
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(branch_time_parent.name, spinup.count()))
+
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(branch_time_child.name, spinup.count()))
 
 
 if __name__ == "__main__":
