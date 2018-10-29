@@ -65,7 +65,7 @@ class TestParentBranchTimeDoubleFix(BaseTest):
         fix = ParentBranchTimeDoubleFix('1.nc', '/a')
         exception_text = ('Cannot find attribute branch_time_in_parent in '
                           'file 1.nc')
-        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+        self.assertRaisesRegex(AttributeNotFoundError, exception_text,
                                 fix.apply_fix)
 
     def test_wrong_attribute_type_raises(self):
@@ -74,7 +74,7 @@ class TestParentBranchTimeDoubleFix(BaseTest):
         fix = ParentBranchTimeDoubleFix('1.nc', '/a')
         exception_text = ('Cannot convert attribute branch_time_in_parent to '
                           'new type float in file 1.nc')
-        self.assertRaisesRegexp(AttributeConversionError, exception_text,
+        self.assertRaisesRegex(AttributeConversionError, exception_text,
                                 fix.apply_fix)
 
     def test_no_attribute_name_raises(self):
@@ -86,7 +86,7 @@ class TestParentBranchTimeDoubleFix(BaseTest):
         fix._get_existing_value()
         fix._calculate_new_value()
         fix.attribute_name = None
-        self.assertRaisesRegexp(InstanceVariableNotDefinedError,
+        self.assertRaisesRegex(InstanceVariableNotDefinedError,
                                 exception_text, fix._run_ncatted)
 
     def test_no_visibility_raises(self):
@@ -96,7 +96,7 @@ class TestParentBranchTimeDoubleFix(BaseTest):
         fix.attribute_visibility = None
         exception_text = ('ParentBranchTimeDoubleFix: attribute '
                           'attribute_visibility is not defined')
-        self.assertRaisesRegexp(InstanceVariableNotDefinedError,
+        self.assertRaisesRegex(InstanceVariableNotDefinedError,
                                 exception_text, fix.apply_fix)
 
     def test_no_new_value_raises(self):
@@ -108,7 +108,7 @@ class TestParentBranchTimeDoubleFix(BaseTest):
         fix._get_existing_value()
         fix._calculate_new_value()
         fix.new_value = None
-        self.assertRaisesRegexp(InstanceVariableNotDefinedError,
+        self.assertRaisesRegex(InstanceVariableNotDefinedError,
                                 exception_text, fix._run_ncatted)
 
     def test_subprocess_called_correctly(self):
@@ -149,7 +149,7 @@ class TestChildBranchTimeDoubleFix(BaseTest):
         fix = ChildBranchTimeDoubleFix('1.nc', '/a')
         exception_text = ('Cannot find attribute branch_time_in_child in '
                           'file 1.nc')
-        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+        self.assertRaisesRegex(AttributeNotFoundError, exception_text,
                                 fix.apply_fix)
 
     def test_wrong_attribute_type_raises(self):
@@ -158,7 +158,7 @@ class TestChildBranchTimeDoubleFix(BaseTest):
         fix = ChildBranchTimeDoubleFix('1.nc', '/a')
         exception_text = ('Cannot convert attribute branch_time_in_child to '
                           'new type float in file 1.nc')
-        self.assertRaisesRegexp(AttributeConversionError, exception_text,
+        self.assertRaisesRegex(AttributeConversionError, exception_text,
                                 fix.apply_fix)
 
     def test_subprocess_called_correctly(self):
@@ -184,7 +184,7 @@ class TestInitializationIndexIntFix(BaseTest):
         fix = InitializationIndexIntFix('1.nc', '/a')
         exception_text = ('Cannot find attribute initialization_index in '
                           'file 1.nc')
-        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+        self.assertRaisesRegex(AttributeNotFoundError, exception_text,
                                 fix.apply_fix)
 
     def test_wrong_attribute_type_raises(self):
@@ -193,7 +193,7 @@ class TestInitializationIndexIntFix(BaseTest):
         fix = InitializationIndexIntFix('1.nc', '/a')
         exception_text = ('Cannot convert attribute initialization_index to '
                           'new type int in file 1.nc')
-        self.assertRaisesRegexp(AttributeConversionError, exception_text,
+        self.assertRaisesRegex(AttributeConversionError, exception_text,
                                 fix.apply_fix)
 
     def test_subprocess_called_correctly(self):
@@ -219,7 +219,7 @@ class TestForcingIndexIntFix(BaseTest):
         fix = ForcingIndexIntFix('1.nc', '/a')
         exception_text = ('Cannot find attribute forcing_index in '
                           'file 1.nc')
-        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+        self.assertRaisesRegex(AttributeNotFoundError, exception_text,
                                 fix.apply_fix)
 
     def test_wrong_attribute_type_raises(self):
@@ -228,7 +228,7 @@ class TestForcingIndexIntFix(BaseTest):
         fix = ForcingIndexIntFix('1.nc', '/a')
         exception_text = ('Cannot convert attribute forcing_index to '
                           'new type int in file 1.nc')
-        self.assertRaisesRegexp(AttributeConversionError, exception_text,
+        self.assertRaisesRegex(AttributeConversionError, exception_text,
                                 fix.apply_fix)
 
     def test_subprocess_called_correctly(self):
@@ -254,7 +254,7 @@ class TestPhysicsIndexIntFix(BaseTest):
         fix = PhysicsIndexIntFix('1.nc', '/a')
         exception_text = ('Cannot find attribute physics_index in '
                           'file 1.nc')
-        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+        self.assertRaisesRegex(AttributeNotFoundError, exception_text,
                                 fix.apply_fix)
 
     def test_wrong_attribute_type_raises(self):
@@ -263,7 +263,7 @@ class TestPhysicsIndexIntFix(BaseTest):
         fix = PhysicsIndexIntFix('1.nc', '/a')
         exception_text = ('Cannot convert attribute physics_index to '
                           'new type int in file 1.nc')
-        self.assertRaisesRegexp(AttributeConversionError, exception_text,
+        self.assertRaisesRegex(AttributeConversionError, exception_text,
                                 fix.apply_fix)
 
     def test_subprocess_called_correctly(self):
@@ -289,7 +289,7 @@ class TestRealizationIndexIntFix(BaseTest):
         fix = RealizationIndexIntFix('1.nc', '/a')
         exception_text = ('Cannot find attribute realization_index in '
                           'file 1.nc')
-        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+        self.assertRaisesRegex(AttributeNotFoundError, exception_text,
                                 fix.apply_fix)
 
     def test_wrong_attribute_type_raises(self):
@@ -298,7 +298,7 @@ class TestRealizationIndexIntFix(BaseTest):
         fix = RealizationIndexIntFix('1.nc', '/a')
         exception_text = ('Cannot convert attribute realization_index to '
                           'new type int in file 1.nc')
-        self.assertRaisesRegexp(AttributeConversionError, exception_text,
+        self.assertRaisesRegex(AttributeConversionError, exception_text,
                                 fix.apply_fix)
 
     def test_subprocess_called_correctly(self):
@@ -324,7 +324,7 @@ class TestFurtherInfoUrlToHttps(BaseTest):
         fix = FurtherInfoUrlToHttps('1.nc', '/a')
         exception_text = ('Cannot find attribute further_info_url in '
                           'file 1.nc')
-        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+        self.assertRaisesRegex(AttributeNotFoundError, exception_text,
                                 fix.apply_fix)
 
     def test_not_http(self):
@@ -333,7 +333,7 @@ class TestFurtherInfoUrlToHttps(BaseTest):
         fix = FurtherInfoUrlToHttps('1.nc', '/a')
         exception_text = ('Existing further_info_url attribute does not start '
                           'with http:')
-        self.assertRaisesRegexp(ExistingAttributeError, exception_text,
+        self.assertRaisesRegex(ExistingAttributeError, exception_text,
                                 fix.apply_fix)
 
     def test_subprocess_called_correctly_further_info_url(self):
@@ -363,7 +363,7 @@ class TestFurtherInfoUrlAWISourceIdAndHttps(BaseTest):
         fix = FurtherInfoUrlAWISourceIdAndHttps('1.nc', '/a')
         exception_text = ('Cannot find attribute further_info_url in file '
                           '1.nc')
-        self.assertRaisesRegexp(AttributeNotFoundError,
+        self.assertRaisesRegex(AttributeNotFoundError,
                                 exception_text, fix._get_existing_value)
 
     def test_no_source_id_raises(self):
@@ -375,7 +375,7 @@ class TestFurtherInfoUrlAWISourceIdAndHttps(BaseTest):
         fix = FurtherInfoUrlAWISourceIdAndHttps('1.nc', '/a')
         exception_text = ('Cannot find attribute source_id in file '
                           '1.nc')
-        self.assertRaisesRegexp(AttributeNotFoundError,
+        self.assertRaisesRegex(AttributeNotFoundError,
                                 exception_text, fix._get_existing_value)
 
     def test_wrong_existing_value_raises(self):
@@ -387,7 +387,7 @@ class TestFurtherInfoUrlAWISourceIdAndHttps(BaseTest):
                           '1.nc. Existing further_info_url attribute '
                           'does not start with http:')
         fix._get_existing_value()
-        self.assertRaisesRegexp(ExistingAttributeError,
+        self.assertRaisesRegex(ExistingAttributeError,
                                 exception_text, fix._calculate_new_value)
 
     def test_subprocess_called_correctly(self):
@@ -418,7 +418,7 @@ class TestParentSourceIdFromSourceId(BaseTest):
         fix = ParentSourceIdFromSourceId('1.nc', '/a')
         exception_text = ('Cannot find attribute source_id in '
                           'file 1.nc')
-        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+        self.assertRaisesRegex(AttributeNotFoundError, exception_text,
                                 fix.apply_fix)
 
     def test_subprocess_called_correctly(self):
@@ -444,7 +444,7 @@ class TestFillValueFromMissingValue(BaseTest):
         fix = FillValueFromMissingValue('tos_blah.nc', '/a')
         exception_text = ('Cannot find attribute tos.missing_value in '
                           'file tos_blah.nc')
-        self.assertRaisesRegexp(AttributeNotFoundError, exception_text,
+        self.assertRaisesRegex(AttributeNotFoundError, exception_text,
                                 fix.apply_fix)
 
     def test_subprocess_called_correctly(self):

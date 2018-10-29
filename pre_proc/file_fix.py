@@ -16,11 +16,10 @@ from pre_proc.exceptions import (AttributeNotFoundError,
                                  InstanceVariableNotDefinedError)
 
 
-class FileFix(object):
+class FileFix(object, metaclass=ABCMeta):
     """
     The abstract base class that all fixes are made from
     """
-    __metaclass__ = ABCMeta
 
     def __init__(self, filename, directory):
         """
@@ -38,12 +37,11 @@ class FileFix(object):
         pass
 
 
-class AttributeEdit(FileFix):
+class AttributeEdit(FileFix, metaclass=ABCMeta):
     """
     An abstract base class for fixes that require the use of `ncatted` to
     fix a metadata attribute.
     """
-    __metaclass__ = ABCMeta
 
     def __init__(self, filename, directory):
         """
@@ -105,12 +103,11 @@ class AttributeEdit(FileFix):
         run_command(cmd)
 
 
-class AttributeUpdate(AttributeEdit):
+class AttributeUpdate(AttributeEdit, metaclass=ABCMeta):
     """
     An abstract base class for fixes that require the use of `ncatted` to
     fix a metadata attribute.
     """
-    __metaclass__ = ABCMeta
 
     def __init__(self, filename, directory):
         """
@@ -379,12 +376,11 @@ class FurtherInfoUrlAWISourceIdAndHttps(AttributeUpdate):
             raise AttributeNotFoundError(self.filename, 'source_id')
 
 
-class CopyAttribute(AttributeEdit):
+class CopyAttribute(AttributeEdit, metaclass=ABCMeta):
     """
     An abstract base class for fixes that require the use of `ncatted` to
     copy a metadata value from one attribute to another.
     """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def __init__(self, filename, directory):
@@ -411,12 +407,11 @@ class CopyAttribute(AttributeEdit):
         raise NotImplementedError()
 
 
-class CopyGlobalAttribute(CopyAttribute):
+class CopyGlobalAttribute(CopyAttribute, metaclass=ABCMeta):
     """
     An abstract base class for fixes that require the use of `ncatted` to
     copy a metadata value from one attribute to another.
     """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def __init__(self, filename, directory):
@@ -455,12 +450,11 @@ class ParentSourceIdFromSourceId(CopyGlobalAttribute):
         self.attribute_type = 'c'
 
 
-class CopyVariableAttribute(CopyAttribute):
+class CopyVariableAttribute(CopyAttribute, metaclass=ABCMeta):
     """
     An abstract base class for fixes that require the use of `ncatted` to
     copy a metadata value from one attribute to another.
     """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def __init__(self, filename, directory):
@@ -510,12 +504,11 @@ class FillValueFromMissingValue(CopyVariableAttribute):
         self.attribute_type = 'f'
 
 
-class AttributeAdd(AttributeEdit):
+class AttributeAdd(AttributeEdit, metaclass=ABCMeta):
     """
     An abstract base class for fixes that require the use of `ncatted` to
     add a new metadata attribute.
     """
-    __metaclass__ = ABCMeta
 
     def __init__(self, filename, directory):
         """

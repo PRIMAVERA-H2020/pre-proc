@@ -9,9 +9,8 @@ import unittest
 from pre_proc.common import get_concrete_subclasses
 
 
-class AbstractParent(object):
+class AbstractParent(object, metaclass=ABCMeta):
     """ Test parent abstract class """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def abstract_method(self):
@@ -19,9 +18,8 @@ class AbstractParent(object):
         pass
 
 
-class AbstractChild(AbstractParent):
+class AbstractChild(AbstractParent, metaclass=ABCMeta):
     """ Test abstract child """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def abstract_method(self):
@@ -47,8 +45,11 @@ class TestGetConcreteSubclasses(unittest.TestCase):
     """ test pre_proc.common.get_concrete_subclasses """
     def test_all(self):
         """ Test that the whole hierarchy is returned """
-        self.assertEqual(sorted([ConcreteChild, ConcreteSubChild]),
-                         sorted(get_concrete_subclasses(AbstractParent)))
+        ref_names = [obj.__name__ for obj in [ConcreteChild, ConcreteSubChild]]
+        test_names = [obj.__name__ for obj in
+                      get_concrete_subclasses(AbstractParent)]
+        self.assertEqual(sorted(ref_names),
+                         sorted(test_names))
 
     def test_one(self):
         """ Test that a single child is returned """

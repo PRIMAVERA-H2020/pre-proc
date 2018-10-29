@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db import models
 
@@ -84,7 +84,7 @@ class DataRequest(models.Model):
     fixes = models.ManyToManyField(FileFix)
 
     def __unicode__(self):
-        return u'{}/{} {}/{}'.format(self.source_id, self.experiment_id,
+        return '{}/{} {}/{}'.format(self.source_id, self.experiment_id,
                                      self.table_id, self.cmor_name)
 
     class Meta:
