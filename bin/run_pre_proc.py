@@ -1,15 +1,16 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 """
 run_pre_proc.py
 
-Run PRIMAVERA pre-processing as part of the CEDA CREPP workflow.
+Run PRIMAVERA pre-processing as part of the CEDA CREPP workflow. A directory
+is specified and all files in this directory are fixed. It is likely that the
+same fixes will be applied to all of the files, however, the fixes to apply
+are calculated again for each file.
 """
 import argparse
 import logging.config
 import os
-import shutil
 import sys
-import tempfile
 
 from pre_proc import EsgfSubmission
 from pre_proc.common import list_files
@@ -22,66 +23,14 @@ DEFAULT_LOG_FORMAT = '%(levelname)s: %(message)s'
 
 logger = logging.getLogger(__name__)
 
-PROCESSING_DIRECTORY = '/work/scratch-nompiio/jseddon'
-
-
-def create_temp_dir():
-    """
-    Create a temporary directory to perform the processing in.
-
-    :returns: The path to directory created
-    :rtype: str
-    """
-    return tempfile.mkdtemp(prefix='crepp', dir=PROCESSING_DIRECTORY)
-
-
-def remove_temp_dir(temp_dir):
-    """
-    Delete the temporary directory created
-
-    :param str temp_dir: The full path of the temporary directory.
-    """
-    if not os.listdir(temp_dir):
-        os.rmdir(temp_dir)
-    else:
-        logger.warning('Unable to delete temporary directory as it is not '
-                       'empty {}'.format(temp_dir))
-
-
-def copy_file_to_temp_dir(filepath, temp_dir):
-    """
-    Copy the specified file into the temporary directory that's being used.
-
-    :param str filepath: The full path of the file to copy.
-    :param str temp_dir: The temporary directory to copy to.
-    :returns: The new path to the file.
-    :rtype: str
-
-    """
-    shutil.copy(filepath, temp_dir)
-
-    return os.path.join(temp_dir, os.path.basename(filepath))
-
-
-def move_file_to_output_dir(filepath, output_dir):
-    """
-    Move the file from its current location to the output directory.
-
-    :param str filepath: The file's current full path.
-    :param str output_dir: The path to the output directory.
-    """
-    shutil.move(filepath, output_dir)
-
 
 def parse_args():
     """
     Parse command-line arguments
     """
     parser = argparse.ArgumentParser(description='Pre-process PRIMAVERA data.')
-    parser.add_argument('input_directory', help='the directory to read files '
-                                                'from', type=str)
-    parser.add_argument('output_directory', help='the directory to write '
-                                                 'files to', type=str)
+    parser.add_argument('directory', help='the directory where the files to '
+                                          'fix are stored', type=str)
     parser.add_argument('-l', '--log-level', help='set logging level to one '
                                                   'of debug, info, warn (the '
                                                   'default), or error')
@@ -99,14 +48,10 @@ def main(args):
     logger.debug('Database directory is {}'.
                  format(os.environ['DATABASE_DIR']))
 
-    temp_dir = create_temp_dir()
-    logger.debug('Temporary directory is {}'.format(temp_dir))
-
-    for filepath in sorted(list_files(args.input_directory)):
+    for filepath in sorted(list_files(args.directory)):
         logger.debug('Processing {}'.format(filepath))
-        working_file = copy_file_to_temp_dir(filepath, temp_dir)
         try:
-            esgf_submission = EsgfSubmission.from_file(working_file)
+            esgf_submission = EsgfSubmission.from_file(filepath)
             esgf_submission.determine_fixes()
             esgf_submission.run_fixes()
             esgf_submission.update_history()
@@ -117,10 +62,6 @@ def main(args):
             logger.warning(exc)
             logger.error('Processing file {} failed'.format(filepath))
             sys.exit(1)
-
-        move_file_to_output_dir(working_file, args.output_directory)
-
-    remove_temp_dir(temp_dir)
 
 
 if __name__ == "__main__":

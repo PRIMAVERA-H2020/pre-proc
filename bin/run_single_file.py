@@ -1,8 +1,8 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 """
 run_single_file.py
 
-Run PRIMAVERA pre-processing on a single file.
+Run PRIMAVERA pre-processing on a single file, which is fixed in place.
 """
 import argparse
 import logging.config
