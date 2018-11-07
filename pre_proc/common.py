@@ -6,6 +6,7 @@ Library code used by many functions.
 import inspect
 import logging.config
 import os
+import re
 import subprocess
 
 logger = logging.getLogger(__name__)
@@ -95,3 +96,39 @@ def get_concrete_subclasses(parent_object):
             sub_classes.append(sub_class)
 
     return sub_classes
+
+
+def to_float(string_value):
+    """
+    Convert a string starting with a float to a float and return this.
+
+    :param str string_value: The string to convert.
+    :returns: The float from the start of the string.
+    :rtype: float
+    :raises ValueError: if a float cannot be found.
+    """
+    float_regexp = r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?'
+    try:
+        float_component = re.match(float_regexp, string_value).group(0)
+    except AttributeError:
+        raise ValueError('Cannot find float in {}'.format(string_value))
+
+    return float(float_component)
+
+
+def to_int(string_value):
+    """
+    Convert a string starting with an int to an int and return this.
+
+    :param str string_value: The string to convert.
+    :returns: The int from the start of the string.
+    :rtype: int
+    :raises ValueError: if an int cannot be found.
+    """
+    int_regexp = r'[+-]?(\d+)'
+    try:
+        int_component = re.match(int_regexp, string_value).group(0)
+    except AttributeError:
+        raise ValueError('Cannot find int in {}'.format(string_value))
+
+    return int(int_component)
