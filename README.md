@@ -14,6 +14,9 @@ To set up the system:
 1. `./bin/add_file_fixes_to_db.py -l debug` to add the file fixes to the database.
 1. Run all of the fix_request scripts, e.g. `./bin/fix_requests/fix_request_0001.py -l debug` to set up the file fixes required for each data request.
 
+If additional data requests are added then all of the fix_request
+scripts will need to be run again.
+
 It should now be possible to run the main processing script:
 
-`./bin/run_pre_proc.sh <input_dir> <output_dir>`
+`./bin/run_pre_proc.sh <data_dir>`
