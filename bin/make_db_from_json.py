@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 """
 make_db_from_json.py
 
@@ -51,7 +51,9 @@ def _dict_to_object(dict_):
             source_id=source_id,
             experiment_id=experiment_id,
             table_id=dict_['__kwargs__']['table_id'],
-            cmor_name=dict_['__kwargs__']['cmor_name'])
+            cmor_name=dict_['__kwargs__']['cmor_name'],
+            variant_label=dict_['__kwargs__']['variant_label']
+        )
     else:
         msg = ('Cannot load from JSON files class {}'.
                format(dict_['__class__']))

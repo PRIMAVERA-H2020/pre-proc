@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db import models
 
@@ -75,6 +75,9 @@ class DataRequest(models.Model):
     experiment_id = models.ForeignKey(Experiment, null=False,
                                       verbose_name='Experiment',
                                       on_delete=models.CASCADE)
+    variant_label = models.CharField(max_length=20,
+                                     verbose_name="Variant Label",
+                                     null=True, blank=True)
 
     table_id = models.CharField(max_length=50, null=False, blank=False,
                                 verbose_name='Table name')
@@ -84,10 +87,12 @@ class DataRequest(models.Model):
     fixes = models.ManyToManyField(FileFix)
 
     def __unicode__(self):
-        return u'{}/{} {}/{}'.format(self.source_id, self.experiment_id,
-                                     self.table_id, self.cmor_name)
+        return '{}.{}.{}.{}.{}.{}'.format(self.institution_id, self.source_id,
+                                          self.experiment_id,
+                                          self.variant_label, self.table_id,
+                                          self.cmor_name)
 
     class Meta:
         verbose_name = 'Data Request'
         unique_together = ('institution_id', 'source_id', 'experiment_id',
-                           'table_id', 'cmor_name')
+                           'variant_label', 'table_id', 'cmor_name')

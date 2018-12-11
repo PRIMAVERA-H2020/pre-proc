@@ -1,40 +1,40 @@
 <html>
-<head><title>fix_requests</title></head>
-<body>
-<table border="1" cellpadding="10">
+<head>
+<style>
+.Body { background-color: #eeeeee;
+ font-family: Verdana, "Arial", Helvetica, sans-serif; margin: 0px}
+#titleBar {     background-color: #dddddd;
+                width: 100%;
+                top: 3px; 
+                border-top: solid #aaaaaa 1px;  
+                border-bottom: solid #aaaaaa 1px; 
+                padding:6px;
+                position: relative}
+                
+#blurb {        padding-left: 20px;
+                padding-right: 20px;
+                padding-top: 30px;
+                padding-bottom:15px }
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+}
+</style>
+<title>fix_requests</title>
+</head>
+<body class="Body">
+<div id="titleBar"><b>fix_requests</b></div>
+<div id="blurb">
+<table>
 
-<tr><td>fix_request_0001.py</td><td>
-Convert the further_info_url attribute on all MOHC and NERC data from HTTP to
+<tr><td>6000</td><td>MOHC.*</td><td>Convert the further_info_url attribute on all MOHC and NERC data from HTTP to
 HTTPS. Update data_specs_version to 01.00.23.
-</td></tr>
-<tr><td>fix_request_0002.py</td><td>
-Add a branch_time_in_parent and branch_time_in_child attribute on all
-Met Office highresSST-present data.
-</td></tr>
-<tr><td>fix_request_0003.py</td><td>
-Add a cellmeasures attribute with a value of area: areacella on Met Office
-variables ua and va in table day.
-</td></tr>
-<tr><td>fix_request_0004.py</td><td>
-Convert the branch_time_in_parent and branch_time_in_child attributes on all
-MOHC and NERC hist-1950 and control-1950 data from string to double.
-</td></tr>
-<tr><td>fix_request_0005.py</td><td>
-Convert the further_info_url attribute on all EC-Earth data from HTTP to HTTPS.
-Also, update branch_method and data_specs_version.
-
-Add a few other fixes to EC-Earth Amon/tas and day/sfcWind data for the current
-tests.
-</td></tr>
-<tr><td>fix_request_0006.py</td><td>
-Fix some AWI data. Convert the further_info_url attribute on all AWI data
-from HTTP to HTTPS and update the data_specs_version.
-Fix additional items for variable Omon/so and Omon/tos.
-</td></tr>
-<tr><td>fix_request_0007.py</td><td>
-Fix some CMCC data.
 </td></tr>
 
 </table>
+</div>
 </body>
 </html>

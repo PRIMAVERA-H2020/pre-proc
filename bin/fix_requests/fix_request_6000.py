@@ -1,9 +1,11 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 """
-fix_request_0004.py
+fix_request_6000.py
 
-Convert the branch_time_in_parent and branch_time_in_child attributes on all
-MOHC and NERC hist-1950 and control-1950 data from string to double.
+MOHC.*
+
+Convert the further_info_url attribute on all MOHC and NERC data from HTTP to
+HTTPS. Update data_specs_version to 01.00.23.
 """
 import argparse
 import logging.config
@@ -42,27 +44,25 @@ def main():
     """
     Main entry point
     """
-    coupled = DataRequest.objects.filter(
-        institution_id__name__in=['MOHC', 'NERC'],
-        experiment_id__name__in=['hist-1950', 'control-1950']
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name__in=['MOHC', 'NERC']
     )
 
-    branch_time_parent = FileFix.objects.get(name='ParentBranchTimeDoubleFix')
-    branch_time_child = FileFix.objects.get(name='ChildBranchTimeDoubleFix')
+    further_info_url_fix = FileFix.objects.get(name='FurtherInfoUrlToHttps')
+    data_specs = FileFix.objects.get(name='DataSpecsVersionAdd')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
-    for data_req in coupled:
-        data_req.fixes.add(branch_time_parent)
-        data_req.fixes.add(branch_time_child)
+    for data_req in data_reqs:
+        data_req.fixes.add(further_info_url_fix)
+        data_req.fixes.add(data_specs)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(branch_time_parent.name, coupled.count()))
-
+                 format(further_info_url_fix.name, data_reqs.count()))
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(branch_time_child.name, coupled.count()))
+                 format(data_specs.name, data_reqs.count()))
 
 
 if __name__ == "__main__":

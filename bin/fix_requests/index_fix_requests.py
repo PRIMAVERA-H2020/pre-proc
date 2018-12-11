@@ -1,16 +1,46 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 """
 index_fix)requests.py
 
 This file builds an HTML summary of the Python files in this directory.
+
+The file naming convention is assumed to be:
+
+1*** AWI
+2*** CMCC
+3*** CNRM-CERFACS
+4*** EC-Earth-Consortium
+5*** ECMWF
+6*** MOHC
+7*** NERC
+8*** MPI
+
+*0** All experiments
+*1** All AMIP
+*2** highresSST-present
+*3** highresSST-future
+*4** All coupled
+*5** spinup-1950
+*6** control-1950
+*7** hist-1950
+*8** highres-future
+
+The docstring at the top of every file is assumed to be in the form (index of
+docstring line on the left):
+0  filename.py                                            [ignored]
+1                                                         [blank line]
+2 MOHC.HadGEM3-GC31-*.highresSST-present.r1i1p1f1.Amon.*  [Affected variables]
+3                                                         [blank line]
+4 Description                                             [description]
+5 continued.....
 """
 import argparse
 import glob
 import importlib
 import logging.config
 import os
+import re
 import sys
-
 
 __version__ = '0.1.0b1'
 
@@ -25,9 +55,36 @@ HTML_FILE = 'fix_requests.html'
 
 def _ouput_headers(fh):
     txt = """<html>
-<head><title>fix_requests</title></head>
-<body>
-<table border="1" cellpadding="10">\n
+<head>
+<style>
+.Body { background-color: #eeeeee;
+ font-family: Verdana, "Arial", Helvetica, sans-serif; margin: 0px}
+#titleBar {     background-color: #dddddd;
+                width: 100%;
+                top: 3px; 
+                border-top: solid #aaaaaa 1px;  
+                border-bottom: solid #aaaaaa 1px; 
+                padding:6px;
+                position: relative}
+                
+#blurb {        padding-left: 20px;
+                padding-right: 20px;
+                padding-top: 30px;
+                padding-bottom:15px }
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+}
+</style>
+<title>fix_requests</title>
+</head>
+<body class="Body">
+<div id="titleBar"><b>fix_requests</b></div>
+<div id="blurb">
+<table>\n
 """
     fh.write(txt)
 
@@ -35,6 +92,7 @@ def _ouput_headers(fh):
 def _ouput_footers(fh):
     txt = """
 </table>
+</div>
 </body>
 </html>
 """
@@ -71,9 +129,11 @@ def main():
             import_string = os.path.basename(update_file.rstrip('.py'))
             doc_string = importlib.import_module(import_string).__doc__
             file_name = os.path.basename(update_file)
-            description = '\n'.join(doc_string.split('\n')[2:])
-            fh.write('<tr><td>{}</td><td>{}</td></tr>\n'.format(file_name,
-                                                                description))
+            file_index = re.findall(r'\d+', file_name)[0]
+            affected_drs = doc_string.split('\n')[3]
+            description = '\n'.join(doc_string.split('\n')[5:])
+            fh.write('<tr><td>{}</td><td>{}</td><td>{}</td></tr>\n'.
+                     format(file_index, affected_drs, description))
         _ouput_footers(fh)
 
 
