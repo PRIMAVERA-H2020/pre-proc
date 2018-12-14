@@ -71,7 +71,7 @@ class BranchMethodAdd(AttributeAdd):
 
     def _calculate_new_value(self):
         """
-        The new value is zero.
+        Set the new value.
         """
         self.new_value = 'no parent'
 
@@ -97,7 +97,7 @@ class DataSpecsVersionAdd(AttributeAdd):
 
     def _calculate_new_value(self):
         """
-        The new value is zero.
+        Set the new value.
         """
         self.new_value = '01.00.23'
 
@@ -120,7 +120,7 @@ class CellMeasuresAreacellaAdd(AttributeAdd):
 
     def _calculate_new_value(self):
         """
-        The new value is zero.
+        Set the new value.
         """
         self.new_value = 'area: areacella'
 
@@ -143,7 +143,7 @@ class CellMeasuresAreacelloAdd(AttributeAdd):
 
     def _calculate_new_value(self):
         """
-        The new value is zero.
+        Set the new value.
         """
         self.new_value = 'area: areacello'
 
@@ -168,7 +168,7 @@ class CellMeasuresAreacelloVolcelloAdd(AttributeAdd):
 
     def _calculate_new_value(self):
         """
-        The new value is zero.
+        Set the new value.
         """
         self.new_value = 'area: areacello volume: volcello'
 
@@ -193,7 +193,7 @@ class CellMethodsAreaTimeMeanAdd(AttributeAdd):
 
     def _calculate_new_value(self):
         """
-        The new value is zero.
+        Set the new value.
         """
         self.new_value = 'area: time: mean'
 
@@ -219,7 +219,7 @@ class CellMethodsSeaAreaTimeMeanAdd(AttributeAdd):
 
     def _calculate_new_value(self):
         """
-        The new value is zero.
+        Set the new value.
         """
         self.new_value = 'area: mean where sea time: mean'
 
@@ -245,7 +245,7 @@ class SeaWaterSalinityStandardNameAdd(AttributeAdd):
 
     def _calculate_new_value(self):
         """
-        The new value is zero.
+        Set the new value.
         """
         self.new_value = 'sea_water_salinity'
 
@@ -270,7 +270,7 @@ class SeaSurfaceTemperatureNameAdd(AttributeAdd):
 
     def _calculate_new_value(self):
         """
-        The new value is zero.
+        Set the new value.
         """
         self.new_value = 'sea_surface_temperature'
 
@@ -279,7 +279,7 @@ class VarUnitsToThousandths(AttributeAdd):
     """
     Replace the variable's attribute `units` to `0.001`. This is done in
     overwrite mode and so will work irrespective of whether there is an
-    existing standard_name attribute.
+    existing units attribute.
     """
     def __init__(self, filename, directory):
         """
@@ -295,6 +295,32 @@ class VarUnitsToThousandths(AttributeAdd):
 
     def _calculate_new_value(self):
         """
-        The new value is zero.
+        Set the new value.
         """
         self.new_value = '0.001'
+
+
+class WtemStandardNameAdd(AttributeAdd):
+    """
+    Replace the variable's `standard_name` with
+    `upward_transformed_eulerian_mean_air_velocity`. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super(WtemStandardNameAdd, self).__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'upward_transformed_eulerian_mean_air_velocity'
