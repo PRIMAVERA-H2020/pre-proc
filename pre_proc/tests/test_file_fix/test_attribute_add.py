@@ -12,6 +12,8 @@ from pre_proc.file_fix import (ParentBranchTimeAdd,
                                ChildBranchTimeAdd,
                                BranchMethodAdd,
                                DataSpecsVersionAdd,
+                               DataSpecsVersionAddTwentySeven,
+                               EcmwfInstitution,
                                CellMeasuresAreacellaAdd,
                                CellMeasuresAreacelloAdd,
                                CellMeasuresAreacelloVolcelloAdd,
@@ -101,6 +103,23 @@ class TestDataSpecsVersionAdd(BaseTest):
         )
 
 
+class TestDataSpecsVersionAddTwentySeven(BaseTest):
+    """ Test DataSpecsVersionTwentySeven """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTimeAdd
+        """
+        fix = DataSpecsVersionAddTwentySeven('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a data_specs_version,global,o,c,'01.00.27' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestCellMeasuresAreacellaAdd(BaseTest):
     """ Test CellMeasuresAreacellaAdd """
     def test_subprocess_called_correctly(self):
@@ -183,6 +202,24 @@ class TestCellMethodsSeaAreaTimeMeanAdd(BaseTest):
             "ncatted -h -a cell_methods,so,o,c,"
             "'area: mean where sea time: mean' "
             "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestEcmwfInstitution(BaseTest):
+    """ Test EcmwfInstitution """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTimeAdd
+        """
+        fix = EcmwfInstitution('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a institution,global,o,c,'European Centre for Medium-"
+            "Range Weather Forecasts, Reading RG2 9AX, UK' "
+            "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

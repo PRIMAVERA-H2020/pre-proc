@@ -50,7 +50,7 @@ def main():
     )
 
     further_info_url_fix = FileFix.objects.get(name='FurtherInfoUrlToHttps')
-    data_specs = FileFix.objects.get(name='DataSpecsVersionAdd')
+    data_specs_27 = FileFix.objects.get(name='DataSpecsVersionAddTwentySeven')
     child_branch_time = FileFix.objects.get(name='ChildBranchTimeDoubleFix')
     parent_branch_time = FileFix.objects.get(name='ParentBranchTimeDoubleFix')
 
@@ -60,14 +60,14 @@ def main():
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
         data_req.fixes.add(further_info_url_fix)
-        data_req.fixes.add(data_specs)
+        data_req.fixes.add(data_specs_27)
         data_req.fixes.add(child_branch_time)
         data_req.fixes.add(parent_branch_time)
 
     logger.debug('FileFix {} added to {} data requests.'.
                  format(further_info_url_fix.name, data_reqs.count()))
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(data_specs.name, data_reqs.count()))
+                 format(data_specs_27.name, data_reqs.count()))
     logger.debug('FileFix {} added to {} data requests.'.
                  format(child_branch_time.name, data_reqs.count()))
     logger.debug('FileFix {} added to {} data requests.'.
