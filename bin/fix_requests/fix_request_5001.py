@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_5000.py
+fix_request_5001.py
 
-ECMWF.*
+ECMWF.ECMWF-IFS-LR.*.*
 
-Convert the further_info_url attribute on all ECMWF data from HTTP to
-HTTPS. Update data_specs_version to 01.00.23. branch_time_in_child and
-branch_time_in_parent to doubles. Correct the institution and add a
-reference attribute.
+Correct the source attribute on all ECMWF-IFS-LR files.
 """
 import argparse
 import logging.config
@@ -47,30 +44,21 @@ def main():
     Main entry point
     """
     data_reqs = DataRequest.objects.filter(
-        institution_id__name='ECMWF'
+        institution_id__name='ECMWF',
+       climate_model__name='ECMWF-IFS-LR'
     )
 
-    fixes = [
-        FileFix.objects.get(name='EcmwfInstitution'),
-        FileFix.objects.get(name='EcmwfReferences'),
-        FileFix.objects.get(name='FurtherInfoUrlToHttps'),
-        FileFix.objects.get(name='DataSpecsVersionAddTwentySeven'),
-        FileFix.objects.get(name='ChildBranchTimeDoubleFix'),
-        FileFix.objects.get(name='ParentBranchTimeDoubleFix')
-    ]
+    lr_fix = FileFix.objects.get(name='EcmwfSourceLr')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        for fix in fixes:
-            data_req.fixes.add(fix)
+        data_req.fixes.add(lr_fix)
 
-    num_data_reqs = data_reqs.count()
-    for fix in fixes:
-        logger.debug('FileFix {} added to {} data requests.'.
-                     format(fix.name, num_data_reqs))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(lr_fix.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
