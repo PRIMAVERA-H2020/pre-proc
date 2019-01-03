@@ -12,7 +12,7 @@ class FileFix(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False,
                             unique=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -26,7 +26,7 @@ class Institution(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False,
                             unique=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -40,7 +40,7 @@ class ClimateModel(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False,
                             unique=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -54,7 +54,7 @@ class Experiment(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False,
                             unique=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -86,7 +86,7 @@ class DataRequest(models.Model):
 
     fixes = models.ManyToManyField(FileFix)
 
-    def __unicode__(self):
+    def __str__(self):
         return '{}.{}.{}.{}.{}.{}'.format(self.institution_id, self.source_id,
                                           self.experiment_id,
                                           self.variant_label, self.table_id,
