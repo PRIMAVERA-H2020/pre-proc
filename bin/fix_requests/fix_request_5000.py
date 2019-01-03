@@ -54,7 +54,7 @@ def main():
         FileFix.objects.get(name='EcmwfInstitution'),
         FileFix.objects.get(name='EcmwfReferences'),
         FileFix.objects.get(name='FurtherInfoUrlToHttps'),
-        FileFix.objects.get(name='DataSpecsVersionAddTwentySeven'),
+        FileFix.objects.get(name='DataSpecsVersionAdd'),
         FileFix.objects.get(name='ChildBranchTimeDoubleFix'),
         FileFix.objects.get(name='ParentBranchTimeDoubleFix')
     ]

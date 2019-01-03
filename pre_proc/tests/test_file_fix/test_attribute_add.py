@@ -12,7 +12,6 @@ from pre_proc.file_fix import (ParentBranchTimeAdd,
                                ChildBranchTimeAdd,
                                BranchMethodAdd,
                                DataSpecsVersionAdd,
-                               DataSpecsVersionAddTwentySeven,
                                EcmwfInstitution,
                                EcmwfReferences,
                                EcmwfSourceHr,
@@ -101,23 +100,6 @@ class TestDataSpecsVersionAdd(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a data_specs_version,global,o,c,'01.00.23' "
-            "/a/1.nc",
-            stderr=subprocess.STDOUT,
-            shell=True
-        )
-
-
-class TestDataSpecsVersionAddTwentySeven(BaseTest):
-    """ Test DataSpecsVersionTwentySeven """
-    def test_subprocess_called_correctly(self):
-        """
-        Test that an external call's been made correctly for
-        ChildBranchTimeAdd
-        """
-        fix = DataSpecsVersionAddTwentySeven('1.nc', '/a')
-        fix.apply_fix()
-        self.mock_subprocess.assert_called_once_with(
-            "ncatted -h -a data_specs_version,global,o,c,'01.00.27' "
             "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True

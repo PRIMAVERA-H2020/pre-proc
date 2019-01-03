@@ -45,7 +45,7 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name='ECMWF',
-       climate_model__name='ECMWF-IFS-LR'
+        source_id__name='ECMWF-IFS-LR'
     )
 
     lr_fix = FileFix.objects.get(name='EcmwfSourceLr')

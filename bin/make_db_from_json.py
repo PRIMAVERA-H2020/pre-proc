@@ -65,7 +65,8 @@ def parse_args():
     """
     Parse command-line arguments
     """
-    parser = argparse.ArgumentParser(description='Pre-process PRIMAVERA data.')
+    parser = argparse.ArgumentParser(description='Load pre-proc database '
+                                                 'from DMT JSON.')
     parser.add_argument('json_file', help='the full path to the JSON file to '
                                           'load into the database', type=str)
     parser.add_argument('-l', '--log-level', help='set logging level to one '
@@ -87,8 +88,12 @@ def main(args):
 
     for object_type in ['institution_id', 'source_id', 'experiment_id',
                         'data_requests']:
+        num_created = 0
         for object_instance in json_dict[object_type]:
-            _dict_to_object(object_instance)
+            _obj, created = _dict_to_object(object_instance)
+            if created:
+                num_created += 1
+        logger.debug('{} new {} created'.format(num_created, object_type))
 
 
 if __name__ == "__main__":
