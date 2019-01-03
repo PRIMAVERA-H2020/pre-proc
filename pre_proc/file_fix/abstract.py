@@ -44,7 +44,7 @@ class AttributeEdit(FileFix, metaclass=ABCMeta):
         """
         Initialise the class
         """
-        super(AttributeEdit, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         # The name of the attribute to fix
         self.attribute_name = None
         # The var_nm to pass to ncatted, e.g. global for a global
@@ -110,7 +110,7 @@ class AttributeUpdate(AttributeEdit, metaclass=ABCMeta):
         """
         Initialise the class
         """
-        super(AttributeUpdate, self).__init__(filename, directory)
+        super().__init__(filename, directory)
 
         # The current value of the required attributes
         self.existing_value = None
@@ -146,7 +146,7 @@ class CopyAttribute(AttributeEdit, metaclass=ABCMeta):
         """
         Initialise the class
         """
-        super(CopyAttribute, self).__init__(filename, directory)
+        super().__init__(filename, directory)
 
         # The name of the attribute to copy
         self.source_attribute = None
@@ -177,7 +177,7 @@ class CopyGlobalAttribute(CopyAttribute, metaclass=ABCMeta):
         """
         Initialise the class
         """
-        super(CopyGlobalAttribute, self).__init__(filename, directory)
+        super().__init__(filename, directory)
 
     def _calculate_new_value(self):
         """
@@ -202,7 +202,7 @@ class CopyVariableAttribute(CopyAttribute, metaclass=ABCMeta):
         """
         Initialise the class
         """
-        super(CopyVariableAttribute, self).__init__(filename, directory)
+        super().__init__(filename, directory)
 
     def _calculate_new_value(self):
         """
@@ -237,7 +237,7 @@ class AttributeAdd(AttributeEdit, metaclass=ABCMeta):
         """
         Initialise the class
         """
-        super(AttributeAdd, self).__init__(filename, directory)
+        super().__init__(filename, directory)
 
     def apply_fix(self):
         """

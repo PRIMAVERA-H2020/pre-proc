@@ -26,7 +26,7 @@ class ParentBranchTimeDoubleFix(AttributeUpdate):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(ParentBranchTimeDoubleFix, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'branch_time_in_parent'
         self.attribute_visibility = 'global'
         self.attribute_type = 'd'
@@ -53,7 +53,7 @@ class ChildBranchTimeDoubleFix(AttributeUpdate):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(ChildBranchTimeDoubleFix, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'branch_time_in_child'
         self.attribute_visibility = 'global'
         self.attribute_type = 'd'
@@ -80,7 +80,7 @@ class ForcingIndexIntFix(AttributeUpdate):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(ForcingIndexIntFix, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'forcing_index'
         self.attribute_visibility = 'global'
         self.attribute_type = 's'
@@ -107,7 +107,7 @@ class InitializationIndexIntFix(AttributeUpdate):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(InitializationIndexIntFix, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'initialization_index'
         self.attribute_visibility = 'global'
         self.attribute_type = 's'
@@ -134,7 +134,7 @@ class PhysicsIndexIntFix(AttributeUpdate):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(PhysicsIndexIntFix, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'physics_index'
         self.attribute_visibility = 'global'
         self.attribute_type = 's'
@@ -161,7 +161,7 @@ class RealizationIndexIntFix(AttributeUpdate):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(RealizationIndexIntFix, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'realization_index'
         self.attribute_visibility = 'global'
         self.attribute_type = 's'
@@ -189,7 +189,7 @@ class FurtherInfoUrlToHttps(AttributeUpdate):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(FurtherInfoUrlToHttps, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'further_info_url'
         self.attribute_visibility = 'global'
         self.attribute_type = 'c'
@@ -218,7 +218,7 @@ class FurtherInfoUrlAWISourceIdAndHttps(AttributeUpdate):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(FurtherInfoUrlAWISourceIdAndHttps, self).__init__(filename,
+        super().__init__(filename,
                                                                 directory)
         self.attribute_name = 'further_info_url'
         self.source_id = None
@@ -264,7 +264,7 @@ class AogcmToAgcm(AttributeUpdate):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(AogcmToAgcm, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'source_type'
         self.attribute_visibility = 'global'
         self.attribute_type = 'c'

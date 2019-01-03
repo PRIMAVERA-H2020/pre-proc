@@ -18,7 +18,7 @@ class ParentBranchTimeAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(ParentBranchTimeAdd, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'branch_time_in_parent'
         self.attribute_visibility = 'global'
         self.attribute_type = 'd'
@@ -41,7 +41,7 @@ class ChildBranchTimeAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(ChildBranchTimeAdd, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'branch_time_in_child'
         self.attribute_visibility = 'global'
         self.attribute_type = 'd'
@@ -64,7 +64,7 @@ class BranchMethodAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(BranchMethodAdd, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'branch_method'
         self.attribute_visibility = 'global'
         self.attribute_type = 'c'
@@ -90,7 +90,7 @@ class DataSpecsVersionAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(DataSpecsVersionAdd, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'data_specs_version'
         self.attribute_visibility = 'global'
         self.attribute_type = 'c'
@@ -113,7 +113,7 @@ class CellMeasuresAreacellaAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(CellMeasuresAreacellaAdd, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'cell_measures'
         self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
@@ -136,7 +136,7 @@ class CellMeasuresAreacelloAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(CellMeasuresAreacelloAdd, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'cell_measures'
         self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
@@ -160,7 +160,7 @@ class CellMeasuresAreacelloVolcelloAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(CellMeasuresAreacelloVolcelloAdd, self).__init__(filename,
+        super().__init__(filename,
                                                                directory)
         self.attribute_name = 'cell_measures'
         self.attribute_visibility = self.variable_name
@@ -186,7 +186,7 @@ class CellMethodsAreaTimeMeanAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(CellMethodsAreaTimeMeanAdd, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'cell_methods'
         self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
@@ -212,7 +212,7 @@ class CellMethodsSeaAreaTimeMeanAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(CellMethodsSeaAreaTimeMeanAdd, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'cell_methods'
         self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
@@ -395,7 +395,7 @@ class SeaWaterSalinityStandardNameAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(SeaWaterSalinityStandardNameAdd, self).__init__(filename,
+        super().__init__(filename,
                                                               directory)
         self.attribute_name = 'standard_name'
         self.attribute_visibility = self.variable_name
@@ -421,7 +421,7 @@ class SeaSurfaceTemperatureNameAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(SeaSurfaceTemperatureNameAdd, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'standard_name'
         self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
@@ -446,7 +446,7 @@ class VarUnitsToThousandths(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(VarUnitsToThousandths, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'units'
         self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
@@ -472,7 +472,7 @@ class WtemStandardNameAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(WtemStandardNameAdd, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'standard_name'
         self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
