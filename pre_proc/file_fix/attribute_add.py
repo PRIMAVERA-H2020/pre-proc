@@ -224,6 +224,164 @@ class CellMethodsSeaAreaTimeMeanAdd(AttributeAdd):
         self.new_value = 'area: mean where sea time: mean'
 
 
+class EcmwfInstitution(AttributeAdd):
+    """
+    Add a global attribute `institution` with a value for ECMWF. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'institution'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('European Centre for Medium-Range Weather '
+                          'Forecasts, Reading RG2 9AX, UK')
+
+
+class EcmwfReferences(AttributeAdd):
+    """
+    Add a global attribute `referencs` with a value for ECMWF. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'references'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('Roberts, C. D., Senan, R., Molteni, F., Boussetta, '
+                          'S., Mayer, M., and Keeley, S. P. E.: Climate model '
+                          'configurations of the ECMWF Integrated Forecasting '
+                          'System (ECMWF-IFS cycle 43r1) for HighResMIP, '
+                          'Geosci. Model Dev., 11, 3681-3712, '
+                          '​https://doi.org/10.5194/gmd-11-3681-2018, 2018.')
+
+
+class EcmwfSourceHr(AttributeAdd):
+    """
+    Add a global attribute `source` with a value for ECMWF-IFS-HR. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'source'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = (
+            'ECMWF-IFS-HR (2017): \naerosol: none\natmos: IFS (IFS CY43R1, '
+            'Tco399, cubic octahedral reduced Gaussian grid equivalent to '
+            '1600 x 800 longitude/latitude; 91 levels; top level 0.01 hPa)'
+            '\natmosChem: none\nland: HTESSEL (as implemented in IFS CY43R1)'
+            '\nlandIce: none\nocean: NEMO3.4 (NEMO v3.4; ORCA025 tripolar grid;'
+            ' 1442 x 1021 longitude/latitude; 75 levels; top grid cell 0-1 m)'
+            '\nocnBgchem: none\nseaIce: LIM2 (LIM v2; ORCA025 tripolar grid; '
+            '1442 x 1021 longitude/latitude)'
+        )
+
+
+class EcmwfSourceMr(AttributeAdd):
+    """
+    Add a global attribute `source` with a value for ECMWF-IFS-MR. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'source'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = (
+            'ECMWF-IFS-MR (2017): \naerosol: none\natmos: IFS (IFS CY43R1, '
+            'Tco199, cubic octahedral reduced Gaussian grid equivalent to 800 '
+            'x 400 longitude/latitude; 91 levels; top level 0.01 hPa)'
+            '\natmosChem: none\nland: HTESSEL (as implemented in IFS CY43R1)'
+            '\nlandIce: none\nocean: NEMO3.4 (NEMO v3.4; ORCA025 tripolar '
+            'grid; 1442 x 1021 longitude/latitude; 75 levels; top grid cell '
+            '0-1 m)\nocnBgchem: none\nseaIce: LIM2 (LIM v2; ORCA025 tripolar '
+            'grid; 1442 x 1021 longitude/latitude)'
+        )
+
+
+class EcmwfSourceLr(AttributeAdd):
+    """
+    Add a global attribute `source` with a value for ECMWF-IFS-LR. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'source'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = (
+            'ECMWF-IFS-LR (2017): \naerosol: none\natmos: IFS (IFS CY43R1, '
+            'Tco199, cubic octahedral reduced Gaussian grid equivalent to 800 '
+            'x 400 longitude/latitude; 91 levels; top level 0.01 hPa)'
+            '\natmosChem: none\nland: HTESSEL (as implemented in IFS CY43R1)'
+            '\nlandIce: none\nocean: NEMO3.4 (NEMO v3.4; ORCA1 tripolar grid; '
+            '362 x 292 longitude/latitude; 75 levels; top grid cell 0-1 m)'
+            '\nocnBgchem: none\nseaIce: LIM2 (LIM v2; ORCA1 tripolar grid; '
+            '362 x 292 longitude/latitude)'
+        )
+
+
 class SeaWaterSalinityStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of

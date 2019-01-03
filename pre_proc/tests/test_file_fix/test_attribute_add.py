@@ -12,6 +12,11 @@ from pre_proc.file_fix import (ParentBranchTimeAdd,
                                ChildBranchTimeAdd,
                                BranchMethodAdd,
                                DataSpecsVersionAdd,
+                               EcmwfInstitution,
+                               EcmwfReferences,
+                               EcmwfSourceHr,
+                               EcmwfSourceMr,
+                               EcmwfSourceLr,
                                CellMeasuresAreacellaAdd,
                                CellMeasuresAreacelloAdd,
                                CellMeasuresAreacelloVolcelloAdd,
@@ -183,6 +188,119 @@ class TestCellMethodsSeaAreaTimeMeanAdd(BaseTest):
             "ncatted -h -a cell_methods,so,o,c,"
             "'area: mean where sea time: mean' "
             "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestEcmwfInstitution(BaseTest):
+    """ Test EcmwfInstitution """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        EcmwfInstitution
+        """
+        fix = EcmwfInstitution('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a institution,global,o,c,'European Centre for Medium-"
+            "Range Weather Forecasts, Reading RG2 9AX, UK' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestEcmwfReferences(BaseTest):
+    """ Test EcmwfReferences """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        EcmwfReferences
+        """
+        fix = EcmwfReferences('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a references,global,o,c,'Roberts, C. D., Senan, R., "
+            "Molteni, F., Boussetta, S., Mayer, M., and Keeley, S. P. E.: "
+            "Climate model configurations of the ECMWF Integrated Forecasting "
+            "System (ECMWF-IFS cycle 43r1) for HighResMIP, Geosci. Model Dev., "
+            "11, 3681-3712, ​https://doi.org/10.5194/gmd-11-3681-2018, 2018.' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestEcmwfSourceHr(BaseTest):
+    """ Test EcmwfSourceHr """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        EcmwfSourceHr
+        """
+        fix = EcmwfSourceHr('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a source,global,o,c,'ECMWF-IFS-HR (2017): "
+            "\naerosol: none\natmos: IFS (IFS CY43R1, Tco399, cubic "
+            "octahedral reduced Gaussian grid equivalent to 1600 x 800 "
+            "longitude/latitude; 91 levels; top level 0.01 hPa)\natmosChem: "
+            "none\nland: HTESSEL (as implemented in IFS CY43R1)\nlandIce: none"
+            "\nocean: NEMO3.4 (NEMO v3.4; ORCA025 tripolar grid; 1442 x 1021 "
+            "longitude/latitude; 75 levels; top grid cell 0-1 m)\nocnBgchem: "
+            "none\nseaIce: LIM2 (LIM v2; ORCA025 tripolar grid; 1442 x 1021 "
+            "longitude/latitude)' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestEcmwfSourceMr(BaseTest):
+    """ Test EcmwfSourceMr """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        EcmwfSourceMr
+        """
+        fix = EcmwfSourceMr('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a source,global,o,c,'ECMWF-IFS-MR (2017): "
+            "\naerosol: none\natmos: IFS (IFS CY43R1, Tco199, cubic octahedral "
+            "reduced Gaussian grid equivalent to 800 x 400 longitude/latitude; "
+            "91 levels; top level 0.01 hPa)\natmosChem: none\nland: HTESSEL "
+            "(as implemented in IFS CY43R1)\nlandIce: none\nocean: NEMO3.4 "
+            "(NEMO v3.4; ORCA025 tripolar grid; 1442 x 1021 longitude/latitude;"
+            " 75 levels; top grid cell 0-1 m)\nocnBgchem: none\nseaIce: LIM2 "
+            "(LIM v2; ORCA025 tripolar grid; 1442 x 1021 longitude/latitude)' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestEcmwfSourceLr(BaseTest):
+    """ Test EcmwfSourceLr """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        EcmwfSourceLr
+        """
+        fix = EcmwfSourceLr('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a source,global,o,c,'ECMWF-IFS-LR (2017): "
+            "\naerosol: none\natmos: IFS (IFS CY43R1, Tco199, cubic "
+            "octahedral reduced Gaussian grid equivalent to 800 x 400 "
+            "longitude/latitude; 91 levels; top level 0.01 hPa)\natmosChem: "
+            "none\nland: HTESSEL (as implemented in IFS CY43R1)\nlandIce: "
+            "none\nocean: NEMO3.4 (NEMO v3.4; ORCA1 tripolar grid; 362 x 292 "
+            "longitude/latitude; 75 levels; top grid cell 0-1 m)\nocnBgchem: "
+            "none\nseaIce: LIM2 (LIM v2; ORCA1 tripolar grid; 362 x 292 "
+            "longitude/latitude)' "
+            "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

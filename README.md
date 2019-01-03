@@ -20,3 +20,11 @@ scripts will need to be run again.
 It should now be possible to run the main processing script:
 
 `./bin/run_pre_proc.sh <data_dir>`
+
+To add new data requests to the Rose suite:
+
+1. In the DMT code: `./scripts/make_esgf_json.py -l debug <filename.json>` to get the data requests that files have been received for.
+1. `./bin/make_db_from_json.py -l debug <filename.json>` to add any new data requests to the pre-proc database.
+1. In the DMT code edit and then run: `./scripts/make_rose_task_names.py -l debug <~/temp/rose_task_names.json>`
+1. Make the Rose suite aware of these new tasks: `rose suite-run --reload --no-gcontrol`
+1. In the Rose suite (but under Python 3): `bin/add_new_tasks.py -l debug <rose_task_names_new.json>`  

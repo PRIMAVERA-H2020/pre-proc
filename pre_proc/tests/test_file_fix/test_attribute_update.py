@@ -19,7 +19,8 @@ from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                PhysicsIndexIntFix,
                                RealizationIndexIntFix,
                                FurtherInfoUrlToHttps,
-                               FurtherInfoUrlAWISourceIdAndHttps)
+                               FurtherInfoUrlAWISourceIdAndHttps,
+                               AogcmToAgcm)
 
 
 class BaseTest(unittest.TestCase):
@@ -399,6 +400,34 @@ class TestFurtherInfoUrlAWISourceIdAndHttps(BaseTest):
             "ncatted -h -a further_info_url,global,o,c,"
             "'https://furtherinfo.es-doc.org/CMIP6.AWI.AWI-CM-1-0-LR."
             "hist-1950.none.r1i1p1f002' /a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestAogcmToAgcm(BaseTest):
+    """ Test AogcmToAgcm """
+    def test_agcm_raises(self):
+        """ Test whether missing further_info_url handled """
+        self.mock_dataset.return_value.source_type = 'AGCM'
+        fix = AogcmToAgcm('1.nc', '/a')
+        exception_text = ('Cannot edit attribute source_type in file '
+                          '1.nc. Existing value is not AOGCM.')
+        fix._get_existing_value()
+        self.assertRaisesRegex(ExistingAttributeError,
+                               exception_text, fix._calculate_new_value)
+
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        AogcmToAgcm
+        """
+        self.mock_dataset.return_value.source_type = 'AOGCM'
+        fix = AogcmToAgcm('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a source_type,global,o,c,"
+            "'AGCM' /a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
