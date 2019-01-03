@@ -18,7 +18,7 @@ class ParentSourceIdFromSourceId(CopyGlobalAttribute):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(ParentSourceIdFromSourceId, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.source_attribute = 'source_id'
         self.attribute_name = 'parent_source_id'
         self.attribute_visibility = 'global'
@@ -36,7 +36,7 @@ class FillValueFromMissingValue(CopyVariableAttribute):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super(FillValueFromMissingValue, self).__init__(filename, directory)
+        super().__init__(filename, directory)
         self.source_attribute = 'missing_value'
         self.attribute_name = '_FillValue'
         self.attribute_visibility = self.variable_name
