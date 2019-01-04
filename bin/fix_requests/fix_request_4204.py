@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_4201.py
+fix_request_4204.py
 
 EC-Earth-Consortium.*.highresSST-present.r1i1p1f1.*mon.many
 
-Set the cell_methods and cell_measures.
+Set the cell_measures.
 """
 import argparse
 import logging.config
@@ -48,16 +48,12 @@ def main():
         experiment_id__name='highresSST-present',
         variant_label='r1i1p1f1',
         table_id='Amon',
-        cmor_name__in=['cl', 'cli', 'clw', 'hurs', 'huss', 'sfcWind','tas',
-                       'uas', 'vas']
-    )
-
-    cfmon_reqs = DataRequest.objects.filter(
-        institution_id__name='EC-Earth-Consortium',
-        experiment_id__name='highresSST-present',
-        variant_label='r1i1p1f1',
-        table_id='CFmon',
-        cmor_name__in=['hur', 'hus', 'ta']
+        cmor_name__in=['clivi', 'clt', 'clwvi', 'evspsbl', 'hfls', 'hfss',
+                       'hur', 'hus', 'pr', 'prc', 'prsn', 'prw', 'ps', 'psl',
+                       'rlds', 'rldscs', 'rlus', 'rlut', 'rlutcs', 'rsds',
+                       'rsdscs', 'rsdt', 'rsus', 'rsuscs', 'rsut', 'rsutcs',
+                       'sbl', 'ta', 'tasmax', 'tasmin', 'tauu', 'tauv', 'ts',
+                       'ua', 'va', 'wap', 'zg']
     )
 
     emon_reqs = DataRequest.objects.filter(
@@ -65,14 +61,29 @@ def main():
         experiment_id__name='highresSST-present',
         variant_label='r1i1p1f1',
         table_id='Emon',
-        cmor_name__in=['t2', 'twap', 'u2', 'ut', 'uv', 'uwap', 'v2', 'vt',
-                       'vwap', 'wap', 'wap2']
+        cmor_name__in=['hus27', 'ta27', 'ua27', 'va27', 'zg27']
     )
 
-    data_reqs = amon_reqs | cfmon_reqs | emon_reqs
+    limon_reqs = DataRequest.objects.filter(
+        institution_id__name='EC-Earth-Consortium',
+        experiment_id__name='highresSST-present',
+        variant_label='r1i1p1f1',
+        table_id='LImon',
+        cmor_name__in=['hfdsn', 'lwsnl', 'sbl', 'snc', 'snd', 'snm', 'snw',
+                       'tsn']
+    )
+
+    lmon_reqs = DataRequest.objects.filter(
+        institution_id__name='EC-Earth-Consortium',
+        experiment_id__name='highresSST-present',
+        variant_label='r1i1p1f1',
+        table_id='Lmon',
+        cmor_name__in=['evspsblsoi', 'mrro', 'mrros', 'mrso', 'mrsos', 'tsl']
+    )
+
+    data_reqs = amon_reqs | emon_reqs | limon_reqs | lmon_reqs
 
     fixes = [
-        FileFix.objects.get(name='CellMethodsAreaTimeMeanAdd'),
         FileFix.objects.get(name='CellMeasuresAreacellaAdd')
     ]
 
