@@ -12,6 +12,7 @@ from pre_proc.file_fix import (ParentBranchTimeAdd,
                                ChildBranchTimeAdd,
                                BranchMethodAdd,
                                DataSpecsVersionAdd,
+                               EcEarthInstitution,
                                EcmwfInstitution,
                                EcmwfReferences,
                                EcmwfSourceHr,
@@ -22,6 +23,7 @@ from pre_proc.file_fix import (ParentBranchTimeAdd,
                                CellMeasuresAreacelloVolcelloAdd,
                                CellMethodsAreaTimeMeanAdd,
                                CellMethodsSeaAreaTimeMeanAdd,
+                               CellMethodsAreaMeanTimePointAdd,
                                SeaWaterSalinityStandardNameAdd,
                                SeaSurfaceTemperatureNameAdd,
                                VarUnitsToThousandths,
@@ -188,6 +190,56 @@ class TestCellMethodsSeaAreaTimeMeanAdd(BaseTest):
             "ncatted -h -a cell_methods,so,o,c,"
             "'area: mean where sea time: mean' "
             "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsAreaMeanTimePointAdd(BaseTest):
+    """ Test CellMethodsAreaMeanTimePointAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaMeanTimePointAdd
+        """
+        fix = CellMethodsAreaMeanTimePointAdd('so_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,so,o,c,"
+            "'area: mean time: point' "
+            "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestEcEartInstitution(BaseTest):
+    """ Test EcEarthInstitution """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        EcEarthInstitution
+        """
+        fix = EcEarthInstitution('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a institution,global,o,c,'AEMET, Spain; BSC, Spain; "
+            "CNR-ISAC, Italy; DMI, Denmark; ENEA, Italy; FMI, Finland; Geomar, "
+            "Germany; ICHEC, Ireland; ICTP, Italy; IDL, Portugal; IMAU, The "
+            "Netherlands; IPMA, Portugal; KIT, Karlsruhe, Germany; KNMI, The "
+            "Netherlands; Lund University, Sweden; Met Eireann, Ireland; "
+            "NLeSC, The Netherlands; NTNU, Norway; Oxford University, UK; "
+            "surfSARA, The Netherlands; SMHI, Sweden; Stockholm University, "
+            "Sweden; Unite ASTR, Belgium; University College Dublin, Ireland; "
+            "University of Bergen, Norway; University of Copenhagen, Denmark; "
+            "University of Helsinki, Finland; University of Santiago de "
+            "Compostela, Spain; Uppsala University, Sweden; Utrecht "
+            "University, The Netherlands; Vrije Universiteit Amsterdam, the "
+            "Netherlands; Wageningen University, The Netherlands. Mailing "
+            "address: EC-Earth consortium, Rossby Center, Swedish "
+            "Meteorological and Hydrological Institute/SMHI, SE-601 76 "
+            "Norrkoping, Sweden' "
+            "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

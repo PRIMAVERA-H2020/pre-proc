@@ -224,6 +224,75 @@ class CellMethodsSeaAreaTimeMeanAdd(AttributeAdd):
         self.new_value = 'area: mean where sea time: mean'
 
 
+class CellMethodsAreaMeanTimePointAdd(AttributeAdd):
+    """
+    Add a variable attribute `cellmethods` with a value of
+    `area: mean time: point`. This is done in overwrite mode
+    and so will work irrespective of whether there is an existing
+    cellmethods attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'cell_methods'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'area: mean time: point'
+
+
+class EcEarthInstitution(AttributeAdd):
+    """
+    Add a global attribute `institution` with a value for EC-Earth. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'institution'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('AEMET, Spain; BSC, Spain; CNR-ISAC, Italy; DMI, '
+                          'Denmark; ENEA, Italy; FMI, Finland; Geomar, Germany;'
+                          ' ICHEC, Ireland; ICTP, Italy; IDL, Portugal; IMAU, '
+                          'The Netherlands; IPMA, Portugal; KIT, Karlsruhe, '
+                          'Germany; KNMI, The Netherlands; Lund University, '
+                          'Sweden; Met Eireann, Ireland; NLeSC, The '
+                          'Netherlands; NTNU, Norway; Oxford University, '
+                          'UK; surfSARA, The Netherlands; SMHI, Sweden; '
+                          'Stockholm University, Sweden; Unite ASTR, Belgium; '
+                          'University College Dublin, Ireland; University of '
+                          'Bergen, Norway; University of Copenhagen, Denmark; '
+                          'University of Helsinki, Finland; University of '
+                          'Santiago de Compostela, Spain; Uppsala University, '
+                          'Sweden; Utrecht University, The Netherlands; Vrije '
+                          'Universiteit Amsterdam, the Netherlands; Wageningen '
+                          'University, The Netherlands. Mailing address: '
+                          'EC-Earth consortium, Rossby Center, Swedish '
+                          'Meteorological and Hydrological Institute/SMHI, '
+                          'SE-601 76 Norrkoping, Sweden')
+
+
 class EcmwfInstitution(AttributeAdd):
     """
     Add a global attribute `institution` with a value for ECMWF. This
