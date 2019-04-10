@@ -346,7 +346,7 @@ class EcmwfReferences(AttributeAdd):
                           'configurations of the ECMWF Integrated Forecasting '
                           'System (ECMWF-IFS cycle 43r1) for HighResMIP, '
                           'Geosci. Model Dev., 11, 3681-3712, '
-                          '​https://doi.org/10.5194/gmd-11-3681-2018, 2018.')
+                          'https://doi.org/10.5194/gmd-11-3681-2018, 2018.')
 
 
 class EcmwfSourceHr(AttributeAdd):
