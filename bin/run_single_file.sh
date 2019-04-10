@@ -3,8 +3,8 @@
 # A wrapper around run_single_file.py to set the appropriate environment
 # variables.
 INSTALL_DIR=/home/users/jseddon/primavera/pre-proc
-CONDA_DIR=/group_workspaces/jasmin2/primavera1/tools/miniconda2/bin
-CONDA_ENV_DIR=/group_workspaces/jasmin2/primavera1/tools/miniconda2/envs/py3-6/bin
+CONDA_DIR=/home/users/jseddon/software/miniconda3/bin
+CONDA_ENV_DIR=/home/users/jseddon/software/miniconda3/envs/py3-6/bin
 
 export PATH=$CONDA_DIR:$PATH
 . activate py3-6
