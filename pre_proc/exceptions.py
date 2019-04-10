@@ -87,7 +87,7 @@ class NcattedError(PreProcError):
     """
     When ncatted fails.
     """
-    def __init(self, class_name, filename, command, traceback_text):
+    def __init__(self, class_name, filename, command, traceback_text):
         self.class_name = class_name
         self.filename = filename
         self.command = command
