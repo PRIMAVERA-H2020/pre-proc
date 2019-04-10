@@ -5,7 +5,8 @@ Custom exceptions for the pre-proc module
 """
 __all__ = ['PreProcError', 'CannotLoadSourceFileError',
            'AttributeNotFoundError', 'AttributeConversionError',
-           'ExistingAttributeError', 'InstanceVariableNotDefinedError']
+           'ExistingAttributeError', 'InstanceVariableNotDefinedError',
+           'NcattedError']
 
 
 class PreProcError(Exception):
@@ -80,3 +81,20 @@ class InstanceVariableNotDefinedError(PreProcError):
     def __str__(self):
         return ('{}: attribute {} is not defined'.
                 format(self.class_name, self.attribute_name))
+
+
+class NcattedError(PreProcError):
+    """
+    When ncatted fails.
+    """
+    def __init(self, class_name, filename, command, traceback_text):
+        self.class_name = class_name
+        self.filename = filename
+        self.command = command
+        self.traceback_text = traceback_text
+
+    def __str__(self):
+        return ('Exception in class {} when running ncatted on file {}. '
+                'Command was:\n{}\n{}'.
+                format(self.class_name, self.filename, self.command,
+                       self.traceback_text))

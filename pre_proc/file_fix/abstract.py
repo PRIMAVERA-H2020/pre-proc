@@ -5,11 +5,12 @@ The abstract base file fixes.
 """
 from abc import ABCMeta, abstractmethod
 import os
+import traceback
 
 from netCDF4 import Dataset
 
 from pre_proc.common import run_command
-from pre_proc.exceptions import (AttributeNotFoundError,
+from pre_proc.exceptions import (AttributeNotFoundError, NcattedError,
                                  InstanceVariableNotDefinedError)
 
 
@@ -97,7 +98,11 @@ class AttributeEdit(FileFix, metaclass=ABCMeta):
             quote_mark,
             os.path.join(self.directory, self.filename)
         )
-        run_command(cmd)
+        try:
+            run_command(cmd)
+        except Exception:
+            raise NcattedError(type(self).__name__, self.filename, cmd,
+                               traceback.format_exc())
 
 
 class AttributeUpdate(AttributeEdit, metaclass=ABCMeta):
