@@ -50,19 +50,19 @@ def main():
     data_reqs = DataRequest.objects.filter(
         institution_id__name='CMCC'
     ).exclude(
-        climate_model__short_name='CMCC-CM2-VHR4',
-        variable_request__table_name='LImon',
-        variable_request__cmor_name__in=['snc', 'snd', 'snm']
+        source_id__name='CMCC-CM2-VHR4',
+        table_id='LImon',
+        cmor_name__in=['snc', 'snd', 'snm']
     ).exclude(
-        climate_model__short_name='CMCC-CM2-VHR4',
-        variable_request__table_name='Lmon',
-        variable_request__cmor_name__in=['mrsos', 'mrso', 'mrfso', 'mrros',
+        source_id__name='CMCC-CM2-VHR4',
+        table_id='Lmon',
+        cmor_name__in=['mrsos', 'mrso', 'mrfso', 'mrros',
                                          'mrro', 'evspsblveg', 'evspsblsoi',
                                          'tran', ]
     ).exclude(
-        climate_model__short_name='CMCC-CM2-HR4',
-        variable_request__table_name='Lmon',
-        variable_request__cmor_name='mrfso'
+        source_id__name='CMCC-CM2-HR4',
+        table_id='Lmon',
+        cmor_name='mrfso'
     )
 
     fixes = [
