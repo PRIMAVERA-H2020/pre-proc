@@ -45,6 +45,7 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         source_id__name='CMCC-CM2-HR4',
+        experiment_id__name='highresSST-present',
         table_id='Amon',
         cmor_name__in=['cl', 'hurs', 'huss', 'sfcWind', 'tas', 'uas', 'vas']
     )

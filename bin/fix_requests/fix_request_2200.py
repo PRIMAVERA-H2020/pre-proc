@@ -48,7 +48,8 @@ def main():
     Main entry point
     """
     data_reqs = DataRequest.objects.filter(
-        institution_id__name='CMCC'
+        institution_id__name='CMCC',
+        experiment_id__name='highresSST-present'
     ).exclude(
         source_id__name='CMCC-CM2-VHR4',
         table_id='LImon',
