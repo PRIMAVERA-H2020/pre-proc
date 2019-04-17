@@ -25,7 +25,7 @@ class BaseTest(unittest.TestCase):
 
 
 class TestLatDirection(BaseTest):
-    """ Test LatDirection """
+    """ Test LatDirection main functionality """
     def setUp(self):
         """ Use BaseTest but also patch two external calls """
         super().setUp()
@@ -38,14 +38,17 @@ class TestLatDirection(BaseTest):
         self.mock_rename = patch.start()
         self.addCleanup(patch.stop)
 
-    @mock.patch('pre_proc.file_fix.data_fixes.LatDirection.'
-                '_is_lat_decreasing')
-    def test_subprocess_called_correctly(self, mock_check):
+        patch = mock.patch('pre_proc.file_fix.data_fixes.LatDirection.'
+                           '_is_lat_decreasing')
+        self.mock_lat_check = patch.start()
+        self.mock_lat_check.return_value = True
+        self.addCleanup(patch.stop)
+
+    def test_subprocess_called_correctly(self):
         """
         Test that an external call's been made correctly for
         LatDirection
         """
-        mock_check.return_value = True
         fix = LatDirection('1.nc', '/a')
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
@@ -54,63 +57,59 @@ class TestLatDirection(BaseTest):
             shell=True
         )
 
-    @mock.patch('pre_proc.file_fix.data_fixes.LatDirection.'
-                '_is_lat_decreasing')
-    def test_remove_called_correctly(self, mock_check):
+    def test_remove_called_correctly(self):
         """
         Test that input files is removed.
         """
-        mock_check.return_value = True
         fix = LatDirection('1.nc', '/a')
         fix.apply_fix()
         self.mock_remove.assert_called_once_with('/a/1.nc')
 
-    @mock.patch('pre_proc.file_fix.data_fixes.LatDirection.'
-                '_is_lat_decreasing')
-    def test_rename_called_correctly(self, mock_check):
+    def test_rename_called_correctly(self):
         """
         Test that output file is renamed.
         """
-        mock_check.return_value = True
         fix = LatDirection('1.nc', '/a')
         fix.apply_fix()
         self.mock_rename.assert_called_once_with('/a/1.nc.temp', '/a/1.nc')
 
-    @mock.patch('pre_proc.file_fix.data_fixes.LatDirection.'
-                '_is_lat_decreasing')
-    def test_exception_raised(self, mock_check):
+    def test_exception_raised(self):
         """
         Test that an exception is raised if the file's latitude is increasing.
         """
-        mock_check.return_value = False
+        self.mock_lat_check.return_value = True
         fix = LatDirection('1.nc', '/a')
         self.assertRaisesRegex(ExistingAttributeError,
                                'Cannot edit attribute latitude in file 1.nc. '
                                'Latitude is not decreasing.', fix.apply_fix)
 
-    @mock.patch('pre_proc.file_fix.data_fixes.iris.load_cube')
-    def test_direction_test_passes(self, mock_iris_load):
+
+class TestLatDirectionLatitudeCheck(BaseTest):
+    """ Test LatDirection._is_lat_decreasing() """
+    def setUp(self):
+        """ Mock loading a cube """
+        patch = mock.patch('pre_proc.file_fix.data_fixes.iris.load_cube')
+        mock_iris_load = patch.start()
+        self.cube = realistic_3d()
+        lat_coord = self.cube.coord('grid_latitude')
+        lat_coord.standard_name = 'latitude'
+        mock_iris_load.return_value = self.cube
+        self.addCleanup(patch.stop)
+
+    def test_direction_test_passes(self):
         """
         Check test fails for decreasing latitude.
         """
-        cube = realistic_3d()
-        lat_coord = cube.coord('grid_latitude')
-        lat_coord.standard_name = 'latitude'
-        lat_coord.points = np.flip(lat_coord.points)
-        mock_iris_load.return_value = cube
-
         fix = LatDirection('1.nc', '/a')
+        # flip the latitude dimension
+        self.cube.coord('latitude').points = np.flip(
+            self.cube.coord('latitude').points
+        )
         self.assertTrue(fix._is_lat_decreasing())
 
-    @mock.patch('pre_proc.file_fix.data_fixes.iris.load_cube')
-    def test_direction_test_fails(self, mock_iris_load):
+    def test_direction_test_fails(self):
         """
         Check test fails for increasing latitude.
         """
-        cube = realistic_3d()
-        lat_coord = cube.coord('grid_latitude')
-        lat_coord.standard_name = 'latitude'
-        mock_iris_load.return_value = cube
-
         fix = LatDirection('1.nc', '/a')
         self.assertFalse(fix._is_lat_decreasing())
