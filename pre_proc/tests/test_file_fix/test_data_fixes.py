@@ -15,7 +15,9 @@ from pre_proc.file_fix import LatDirection
 
 
 class BaseTest(unittest.TestCase):
-    """ Base class to setup a typical environment used by other tests """
+    """
+    Base class to setup a typical environment used by other tests
+    """
     def setUp(self):
         """ Set up code run before every test """
         # mock any external calls
@@ -25,7 +27,9 @@ class BaseTest(unittest.TestCase):
 
 
 class TestLatDirection(BaseTest):
-    """ Test LatDirection main functionality """
+    """
+    Test LatDirection main functionality
+    """
     def setUp(self):
         """ Use BaseTest but also patch two external calls """
         super().setUp()
@@ -77,7 +81,7 @@ class TestLatDirection(BaseTest):
         """
         Test that an exception is raised if the file's latitude is increasing.
         """
-        self.mock_lat_check.return_value = True
+        self.mock_lat_check.return_value = False
         fix = LatDirection('1.nc', '/a')
         self.assertRaisesRegex(ExistingAttributeError,
                                'Cannot edit attribute latitude in file 1.nc. '
@@ -85,7 +89,9 @@ class TestLatDirection(BaseTest):
 
 
 class TestLatDirectionLatitudeCheck(BaseTest):
-    """ Test LatDirection._is_lat_decreasing() """
+    """
+    Test LatDirection._is_lat_decreasing()
+    """
     def setUp(self):
         """ Mock loading a cube """
         patch = mock.patch('pre_proc.file_fix.data_fixes.iris.load_cube')
