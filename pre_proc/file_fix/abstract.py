@@ -105,6 +105,17 @@ class AttributeEdit(FileFix, metaclass=ABCMeta):
                                traceback.format_exc())
 
 
+class DataFix(FileFix, metaclass=ABCMeta):
+    """
+    An abstract base class for fixes that edit the data in a netCDF file.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+
+
 class AttributeUpdate(AttributeEdit, metaclass=ABCMeta):
     """
     An abstract base class for fixes that require the use of `ncatted` to

@@ -6,7 +6,7 @@ Custom exceptions for the pre-proc module
 __all__ = ['PreProcError', 'CannotLoadSourceFileError',
            'AttributeNotFoundError', 'AttributeConversionError',
            'ExistingAttributeError', 'InstanceVariableNotDefinedError',
-           'NcattedError']
+           'NcattedError', 'NcpdqError']
 
 
 class PreProcError(Exception):
@@ -83,18 +83,38 @@ class InstanceVariableNotDefinedError(PreProcError):
                 format(self.class_name, self.attribute_name))
 
 
-class NcattedError(PreProcError):
+class ExternalCommandError(PreProcError):
     """
-    When ncatted fails.
+    A generic class for when an external command fails.
     """
-    def __init__(self, class_name, filename, command, traceback_text):
+    def __init__(self, class_name, external_command, filename, command,
+                 traceback_text):
         self.class_name = class_name
+        self.external_command = external_command
         self.filename = filename
         self.command = command
         self.traceback_text = traceback_text
 
     def __str__(self):
-        return ('Exception in class {} when running ncatted on file {}. '
+        return ('Exception in class {} when running {} on file {}. '
                 'Command was:\n{}\n{}'.
-                format(self.class_name, self.filename, self.command,
-                       self.traceback_text))
+                format(self.class_name, self.external_command,  self.filename,
+                       self.command, self.traceback_text))
+
+
+class NcattedError(ExternalCommandError):
+    """
+    When ncatted fails.
+    """
+    def __init__(self, class_name, filename, command, traceback_text):
+        super().__init__(class_name, 'ncatted', filename, command,
+                         traceback_text)
+
+
+class NcpdqError(ExternalCommandError):
+    """
+    When ncpdq fails.
+    """
+    def __init__(self, class_name, filename, command, traceback_text):
+        super().__init__(class_name, 'ncpdq', filename, command,
+                         traceback_text)
