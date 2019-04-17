@@ -5,9 +5,12 @@ Unit tests for all FileFix concrete classes from data_fixes.py
 """
 import subprocess
 import unittest
+from unittest import mock
 
-import mock
+from iris.tests.stock import realistic_3d
+import numpy as np
 
+from pre_proc.exceptions import ExistingAttributeError
 from pre_proc.file_fix import LatDirection
 
 
@@ -35,11 +38,14 @@ class TestLatDirection(BaseTest):
         self.mock_rename = patch.start()
         self.addCleanup(patch.stop)
 
-    def test_subprocess_called_correctly(self):
+    @mock.patch('pre_proc.file_fix.data_fixes.LatDirection.'
+                '_is_lat_decreasing')
+    def test_subprocess_called_correctly(self, mock_check):
         """
         Test that an external call's been made correctly for
         LatDirection
         """
+        mock_check.return_value = True
         fix = LatDirection('1.nc', '/a')
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
@@ -48,18 +54,63 @@ class TestLatDirection(BaseTest):
             shell=True
         )
 
-    def test_remove_called_correctly(self):
+    @mock.patch('pre_proc.file_fix.data_fixes.LatDirection.'
+                '_is_lat_decreasing')
+    def test_remove_called_correctly(self, mock_check):
         """
         Test that input files is removed.
         """
+        mock_check.return_value = True
         fix = LatDirection('1.nc', '/a')
         fix.apply_fix()
         self.mock_remove.assert_called_once_with('/a/1.nc')
 
-    def test_rename_called_correctly(self):
+    @mock.patch('pre_proc.file_fix.data_fixes.LatDirection.'
+                '_is_lat_decreasing')
+    def test_rename_called_correctly(self, mock_check):
         """
         Test that output file is renamed.
         """
+        mock_check.return_value = True
         fix = LatDirection('1.nc', '/a')
         fix.apply_fix()
         self.mock_rename.assert_called_once_with('/a/1.nc.temp', '/a/1.nc')
+
+    @mock.patch('pre_proc.file_fix.data_fixes.LatDirection.'
+                '_is_lat_decreasing')
+    def test_exception_raised(self, mock_check):
+        """
+        Test that an exception is raised if the file's latitude is increasing.
+        """
+        mock_check.return_value = False
+        fix = LatDirection('1.nc', '/a')
+        self.assertRaisesRegex(ExistingAttributeError,
+                               'Cannot edit attribute latitude in file 1.nc. '
+                               'Latitude is not decreasing.', fix.apply_fix)
+
+    @mock.patch('pre_proc.file_fix.data_fixes.iris.load_cube')
+    def test_direction_test_passes(self, mock_iris_load):
+        """
+        Check test fails for decreasing latitude.
+        """
+        cube = realistic_3d()
+        lat_coord = cube.coord('grid_latitude')
+        lat_coord.standard_name = 'latitude'
+        lat_coord.points = np.flip(lat_coord.points)
+        mock_iris_load.return_value = cube
+
+        fix = LatDirection('1.nc', '/a')
+        self.assertTrue(fix._is_lat_decreasing())
+
+    @mock.patch('pre_proc.file_fix.data_fixes.iris.load_cube')
+    def test_direction_test_fails(self, mock_iris_load):
+        """
+        Check test fails for increasing latitude.
+        """
+        cube = realistic_3d()
+        lat_coord = cube.coord('grid_latitude')
+        lat_coord.standard_name = 'latitude'
+        mock_iris_load.return_value = cube
+
+        fix = LatDirection('1.nc', '/a')
+        self.assertFalse(fix._is_lat_decreasing())
