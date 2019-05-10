@@ -24,6 +24,7 @@ from pre_proc.file_fix import (ParentBranchTimeAdd,
                                CellMethodsAreaTimeMeanAdd,
                                CellMethodsSeaAreaTimeMeanAdd,
                                CellMethodsAreaMeanTimePointAdd,
+                               ProductAdd,
                                SeaWaterSalinityStandardNameAdd,
                                SeaSurfaceTemperatureNameAdd,
                                VarUnitsToThousandths,
@@ -353,6 +354,21 @@ class TestEcmwfSourceLr(BaseTest):
             "none\nseaIce: LIM2 (LIM v2; ORCA1 tripolar grid; 362 x 292 "
             "longitude/latitude)' "
             "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestProductAdd(BaseTest):
+    """ Test ProductAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for ProductAdd
+        """
+        fix = ProductAdd('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a product,global,o,c,'model-output' /a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

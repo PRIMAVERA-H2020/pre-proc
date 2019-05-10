@@ -20,7 +20,7 @@ from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                RealizationIndexIntFix,
                                FurtherInfoUrlToHttps,
                                FurtherInfoUrlAWISourceIdAndHttps,
-                               AogcmToAgcm)
+                               AogcmToAgcm, TrackingIdFix)
 
 
 class BaseTest(unittest.TestCase):
@@ -428,6 +428,43 @@ class TestAogcmToAgcm(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a source_type,global,o,c,"
             "'AGCM' /a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestTrackingIdFix(BaseTest):
+    """ Test TrackingIdFix """
+    def test_no_attribute_raises(self):
+        """ Test if the required attribute isn't found in the netCDF """
+        fix = TrackingIdFix('1.nc', '/a')
+        exception_text = ('Cannot find attribute tracking_id in '
+                          'file 1.nc')
+        self.assertRaisesRegex(AttributeNotFoundError, exception_text,
+                               fix.apply_fix)
+
+    def test_not_hdl(self):
+        """ Test exception is raised if it starts with hdl: """
+        self.mock_dataset.return_value.tracking_id = 'hdl:/uuid'
+        fix = TrackingIdFix('1.nc', '/a')
+        exception_text = ('Existing tracking_id attribute starts with hdl:')
+        self.assertRaisesRegex(ExistingAttributeError, exception_text,
+                               fix.apply_fix)
+
+    def test_subprocess_called_correctly_further_info_url(self):
+        """
+        Test that an external call's been made correctly for
+        TrackingIdFix
+        """
+        self.mock_dataset.return_value.tracking_id = (
+            '79fa5ac0-14cb-4a9f-bcff-ca097ba45c46'
+        )
+        fix = TrackingIdFix('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a tracking_id,global,o,c,"
+            "'hdl:21.14100/79fa5ac0-14cb-4a9f-bcff-ca097ba45c46' "
+            "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
