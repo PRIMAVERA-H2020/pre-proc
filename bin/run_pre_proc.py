@@ -11,10 +11,10 @@ import argparse
 import logging.config
 import os
 import sys
+import traceback
 
 from pre_proc import EsgfSubmission
 from pre_proc.common import list_files
-from pre_proc.exceptions import PreProcError
 
 __version__ = '0.1.0b1'
 
@@ -55,13 +55,12 @@ def main(args):
             esgf_submission.determine_fixes()
             esgf_submission.run_fixes()
             esgf_submission.update_history()
-        except RuntimeError:
-            logger.error('Processing file {} failed'.format(filepath))
-            sys.exit(1)
-        except PreProcError as exc:
-            logger.warning(exc)
-            logger.error('Processing file {} failed'.format(filepath))
-            sys.exit(1)
+        except:
+            exc_type, exc_value, exc_tb = sys.exc_info()
+            tb_list = traceback.format_exception(exc_type, exc_value, exc_tb)
+            tb_string = '\n'.join(tb_list)
+            logger.error('Processing file {} failed\n{}'.
+                         format(filepath), tb_string)
 
 
 if __name__ == "__main__":
