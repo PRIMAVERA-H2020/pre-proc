@@ -46,7 +46,7 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name='MPI-M',
-        experiment__name='highresSST-present'
+        experiment_id__name='highresSST-present'
     )
 
     realization = FileFix.objects.get(name='RealizationIndexIntFix')
