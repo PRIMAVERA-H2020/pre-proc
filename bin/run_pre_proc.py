@@ -48,6 +48,7 @@ def main(args):
     logger.debug('Database directory is {}'.
                  format(os.environ['DATABASE_DIR']))
 
+    files_failed = []
     for filepath in sorted(list_files(args.directory)):
         logger.debug('Processing {}'.format(filepath))
         try:
@@ -56,11 +57,17 @@ def main(args):
             esgf_submission.run_fixes()
             esgf_submission.update_history()
         except:
+            files_failed.append(filepath)
             exc_type, exc_value, exc_tb = sys.exc_info()
             tb_list = traceback.format_exception(exc_type, exc_value, exc_tb)
             tb_string = '\n'.join(tb_list)
             logger.error('Processing file {} failed\n{}'.
                          format(filepath), tb_string)
+
+    if files_failed:
+        logger.error('{} files failed:\n{}'.format(len(files_failed),
+                                                   '\n'.join(files_failed)))
+        sys.exit(1)
 
 
 if __name__ == "__main__":
