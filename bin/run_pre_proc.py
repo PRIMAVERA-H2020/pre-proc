@@ -12,6 +12,7 @@ import logging.config
 import os
 import sys
 import traceback
+import warnings
 
 from pre_proc import EsgfSubmission
 from pre_proc.common import list_files
@@ -22,6 +23,9 @@ DEFAULT_LOG_LEVEL = logging.WARNING
 DEFAULT_LOG_FORMAT = '%(levelname)s: %(message)s'
 
 logger = logging.getLogger(__name__)
+
+# Ignore warnings displayed when loading data
+warnings.filterwarnings("ignore")
 
 
 def parse_args():
