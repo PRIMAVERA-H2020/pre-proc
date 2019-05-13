@@ -47,7 +47,7 @@ def main():
         institution_id__name='MPI-M',
         experiment_id__name='highresSST-present',
         table_id='Amon',
-        cmor_name__in=['psl', 'tas']
+        cmor_name__in=['psl', 'tas', 'ts']
     )
 
     cm_atm = FileFix.objects.get(name='CellMethodsAreaTimeMeanAdd')
