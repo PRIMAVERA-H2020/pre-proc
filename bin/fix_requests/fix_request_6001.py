@@ -2,7 +2,7 @@
 """
 fix_request_6001.py
 
-MOHC/NERC.HadGEM3-GC31-*.*.*.Amon.[uv]a
+MOHC/NERC.HadGEM3-GC31-*.*.*.Amon/day.[uv]a
 
 Add cell_measures area: areacella to all MOHC and NERC Amon ua and va
 variables.
@@ -46,7 +46,7 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name__in=['MOHC', 'NERC'],
-        table_id='Amon',
+        table_id__in=['Amon', 'day'],
         cmor_name__in=['ua', 'va']
     )
 
