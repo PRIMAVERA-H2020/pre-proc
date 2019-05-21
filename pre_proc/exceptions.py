@@ -3,10 +3,12 @@ exceptions.py
 
 Custom exceptions for the pre-proc module
 """
+import os
+
 __all__ = ['PreProcError', 'CannotLoadSourceFileError',
            'AttributeNotFoundError', 'AttributeConversionError',
            'ExistingAttributeError', 'InstanceVariableNotDefinedError',
-           'NcattedError']
+           'NcattedError', 'DataRequestNotFound', 'MultipleDataRequestsFound']
 
 
 class PreProcError(Exception):
@@ -98,3 +100,29 @@ class NcattedError(PreProcError):
                 'Command was:\n{}\n{}'.
                 format(self.class_name, self.filename, self.command,
                        self.traceback_text))
+
+
+class DataRequestNotFound(PreProcError):
+    """
+    When a pre_proc data request cannot be found.
+    """
+    def __init__(self, directory, filename):
+        self.directory = directory
+        self.filename = filename
+
+    def __str__(self):
+        return ('Cannot find a pre_proc DataRequest for file {}'.
+                format(os.path.join(self.directory, self.filename)))
+
+
+class MultipleDataRequestsFound(PreProcError):
+    """
+    When multiple pre_proc data requests are found.
+    """
+    def __init__(self, directory, filename):
+        self.directory = directory
+        self.filename = filename
+
+    def __str__(self):
+        return ('Multiple pre_proc DataRequest found for file {}'.
+                format(os.path.join(self.directory, self.filename)))
