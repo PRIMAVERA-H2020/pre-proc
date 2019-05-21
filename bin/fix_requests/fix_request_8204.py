@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_8201.py
+fix_request_8204.py
 
-MPI-M.*.highresSST-present.*.Amon.many
+MPI-M.*.highresSST-present.*.Amon.[uv]as
 
-Correct the cell_methods on various Amon variables.
+Correct the cell_measures on Amon uas and vas.
 """
 import argparse
 import logging.config
@@ -47,16 +47,10 @@ def main():
         institution_id__name='MPI-M',
         experiment_id__name='highresSST-present',
         table_id='Amon',
-        cmor_name__in=[
-            'cl', 'cli', 'clivi', 'clt', 'clw', 'clwvi', 'evspsbl', 'hfls',
-            'hfss', 'hurs', 'huss', 'pr', 'prc', 'prsn', 'prw', 'ps', 'psl',
-            'rlds', 'rldscs', 'rlus', 'rlut', 'rlutcs', 'rsds', 'rsdscs',
-            'rsdt', 'rsus', 'rsutcs', 'rsuscs', 'rsut', 'rtmt', 'sfcWind',
-            'tas', 'tauu', 'tauv', 'ts', 'uas', 'vas'
-        ]
+        cmor_name__in=['uas', 'vas', 'sfcWind']
     )
 
-    cm_atm = FileFix.objects.get(name='CellMethodsAreaTimeMeanAdd')
+    cm_atm = FileFix.objects.get(name='CellMeasuresAreacellaAdd')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)

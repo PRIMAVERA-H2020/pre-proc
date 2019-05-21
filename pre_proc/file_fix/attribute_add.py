@@ -530,6 +530,31 @@ class ProductAdd(AttributeAdd):
         self.new_value = 'model-output'
 
 
+class AtmosphereCloudIceContentStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `atmosphere_cloud_ice_content`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'atmosphere_cloud_ice_content'
+
+
 class SeaWaterSalinityStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
@@ -604,6 +629,31 @@ class ShallowConvectivePrecipitationFluxStandardNameAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'shallow_convective_precipitation_flux'
+
+
+class VarUnitsToPercent(AttributeAdd):
+    """
+    Replace the variable's attribute `units` to `%`. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing units attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'units'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = '%'
 
 
 class VarUnitsToThousandths(AttributeAdd):

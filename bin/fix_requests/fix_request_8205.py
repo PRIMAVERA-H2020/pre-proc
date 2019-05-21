@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_8201.py
+fix_request_8205.py
 
-MPI-M.*.highresSST-present.*.Amon.many
+MPI-M.*.highresSST-present.*.Amon.clivi
 
-Correct the cell_methods on various Amon variables.
+Correct the cell_methods on Amon clivi.
 """
 import argparse
 import logging.config
@@ -47,26 +47,20 @@ def main():
         institution_id__name='MPI-M',
         experiment_id__name='highresSST-present',
         table_id='Amon',
-        cmor_name__in=[
-            'cl', 'cli', 'clivi', 'clt', 'clw', 'clwvi', 'evspsbl', 'hfls',
-            'hfss', 'hurs', 'huss', 'pr', 'prc', 'prsn', 'prw', 'ps', 'psl',
-            'rlds', 'rldscs', 'rlus', 'rlut', 'rlutcs', 'rsds', 'rsdscs',
-            'rsdt', 'rsus', 'rsutcs', 'rsuscs', 'rsut', 'rtmt', 'sfcWind',
-            'tas', 'tauu', 'tauv', 'ts', 'uas', 'vas'
-        ]
+        cmor_name='clivi'
     )
 
-    cm_atm = FileFix.objects.get(name='CellMethodsAreaTimeMeanAdd')
+    clivi = FileFix.objects.get(name='AtmosphereCloudIceContentStandardNameAdd')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(cm_atm)
+        data_req.fixes.add(clivi)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(cm_atm.name, data_reqs.count()))
+                 format(clivi.name, data_reqs.count()))
 
 
 if __name__ == "__main__":

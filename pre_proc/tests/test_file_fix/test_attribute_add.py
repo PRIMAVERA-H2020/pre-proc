@@ -27,9 +27,11 @@ from pre_proc.file_fix import (ParentBranchTimeAdd,
                                CellMethodsAreaMeanTimeMinimumAdd,
                                CellMethodsAreaMeanTimeMaximumAdd,
                                ProductAdd,
+                               AtmosphereCloudIceContentStandardNameAdd,
                                SeaWaterSalinityStandardNameAdd,
                                SeaSurfaceTemperatureNameAdd,
                                ShallowConvectivePrecipitationFluxStandardNameAdd,
+                               VarUnitsToPercent,
                                VarUnitsToThousandths,
                                WtemStandardNameAdd)
 
@@ -413,6 +415,25 @@ class TestProductAdd(BaseTest):
         )
 
 
+class TestAtmosphereCloudIceContentStandardNameAdd(BaseTest):
+    """ Test AtmosphereCloudIceContentStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        AtmosphereCloudIceContentStandardNameAdd
+        """
+        fix = AtmosphereCloudIceContentStandardNameAdd('clivi_components.nc',
+                                                       '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,clivi,o,c,"
+            "'atmosphere_cloud_ice_content' "
+            "/a/clivi_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestSeaWaterSalinityStandardNameAdd(BaseTest):
     """ Test SeaWaterSalinityStandardNameAdd """
     def test_subprocess_called_correctly(self):
@@ -462,6 +483,23 @@ class TestShallowConvectivePrecipitationFluxStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,prcsh,o,c,"
             "'shallow_convective_precipitation_flux' "
             "/a/prcsh_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVarUnitsToPercent(BaseTest):
+    """ Test VarUnitsToPercent """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VarUnitsToPercent.
+        """
+        fix = VarUnitsToPercent('clt_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a units,clt,o,c,'%' "
+            "/a/clt_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
