@@ -10,11 +10,13 @@ import os
 from netCDF4 import Dataset
 
 import django
+import django.core.exceptions
 
 django.setup()
 
 import pre_proc
 from pre_proc.common import run_command
+from pre_proc.exceptions import DataRequestNotFound, MultipleDataRequestsFound
 from pre_proc_app.models import DataRequest
 
 
@@ -111,13 +113,29 @@ class EsgfSubmission(object):
         :returns: the data request object corresponding to this submission
         :rtype: pre_proc_app.models.DataRequest
         """
-        return DataRequest.objects.get(
-            source_id__name=self.source_id,
-            experiment_id__name=self.experiment_id,
-            variant_label=self.variant_label,
-            table_id=self.table_id,
-            cmor_name=self.cmor_name
-        )
+        try:
+            dreq = DataRequest.objects.get(
+                source_id__name=self.source_id,
+                experiment_id__name=self.experiment_id,
+                variant_label=self.variant_label,
+                table_id=self.table_id,
+                cmor_name=self.cmor_name
+            )
+        except django.core.exceptions.ObjectDoesNotExist:
+            try:
+                dreq = DataRequest.objects.get(
+                    source_id__name=self.source_id,
+                    experiment_id__name=self.experiment_id,
+                    variant_label=self.variant_label,
+                    table_id=self.table_id,
+                    cmor_name__startswith=self.cmor_name
+                )
+            except django.core.exceptions.ObjectDoesNotExist:
+                raise DataRequestNotFound(self.directory, self.filename)
+            except django.core.exceptions.MultipleObjectsReturned:
+                raise MultipleDataRequestsFound(self.directory, self.filename)
+
+        return dreq
 
 
 def _get_attribute(filepath, attr_name):

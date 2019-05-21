@@ -27,6 +27,7 @@ from pre_proc.file_fix import (ParentBranchTimeAdd,
                                ProductAdd,
                                SeaWaterSalinityStandardNameAdd,
                                SeaSurfaceTemperatureNameAdd,
+                               ShallowConvectivePrecipitationFluxStandardNameAdd,
                                VarUnitsToThousandths,
                                WtemStandardNameAdd)
 
@@ -403,6 +404,26 @@ class TestSeaSurfaceTemperatureNameAdd(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a standard_name,tos,o,c,'sea_surface_temperature' "
             "/a/tos_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestShallowConvectivePrecipitationFluxStandardNameAdd(BaseTest):
+    """ Test ShallowConvectivePrecipitationFluxStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ShallowConvectivePrecipitationFluxStandardNameAdd
+        """
+        fix = ShallowConvectivePrecipitationFluxStandardNameAdd(
+            'prcsh_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,prcsh,o,c,"
+            "'shallow_convective_precipitation_flux' "
+            "/a/prcsh_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
