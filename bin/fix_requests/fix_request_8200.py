@@ -49,6 +49,7 @@ def main():
         experiment_id__name='highresSST-present'
     )
 
+    data_specs = FileFix.objects.get(name='DataSpecsVersionAdd')
     realization = FileFix.objects.get(name='RealizationIndexIntFix')
     initialization = FileFix.objects.get(name='InitializationIndexIntFix')
     physics = FileFix.objects.get(name='PhysicsIndexIntFix')
@@ -61,6 +62,7 @@ def main():
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
+        data_req.fixes.add(data_specs)
         data_req.fixes.add(realization)
         data_req.fixes.add(initialization)
         data_req.fixes.add(physics)
@@ -68,6 +70,8 @@ def main():
         data_req.fixes.add(product)
         data_req.fixes.add(tracking_id)
 
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(data_specs.name, data_reqs.count()))
     logger.debug('FileFix {} added to {} data requests.'.
                  format(realization.name, data_reqs.count()))
     logger.debug('FileFix {} added to {} data requests.'.
