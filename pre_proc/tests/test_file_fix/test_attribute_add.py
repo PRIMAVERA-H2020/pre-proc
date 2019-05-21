@@ -24,6 +24,8 @@ from pre_proc.file_fix import (ParentBranchTimeAdd,
                                CellMethodsAreaTimeMeanAdd,
                                CellMethodsSeaAreaTimeMeanAdd,
                                CellMethodsAreaMeanTimePointAdd,
+                               CellMethodsAreaMeanTimeMinimumAdd,
+                               CellMethodsAreaMeanTimeMaximumAdd,
                                ProductAdd,
                                SeaWaterSalinityStandardNameAdd,
                                SeaSurfaceTemperatureNameAdd,
@@ -210,6 +212,42 @@ class TestCellMethodsAreaMeanTimePointAdd(BaseTest):
             "ncatted -h -a cell_methods,so,o,c,"
             "'area: mean time: point' "
             "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsAreaMeanTimeMinimumAdd(BaseTest):
+    """ Test CellMethodsAreaMeanTimeMinimumAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaMeanTimeMinimumAdd
+        """
+        fix = CellMethodsAreaMeanTimeMinimumAdd('tasmin_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,tasmin,o,c,"
+            "'area: mean time: minimum within days time: mean over days' "
+            "/a/tasmin_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsAreaMeanTimeMaximumAdd(BaseTest):
+    """ Test CellMethodsAreaMeanTimeMaximumAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaMeanTimeMaximumAdd
+        """
+        fix = CellMethodsAreaMeanTimeMaximumAdd('tasmax_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,tasmax,o,c,"
+            "'area: mean time: maximum within days time: mean over days' "
+            "/a/tasmax_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
