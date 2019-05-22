@@ -24,9 +24,16 @@ from pre_proc.file_fix import (ParentBranchTimeAdd,
                                CellMethodsAreaTimeMeanAdd,
                                CellMethodsSeaAreaTimeMeanAdd,
                                CellMethodsAreaMeanTimePointAdd,
+                               CellMethodsAreaMeanTimeMinimumAdd,
+                               CellMethodsAreaMeanTimeMaximumAdd,
+                               CellMethodsAreaMeanTimeMinDailyAdd,
+                               CellMethodsAreaMeanTimeMaxDailyAdd,
+                               ProductAdd,
+                               AtmosphereCloudIceContentStandardNameAdd,
                                SeaWaterSalinityStandardNameAdd,
                                SeaSurfaceTemperatureNameAdd,
                                ShallowConvectivePrecipitationFluxStandardNameAdd,
+                               VarUnitsToPercent,
                                VarUnitsToThousandths,
                                WtemStandardNameAdd)
 
@@ -214,6 +221,78 @@ class TestCellMethodsAreaMeanTimePointAdd(BaseTest):
         )
 
 
+class TestCellMethodsAreaMeanTimeMinimumAdd(BaseTest):
+    """ Test CellMethodsAreaMeanTimeMinimumAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaMeanTimeMinimumAdd
+        """
+        fix = CellMethodsAreaMeanTimeMinimumAdd('tasmin_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,tasmin,o,c,"
+            "'area: mean time: minimum within days time: mean over days' "
+            "/a/tasmin_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsAreaMeanTimeMaximumAdd(BaseTest):
+    """ Test CellMethodsAreaMeanTimeMaximumAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaMeanTimeMaximumAdd
+        """
+        fix = CellMethodsAreaMeanTimeMaximumAdd('tasmax_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,tasmax,o,c,"
+            "'area: mean time: maximum within days time: mean over days' "
+            "/a/tasmax_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsAreaMeanTimeMinDailyAdd(BaseTest):
+    """ Test CellMethodsAreaMeanTimeMinDailyAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaMeanTimeMinDailyAdd
+        """
+        fix = CellMethodsAreaMeanTimeMinDailyAdd('tasmin_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,tasmin,o,c,"
+            "'area: mean time: minimum' "
+            "/a/tasmin_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsAreaMeanTimeMaxDailyAdd(BaseTest):
+    """ Test CellMethodsAreaMeanTimeMaxDailyAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaMeanTimeMaxDailyAdd
+        """
+        fix = CellMethodsAreaMeanTimeMaxDailyAdd('sfcWindmax_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,sfcWindmax,o,c,"
+            "'area: mean time: maximum' "
+            "/a/sfcWindmax_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestEcEartInstitution(BaseTest):
     """ Test EcEarthInstitution """
     def test_subprocess_called_correctly(self):
@@ -359,6 +438,40 @@ class TestEcmwfSourceLr(BaseTest):
         )
 
 
+class TestProductAdd(BaseTest):
+    """ Test ProductAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for ProductAdd
+        """
+        fix = ProductAdd('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a product,global,o,c,'model-output' /a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestAtmosphereCloudIceContentStandardNameAdd(BaseTest):
+    """ Test AtmosphereCloudIceContentStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        AtmosphereCloudIceContentStandardNameAdd
+        """
+        fix = AtmosphereCloudIceContentStandardNameAdd('clivi_components.nc',
+                                                       '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,clivi,o,c,"
+            "'atmosphere_cloud_ice_content' "
+            "/a/clivi_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestSeaWaterSalinityStandardNameAdd(BaseTest):
     """ Test SeaWaterSalinityStandardNameAdd """
     def test_subprocess_called_correctly(self):
@@ -408,6 +521,23 @@ class TestShallowConvectivePrecipitationFluxStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,prcsh,o,c,"
             "'shallow_convective_precipitation_flux' "
             "/a/prcsh_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVarUnitsToPercent(BaseTest):
+    """ Test VarUnitsToPercent """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VarUnitsToPercent.
+        """
+        fix = VarUnitsToPercent('clt_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a units,clt,o,c,'%' "
+            "/a/clt_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

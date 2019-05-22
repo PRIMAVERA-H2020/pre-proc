@@ -1,21 +1,20 @@
 #!/usr/bin/env python
 """
-run_pre_proc.py
+fix_request_8206.py
 
-Run PRIMAVERA pre-processing as part of the CEDA CREPP workflow. A directory
-is specified and all files in this directory are fixed. It is likely that the
-same fixes will be applied to all of the files, however, the fixes to apply
-are calculated again for each file.
+MPI-M.*.highresSST-present.*.day.sfcWindmax/tasmax
+
+Correct the cell_methods on day for maxima.
 """
 import argparse
 import logging.config
-import os
 import sys
-import traceback
-import warnings
 
-from pre_proc import EsgfSubmission
-from pre_proc.common import list_files
+import django
+django.setup()
+
+from pre_proc_app.models import DataRequest, FileFix
+
 
 __version__ = '0.1.0b1'
 
@@ -24,17 +23,12 @@ DEFAULT_LOG_FORMAT = '%(levelname)s: %(message)s'
 
 logger = logging.getLogger(__name__)
 
-# Ignore warnings displayed when loading data
-warnings.filterwarnings("ignore")
-
 
 def parse_args():
     """
     Parse command-line arguments
     """
-    parser = argparse.ArgumentParser(description='Pre-process PRIMAVERA data.')
-    parser.add_argument('directory', help='the directory where the files to '
-                                          'fix are stored', type=str)
+    parser = argparse.ArgumentParser(description='Add pre-processing rules.')
     parser.add_argument('-l', '--log-level', help='set logging level to one '
                                                   'of debug, info, warn (the '
                                                   'default), or error')
@@ -45,33 +39,28 @@ def parse_args():
     return args
 
 
-def main(args):
+def main():
     """
     Main entry point
     """
-    logger.debug('Database directory is {}'.
-                 format(os.environ['DATABASE_DIR']))
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name='highresSST-present',
+        table_id='day',
+        cmor_name__in=['sfcWindmax', 'tasmax']
+    )
 
-    files_failed = []
-    for filepath in sorted(list_files(args.directory)):
-        logger.debug('Processing {}'.format(filepath))
-        try:
-            esgf_submission = EsgfSubmission.from_file(filepath)
-            esgf_submission.determine_fixes()
-            esgf_submission.run_fixes()
-            esgf_submission.update_history()
-        except:
-            files_failed.append(filepath)
-            exc_type, exc_value, exc_tb = sys.exc_info()
-            tb_list = traceback.format_exception(exc_type, exc_value, exc_tb)
-            tb_string = '\n'.join(tb_list)
-            logger.error('Processing file {} failed\n{}'.
-                         format(filepath), tb_string)
+    sfcWindmax = FileFix.objects.get(name='CellMethodsAreaMeanTimeMaxDailyAdd')
 
-    if files_failed:
-        logger.error('{} files failed:\n{}'.format(len(files_failed),
-                                                   '\n'.join(files_failed)))
-        sys.exit(1)
+    # This next line could be done more quickly by:
+    # further_info_url_fix.datarequest_set.add(*data_reqs)
+    # but sqlite3 gives an error of:
+    # django.db.utils.OperationalError: too many SQL variables
+    for data_req in data_reqs:
+        data_req.fixes.add(sfcWindmax)
+
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(sfcWindmax.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
@@ -114,4 +103,4 @@ if __name__ == "__main__":
     })
 
     # run the code
-    main(cmd_args)
+    main()

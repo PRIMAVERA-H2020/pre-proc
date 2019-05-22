@@ -250,6 +250,112 @@ class CellMethodsAreaMeanTimePointAdd(AttributeAdd):
         self.new_value = 'area: mean time: point'
 
 
+class CellMethodsAreaMeanTimeMinimumAdd(AttributeAdd):
+    """
+    Add a variable attribute `cellmethods` with a value of
+    `area: mean time: minimum within days time: mean over days`. This is done
+    in overwrite mode and so will work irrespective of whether there is an
+    existing cellmethods attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'cell_methods'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('area: mean time: minimum within days time: '
+                          'mean over days')
+
+
+class CellMethodsAreaMeanTimeMaximumAdd(AttributeAdd):
+    """
+    Add a variable attribute `cellmethods` with a value of
+    `area: mean time: maximum within days time: mean over days`. This is done
+    in overwrite mode and so will work irrespective of whether there is an
+    existing cellmethods attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'cell_methods'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('area: mean time: maximum within days time: '
+                          'mean over days')
+
+
+class CellMethodsAreaMeanTimeMinDailyAdd(AttributeAdd):
+    """
+    Add a variable attribute `cellmethods` with a value of
+    `area: mean time: minimum`. This is done
+    in overwrite mode and so will work irrespective of whether there is an
+    existing cellmethods attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'cell_methods'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('area: mean time: minimum')
+
+
+class CellMethodsAreaMeanTimeMaxDailyAdd(AttributeAdd):
+    """
+    Add a variable attribute `cellmethods` with a value of
+    `area: mean time: maximum`. This is done
+    in overwrite mode and so will work irrespective of whether there is an
+    existing cellmethods attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'cell_methods'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('area: mean time: maximum')
+
+
 class EcEarthInstitution(AttributeAdd):
     """
     Add a global attribute `institution` with a value for EC-Earth. This
@@ -451,6 +557,56 @@ class EcmwfSourceLr(AttributeAdd):
         )
 
 
+class ProductAdd(AttributeAdd):
+    """
+    Add a global attribute `product` with a value of `model-output`. This is
+    done in overwrite mode and so will work irrespective of whether there is
+    an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'product'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'model-output'
+
+
+class AtmosphereCloudIceContentStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `atmosphere_cloud_ice_content`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'atmosphere_cloud_ice_content'
+
+
 class SeaWaterSalinityStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
@@ -525,6 +681,31 @@ class ShallowConvectivePrecipitationFluxStandardNameAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'shallow_convective_precipitation_flux'
+
+
+class VarUnitsToPercent(AttributeAdd):
+    """
+    Replace the variable's attribute `units` to `%`. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing units attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'units'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = '%'
 
 
 class VarUnitsToThousandths(AttributeAdd):

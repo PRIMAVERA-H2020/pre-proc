@@ -278,3 +278,31 @@ class AogcmToAgcm(AttributeUpdate):
                                            'Existing value is not AOGCM.')
         else:
             self.new_value = 'AGCM'
+
+
+class TrackingIdFix(AttributeUpdate):
+    """
+    Convert the tracking_id to the correct form.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'tracking_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Convert the tracking_id to the correct form.
+        """
+        if self.existing_value.startswith('hdl:'):
+            raise ExistingAttributeError(self.filename, self.attribute_name,
+                                         'Existing tracking_id attribute '
+                                         'starts with hdl:')
+
+        self.new_value = 'hdl:21.14100/{}'.format(self.existing_value)
