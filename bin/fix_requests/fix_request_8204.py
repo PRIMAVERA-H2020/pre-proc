@@ -2,9 +2,9 @@
 """
 fix_request_8204.py
 
-MPI-M.*.highresSST-present.*.Amon.[uv]as
+MPI-M.*.highresSST-present.*.Amon/day.[uv]as/sfcWind*
 
-Correct the cell_measures on Amon uas and vas.
+Correct the cell_measures on uas, vas and the sfcWinds in various tables.
 """
 import argparse
 import logging.config
@@ -46,8 +46,8 @@ def main():
     data_reqs = DataRequest.objects.filter(
         institution_id__name='MPI-M',
         experiment_id__name='highresSST-present',
-        table_id='Amon',
-        cmor_name__in=['uas', 'vas', 'sfcWind']
+        table_id__in=['Amon', 'day'],
+        cmor_name__in=['uas', 'vas', 'sfcWind', 'sfcWindmax']
     )
 
     cm_atm = FileFix.objects.get(name='CellMeasuresAreacellaAdd')

@@ -2,9 +2,9 @@
 """
 fix_request_8202.py
 
-MPI-M.*.highresSST-present.*.Amon.clt
+MPI-M.*.highresSST-present.*.Amon/day.clt
 
-Correct the cell_methods on Amon clt.
+Correct the cell_methods on clt.
 """
 import argparse
 import logging.config
@@ -46,7 +46,7 @@ def main():
     data_reqs = DataRequest.objects.filter(
         institution_id__name='MPI-M',
         experiment_id__name='highresSST-present',
-        table_id='Amon',
+        table_id__in=['Amon', 'day'],
         cmor_name='clt'
     )
 

@@ -26,6 +26,8 @@ from pre_proc.file_fix import (ParentBranchTimeAdd,
                                CellMethodsAreaMeanTimePointAdd,
                                CellMethodsAreaMeanTimeMinimumAdd,
                                CellMethodsAreaMeanTimeMaximumAdd,
+                               CellMethodsAreaMeanTimeMinDailyAdd,
+                               CellMethodsAreaMeanTimeMaxDailyAdd,
                                ProductAdd,
                                AtmosphereCloudIceContentStandardNameAdd,
                                SeaWaterSalinityStandardNameAdd,
@@ -250,6 +252,42 @@ class TestCellMethodsAreaMeanTimeMaximumAdd(BaseTest):
             "ncatted -h -a cell_methods,tasmax,o,c,"
             "'area: mean time: maximum within days time: mean over days' "
             "/a/tasmax_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsAreaMeanTimeMinDailyAdd(BaseTest):
+    """ Test CellMethodsAreaMeanTimeMinDailyAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaMeanTimeMinDailyAdd
+        """
+        fix = CellMethodsAreaMeanTimeMinDailyAdd('tasmin_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,tasmin,o,c,"
+            "'area: mean time: minimum' "
+            "/a/tasmin_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsAreaMeanTimeMaxDailyAdd(BaseTest):
+    """ Test CellMethodsAreaMeanTimeMaxDailyAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaMeanTimeMaxDailyAdd
+        """
+        fix = CellMethodsAreaMeanTimeMaxDailyAdd('sfcWindmax_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,sfcWindmax,o,c,"
+            "'area: mean time: maximum' "
+            "/a/sfcWindmax_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
