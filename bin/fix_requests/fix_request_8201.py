@@ -76,7 +76,16 @@ def main():
         ]
     )
 
-    data_reqs = amon | day | eday
+    six_hour = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name='highresSST-present',
+        table_id='6hrPlev',
+        cmor_name__in=[
+            'psl'
+        ]
+    )
+
+    data_reqs = amon | day | eday | six_hour
 
     cm_atm = FileFix.objects.get(name='CellMethodsAreaTimeMeanAdd')
 

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_8204.py
+fix_request_8208.py
 
-MPI-M.*.highresSST-present.*.Amon/day/6hrPlevPt.[uv]as/sfcWind*
+MPI-M.*.highresSST-present.*.6hrPlevPt.many
 
-Correct the cell_measures on uas, vas and the sfcWinds in various tables.
+Set the cell_methods to "area: mean time: point" on various variables.
 """
 import argparse
 import logging.config
@@ -43,40 +43,28 @@ def main():
     """
     Main entry point
     """
-    monthly = DataRequest.objects.filter(
-        institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
-        table_id='Amon',
-        cmor_name__in=['uas', 'vas', 'sfcWind']
-    )
-
-    daily = DataRequest.objects.filter(
-        institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
-        table_id='day',
-        cmor_name__in=['uas', 'vas', 'sfcWind', 'sfcWindmax']
-    )
-
-    six_hourly = DataRequest.objects.filter(
+    sixhrplevpt = DataRequest.objects.filter(
         institution_id__name='MPI-M',
         experiment_id__name='highresSST-present',
         table_id='6hrPlevPt',
-        cmor_name__in=['uas', 'vas']
+        cmor_name__in=[
+            'psl', 'uas', 'vas'
+        ]
     )
 
-    data_reqs = monthly | daily | six_hourly
+    data_reqs = sixhrplevpt
 
-    cm_aca = FileFix.objects.get(name='CellMeasuresAreacellaAdd')
+    cm_amtp = FileFix.objects.get(name='CellMethodsAreaMeanTimePointAdd')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(cm_aca)
+        data_req.fixes.add(cm_amtp)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(cm_aca.name, data_reqs.count()))
+                 format(cm_amtp.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
