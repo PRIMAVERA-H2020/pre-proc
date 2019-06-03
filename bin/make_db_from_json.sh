@@ -12,4 +12,4 @@ export PATH=$CONDA_DIR:$PATH
 export DJANGO_SETTINGS_MODULE=pre_proc_site.settings
 export PYTHONPATH=$INSTALL_DIR
 
-$CONDA_ENV_DIR/python $INSTALL_DIR/bin/make_db_from_json.py -l debug "$@"
+$CONDA_ENV_DIR/python $INSTALL_DIR/bin/make_db_from_json.py "$@"
