@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_2201.py
+fix_request_2202.py
 
-CMCC.CMCC-CM2-HR4.highresSST-present.r1i1p1f1.Amon/day.many
+CMCC.CMCC-CM2-HR4.highresSST-present.r1i1p1f1.day.sfcWindmax
 
-Set the cell_methods appropriately to overcome a bug in the old MIP tables.
+Set the cell_measures appropriately.
 """
 import argparse
 import logging.config
@@ -43,24 +43,15 @@ def main():
     """
     Main entry point
     """
-    amon_reqs = DataRequest.objects.filter(
-        source_id__name='CMCC-CM2-HR4',
-        experiment_id__name='highresSST-present',
-        table_id='Amon',
-        cmor_name__in=['cl', 'hurs', 'huss', 'sfcWind', 'tas', 'uas', 'vas']
-    )
-
-    day_reqs = DataRequest.objects.filter(
+    data_reqs = DataRequest.objects.filter(
         source_id__name='CMCC-CM2-HR4',
         experiment_id__name='highresSST-present',
         table_id='day',
-        cmor_name__in=['huss', 'sfcWind', 'uas', 'vas']
+        cmor_name='sfcWindmax'
     )
 
-    data_reqs = amon_reqs | day_reqs
-
     fixes = [
-        FileFix.objects.get(name='CellMethodsAreaTimeMeanAdd')
+        FileFix.objects.get(name='CellMeasuresAreacellaAdd')
     ]
 
     # This next line could be done more quickly by:

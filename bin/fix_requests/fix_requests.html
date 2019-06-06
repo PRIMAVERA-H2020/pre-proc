@@ -36,7 +36,9 @@ HTTPS. Update data_specs_version to 01.00.23.
 This isn't applied to some datasets that were reuploaded and already produced
 at 01.00.23.
 </td></tr>
-<tr><td>2201</td><td>CMCC.CMCC-CM2-HR4.highresSST-present.r1i1p1f1.Amon.[cl,hurs,huss,sfcWind,tas,uas,vas]</td><td>Set the cell_methods appropriately to overcome a bug in the old MIP tables.
+<tr><td>2201</td><td>CMCC.CMCC-CM2-HR4.highresSST-present.r1i1p1f1.Amon/day.many</td><td>Set the cell_methods appropriately to overcome a bug in the old MIP tables.
+</td></tr>
+<tr><td>2202</td><td>CMCC.CMCC-CM2-HR4.highresSST-present.r1i1p1f1.day.sfcWindmax</td><td>Set the cell_measures appropriately.
 </td></tr>
 <tr><td>4200</td><td>EC-Earth-Consortium.*.highresSST-present.r1i1p1f1.*</td><td>Convert the further_info_url attribute on all EC-Earth data from HTTP to
 HTTPS. Update data_specs_version to 01.00.23. Update the institution
@@ -84,13 +86,15 @@ product and tracking_id.
 </td></tr>
 <tr><td>8203</td><td>MPI-M.*.highresSST-present.*.Amon/day.clt</td><td>Correct the cell_methods on clt.
 </td></tr>
-<tr><td>8204</td><td>MPI-M.*.highresSST-present.*.Amon/day.[uv]as/sfcWind*</td><td>Correct the cell_measures on uas, vas and the sfcWinds in various tables.
+<tr><td>8204</td><td>MPI-M.*.highresSST-present.*.Amon/day/6hrPlevPt.[uv]as/sfcWind*</td><td>Correct the cell_measures on uas, vas and the sfcWinds in various tables.
 </td></tr>
 <tr><td>8205</td><td>MPI-M.*.highresSST-present.*.Amon.clivi</td><td>Correct the cell_methods on Amon clivi.
 </td></tr>
 <tr><td>8206</td><td>MPI-M.*.highresSST-present.*.day.sfcWindmax/tasmax</td><td>Correct the cell_methods on day for maxima.
 </td></tr>
 <tr><td>8207</td><td>MPI-M.*.highresSST-present.*.day.tasmin</td><td>Correct the cell_methods on day for minima.
+</td></tr>
+<tr><td>8208</td><td>MPI-M.*.highresSST-present.*.6hrPlevPt.many</td><td>Set the cell_methods to "area: mean time: point" on various variables.
 </td></tr>
 
 </table>
