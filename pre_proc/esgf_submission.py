@@ -89,21 +89,22 @@ class EsgfSubmission(object):
         """
         Add the fixes run to the history attribute.
         """
-        fix_names = [fix.__class__.__name__ for fix in self.fixes]
-        fix_names.sort()
-        filepath = os.path.join(self.directory, self.filename)
+        if self.fixes:
+            fix_names = [fix.__class__.__name__ for fix in self.fixes]
+            fix_names.sort()
+            filepath = os.path.join(self.directory, self.filename)
 
-        time_now = datetime.datetime.utcnow().replace(microsecond=0)
-        filefix_history = '{}Z {}'.format(time_now.isoformat(),
-                                          ', '.join(fix_names))
+            time_now = datetime.datetime.utcnow().replace(microsecond=0)
+            filefix_history = '{}Z {}'.format(time_now.isoformat(),
+                                              ', '.join(fix_names))
 
-        existing_history = _get_attribute(filepath, 'history')
-        if existing_history:
-            new_history = '{}; {}'.format(existing_history, filefix_history)
-        else:
-            new_history = filefix_history
+            existing_history = _get_attribute(filepath, 'history')
+            if existing_history:
+                new_history = '{}; {}'.format(existing_history, filefix_history)
+            else:
+                new_history = filefix_history
 
-        _set_attribute(filepath, 'history', new_history)
+            _set_attribute(filepath, 'history', new_history)
 
     def _get_data_request(self):
         """
