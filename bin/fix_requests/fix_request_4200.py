@@ -52,7 +52,6 @@ def main():
     )
 
     fixes = [
-        FileFix.objects.get(name='FurtherInfoUrlToHttps'),
         FileFix.objects.get(name='DataSpecsVersionAdd'),
         FileFix.objects.get(name='EcEarthInstitution')
     ]
