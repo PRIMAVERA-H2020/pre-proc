@@ -53,17 +53,15 @@ class LatDirection(NcoDataFix):
             return False
 
 
-class ToDegC(NcoDataFix, metaclass=ABCMeta):
+class ToDegC(NcoDataFix):
     """
-    Abstract class to convert the data and units of a file from Kelvin to
-    degrees Celsius.
+    Convert the data and units of a file from Kelvin to degrees Celsius.
     """
     def __init__(self, filename, directory):
         """
         Initialise the class
         """
         super().__init__(filename, directory)
-        self.variable_name = None
 
     def apply_fix(self):
         """
@@ -99,19 +97,3 @@ class ToDegC(NcoDataFix, metaclass=ABCMeta):
         """
         cube = iris.load_cube(os.path.join(self.directory, self.filename))
         return True if cube.units.symbol == 'K' else False
-
-
-class TosToDegC(ToDegC):
-    """
-    Abstract class to convert the data and units of a file from Kelvin to
-    degrees Celsius.
-    """
-    def __init__(self, filename, directory):
-        """
-        Initialise the class
-        """
-        super().__init__(filename, directory)
-        self.variable_name = 'tos'
-
-
-

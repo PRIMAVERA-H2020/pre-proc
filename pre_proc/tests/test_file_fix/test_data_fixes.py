@@ -12,7 +12,7 @@ from iris.tests.stock import realistic_3d
 import numpy as np
 
 from pre_proc.exceptions import ExistingAttributeError
-from pre_proc.file_fix import LatDirection, TosToDegC
+from pre_proc.file_fix import LatDirection, ToDegC
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -122,7 +122,7 @@ class TestLatDirectionLatitudeCheck(unittest.TestCase):
         self.assertFalse(fix._is_lat_decreasing())
 
 
-class TestTosToDegC(NcoDataFixBaseTest):
+class TestToDegC(NcoDataFixBaseTest):
     """
     Test TosToDegC main functionality
     """
@@ -130,7 +130,7 @@ class TestTosToDegC(NcoDataFixBaseTest):
         """ Use NcoDataFixBaseTest but also patch the unique external calls """
         super().setUp()
 
-        patch = mock.patch('pre_proc.file_fix.data_fixes.TosToDegC.'
+        patch = mock.patch('pre_proc.file_fix.data_fixes.ToDegC.'
                            '_is_kelvin')
         self.mock_kelvin_check = patch.start()
         self.mock_kelvin_check.return_value = True
@@ -141,12 +141,13 @@ class TestTosToDegC(NcoDataFixBaseTest):
         Test that an external call's been made correctly for
         LatDirection
         """
-        fix = TosToDegC('1.nc', '/a')
+        fix = ToDegC('tos_table.nc', '/a')
         fix.apply_fix()
         calls = [
-            mock.call("ncap2 -h -s 'tos=tos-273.15f' /a/1.nc /a/1.nc.temp",
+            mock.call("ncap2 -h -s 'tos=tos-273.15f' /a/tos_table.nc "
+                      "/a/tos_table.nc.temp",
                       stderr=subprocess.STDOUT, shell=True),
-            mock.call("ncatted -h -a units,tos,m,c,'degC' /a/1.nc",
+            mock.call("ncatted -h -a units,tos,m,c,'degC' /a/tos_table.nc",
                       stderr=subprocess.STDOUT, shell=True)
         ]
         self.mock_subprocess.assert_has_calls(calls)
@@ -155,27 +156,28 @@ class TestTosToDegC(NcoDataFixBaseTest):
         """
         Test that input files is removed.
         """
-        fix = TosToDegC('1.nc', '/a')
+        fix = ToDegC('tos_table.nc', '/a')
         fix.apply_fix()
-        self.mock_remove.assert_called_once_with('/a/1.nc')
+        self.mock_remove.assert_called_once_with('/a/tos_table.nc')
 
     def test_rename_called_correctly(self):
         """
         Test that output file is renamed.
         """
-        fix = TosToDegC('1.nc', '/a')
+        fix = ToDegC('tos_table.nc', '/a')
         fix.apply_fix()
-        self.mock_rename.assert_called_once_with('/a/1.nc.temp', '/a/1.nc')
+        self.mock_rename.assert_called_once_with('/a/tos_table.nc.temp',
+                                                 '/a/tos_table.nc')
 
     def test_exception_raised(self):
         """
         Test that an exception is raised if the file's units are already degC.
         """
         self.mock_kelvin_check.return_value = False
-        fix = TosToDegC('1.nc', '/a')
+        fix = ToDegC('tos_table.nc', '/a')
         self.assertRaisesRegex(ExistingAttributeError,
-                               'Cannot edit attribute units in file 1.nc. '
-                               'Units are not K.', fix.apply_fix)
+                               'Cannot edit attribute units in file '
+                               'tos_table.nc. Units are not K.', fix.apply_fix)
 
 
 class TestToDegCUnitsCheck(unittest.TestCase):
@@ -195,7 +197,7 @@ class TestToDegCUnitsCheck(unittest.TestCase):
         Check test passes for kelvin.
         """
         self.cube.units = cf_units.Unit('kelvin')
-        fix = TosToDegC('1.nc', '/a')
+        fix = ToDegC('tos_table.nc', '/a')
         self.assertTrue(fix._is_kelvin())
 
     def test_fails(self):
@@ -203,5 +205,5 @@ class TestToDegCUnitsCheck(unittest.TestCase):
         Check test fails for degC.
         """
         self.cube.units = cf_units.Unit('degC')
-        fix = TosToDegC('1.nc', '/a')
+        fix = ToDegC('tos_table.nc', '/a')
         self.assertFalse(fix._is_kelvin())
