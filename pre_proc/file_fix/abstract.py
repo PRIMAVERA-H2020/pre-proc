@@ -116,6 +116,36 @@ class DataFix(FileFix, metaclass=ABCMeta):
         super().__init__(filename, directory)
 
 
+class NcoDataFix(DataFix, metaclass=ABCMeta):
+    """
+    An abstract base class for fixes that edit the data in a netCDF file
+    using the NCO tools.
+    """
+
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+        self.command = None
+
+    def _run_nco_command(self, command_error):
+        """
+        Run the nco command
+        """
+        output_file = os.path.join(self.directory, self.filename)
+        temp_file = output_file + '.temp'
+        cmd = f'{self.command} {output_file} {temp_file}'
+        try:
+            run_command(cmd)
+        except Exception:
+            raise command_error(type(self).__name__, self.filename, cmd,
+                                     traceback.format_exc())
+
+        os.remove(output_file)
+        os.rename(temp_file, output_file)
+
+
 class AttributeUpdate(AttributeEdit, metaclass=ABCMeta):
     """
     An abstract base class for fixes that require the use of `ncatted` to
