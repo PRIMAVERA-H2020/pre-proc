@@ -7,14 +7,15 @@ import subprocess
 import unittest
 from unittest import mock
 
+import cf_units
 from iris.tests.stock import realistic_3d
 import numpy as np
 
 from pre_proc.exceptions import ExistingAttributeError
-from pre_proc.file_fix import LatDirection
+from pre_proc.file_fix import LatDirection, TosToDegC
 
 
-class BaseTest(unittest.TestCase):
+class NcoDataFixBaseTest(unittest.TestCase):
     """
     Base class to setup a typical environment used by other tests
     """
@@ -25,15 +26,6 @@ class BaseTest(unittest.TestCase):
         self.mock_subprocess = patch.start()
         self.addCleanup(patch.stop)
 
-
-class TestLatDirection(BaseTest):
-    """
-    Test LatDirection main functionality
-    """
-    def setUp(self):
-        """ Use BaseTest but also patch two external calls """
-        super().setUp()
-
         patch = mock.patch('pre_proc.file_fix.data_fixes.os.remove')
         self.mock_remove = patch.start()
         self.addCleanup(patch.stop)
@@ -41,6 +33,15 @@ class TestLatDirection(BaseTest):
         patch = mock.patch('pre_proc.file_fix.data_fixes.os.rename')
         self.mock_rename = patch.start()
         self.addCleanup(patch.stop)
+
+
+class TestLatDirection(NcoDataFixBaseTest):
+    """
+    Test LatDirection main functionality
+    """
+    def setUp(self):
+        """ Use NcoDataFixBaseTest but also patch the unique external calls """
+        super().setUp()
 
         patch = mock.patch('pre_proc.file_fix.data_fixes.LatDirection.'
                            '_is_lat_decreasing')
@@ -88,7 +89,7 @@ class TestLatDirection(BaseTest):
                                'Latitude is not decreasing.', fix.apply_fix)
 
 
-class TestLatDirectionLatitudeCheck(BaseTest):
+class TestLatDirectionLatitudeCheck(unittest.TestCase):
     """
     Test LatDirection._is_lat_decreasing()
     """
@@ -104,7 +105,7 @@ class TestLatDirectionLatitudeCheck(BaseTest):
 
     def test_direction_test_passes(self):
         """
-        Check test fails for decreasing latitude.
+        Check test passes for decreasing latitude.
         """
         fix = LatDirection('1.nc', '/a')
         # flip the latitude dimension
@@ -119,3 +120,88 @@ class TestLatDirectionLatitudeCheck(BaseTest):
         """
         fix = LatDirection('1.nc', '/a')
         self.assertFalse(fix._is_lat_decreasing())
+
+
+class TestTosToDegC(NcoDataFixBaseTest):
+    """
+    Test TosToDegC main functionality
+    """
+    def setUp(self):
+        """ Use NcoDataFixBaseTest but also patch the unique external calls """
+        super().setUp()
+
+        patch = mock.patch('pre_proc.file_fix.data_fixes.TosToDegC.'
+                           '_is_kelvin')
+        self.mock_kelvin_check = patch.start()
+        self.mock_kelvin_check.return_value = True
+        self.addCleanup(patch.stop)
+
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        LatDirection
+        """
+        fix = TosToDegC('1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call("ncap2 -h -s 'tos=tos-273.15f' /a/1.nc /a/1.nc.temp",
+                      stderr=subprocess.STDOUT, shell=True),
+            mock.call("ncatted -h -a units,tos,m,c,'degC' /a/1.nc",
+                      stderr=subprocess.STDOUT, shell=True)
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
+
+    def test_remove_called_correctly(self):
+        """
+        Test that input files is removed.
+        """
+        fix = TosToDegC('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_remove.assert_called_once_with('/a/1.nc')
+
+    def test_rename_called_correctly(self):
+        """
+        Test that output file is renamed.
+        """
+        fix = TosToDegC('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_rename.assert_called_once_with('/a/1.nc.temp', '/a/1.nc')
+
+    def test_exception_raised(self):
+        """
+        Test that an exception is raised if the file's units are already degC.
+        """
+        self.mock_kelvin_check.return_value = False
+        fix = TosToDegC('1.nc', '/a')
+        self.assertRaisesRegex(ExistingAttributeError,
+                               'Cannot edit attribute units in file 1.nc. '
+                               'Units are not K.', fix.apply_fix)
+
+
+class TestToDegCUnitsCheck(unittest.TestCase):
+    """
+    Test ToDegC._is_kelvin()
+    """
+    def setUp(self):
+        """ Mock loading a cube """
+        patch = mock.patch('pre_proc.file_fix.data_fixes.iris.load_cube')
+        mock_iris_load = patch.start()
+        self.cube = realistic_3d()
+        mock_iris_load.return_value = self.cube
+        self.addCleanup(patch.stop)
+
+    def test_kelvin(self):
+        """
+        Check test passes for kelvin.
+        """
+        self.cube.units = cf_units.Unit('kelvin')
+        fix = TosToDegC('1.nc', '/a')
+        self.assertTrue(fix._is_kelvin())
+
+    def test_fails(self):
+        """
+        Check test fails for degC.
+        """
+        self.cube.units = cf_units.Unit('degC')
+        fix = TosToDegC('1.nc', '/a')
+        self.assertFalse(fix._is_kelvin())

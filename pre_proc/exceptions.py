@@ -123,6 +123,15 @@ class NcpdqError(ExternalCommandError):
                          traceback_text)
 
 
+class Ncap2Error(ExternalCommandError):
+    """
+    When ncap2 fails.
+    """
+    def __init__(self, class_name, filename, command, traceback_text):
+        super().__init__(class_name, 'ncap2', filename, command,
+                         traceback_text)
+
+
 class DataRequestNotFound(PreProcError):
     """
     When a pre_proc data request cannot be found.
