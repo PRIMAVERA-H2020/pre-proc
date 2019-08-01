@@ -4,9 +4,9 @@ data_fixes.py
 Workers that edit the data in netCDF files that are based on the DataFix
 abstract base class.
 """
-from abc import ABCMeta
 import os
 import traceback
+import warnings
 
 import iris
 
@@ -14,6 +14,9 @@ from .abstract import NcoDataFix
 from pre_proc.common import run_command
 from pre_proc.exceptions import (ExistingAttributeError, Ncap2Error,
                                  NcattedError, NcpdqError)
+
+# Ignore warnings displayed when loading data into Iris to check it
+warnings.filterwarnings("ignore")
 
 
 class LatDirection(NcoDataFix):
@@ -37,7 +40,6 @@ class LatDirection(NcoDataFix):
                                          'Latitude is not decreasing.')
         self.command = 'ncpdq -a -lat'
         self._run_nco_command(NcpdqError)
-
 
     def _is_lat_decreasing(self):
         """

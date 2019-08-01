@@ -8,7 +8,7 @@ import os
 __all__ = ['PreProcError', 'CannotLoadSourceFileError',
            'AttributeNotFoundError', 'AttributeConversionError',
            'ExistingAttributeError', 'InstanceVariableNotDefinedError',
-           'NcattedError', 'NcpdqError', 'DataRequestNotFound',
+           'NcattedError', 'NcpdqError', 'Ncap2Error', 'DataRequestNotFound',
            'MultipleDataRequestsFound']
 
 
