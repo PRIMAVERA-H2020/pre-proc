@@ -18,6 +18,7 @@ from pre_proc.file_fix import (ParentBranchTimeAdd,
                                EcmwfSourceHr,
                                EcmwfSourceMr,
                                EcmwfSourceLr,
+                               HadGemMMParentSourceId,
                                CellMeasuresAreacellaAdd,
                                CellMeasuresAreacelloAdd,
                                CellMeasuresAreacelloVolcelloAdd,
@@ -432,6 +433,23 @@ class TestEcmwfSourceLr(BaseTest):
             "longitude/latitude; 75 levels; top grid cell 0-1 m)\nocnBgchem: "
             "none\nseaIce: LIM2 (LIM v2; ORCA1 tripolar grid; 362 x 292 "
             "longitude/latitude)' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestHadGemMMParentSourceId(BaseTest):
+    """ Test HadGemMMParentSourceId """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        HadGemMMParentSourceId
+        """
+        fix = HadGemMMParentSourceId('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a parent_source_id,global,o,c,'HadGEM3-GC31-MM' "
             "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
