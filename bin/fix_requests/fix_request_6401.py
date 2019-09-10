@@ -46,7 +46,7 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name__in=['MOHC', 'NERC'],
-        climate_model__name='HadGEM3-GC31-HM',
+        source_id__name='HadGEM3-GC31-HM',
         experiment_id__name__in=['hist-1950', 'control-1950']
     )
 
