@@ -13,7 +13,7 @@ import iris
 from .abstract import NcoDataFix
 from pre_proc.common import run_command
 from pre_proc.exceptions import (ExistingAttributeError, Ncap2Error,
-                                 NcattedError, NcpdqError)
+                                 NcattedError, NcpdqError, NcksError)
 
 # Ignore warnings displayed when loading data into Iris to check it
 warnings.filterwarnings("ignore")
@@ -31,7 +31,7 @@ class LatDirection(NcoDataFix):
 
     def apply_fix(self):
         """
-        Run ncpdq.
+        Run ncpdq and then swap the columns in lat_bnds.
         """
         # check that the latitude is decreasing and that the fix is actually
         # needed
@@ -40,6 +40,35 @@ class LatDirection(NcoDataFix):
                                          'Latitude is not decreasing.')
         self.command = 'ncpdq -a -lat'
         self._run_nco_command(NcpdqError)
+
+        original_nc = os.path.join(self.directory, self.filename)
+        bnds_file = original_nc + '.bnds'
+        corrected_bnds_file = bnds_file + '_corr'
+
+        commands = [
+            # Copy lat_bnds to a new file
+            f'ncks -v lat_bnds {original_nc} {bnds_file}',
+            # Swap the colums
+            f'ncpdq -a -bnds {bnds_file} {corrected_bnds_file}',
+            # Remove history from lat_bnds as this is pasted back into the file
+            f'ncatted -h -a history,global,d,, {corrected_bnds_file}',
+            # Paste the fixed bnds back into the original file
+            f'ncks -A -v lat_bnds {corrected_bnds_file} {original_nc}'
+        ]
+        for cmd in commands:
+            try:
+                run_command(cmd)
+            except Exception:
+                exceptions = {
+                    'ncks': NcksError,
+                    'ncpdq': NcpdqError,
+                    'ncatted': NcattedError
+                }
+                cmd_name = cmd.split()[0]
+                raise exceptions[cmd_name](type(self).__name__, self.filename,
+                                           cmd, traceback.format_exc())
+        os.remove(bnds_file)
+        os.remove(corrected_bnds_file)
 
     def _is_lat_decreasing(self):
         """

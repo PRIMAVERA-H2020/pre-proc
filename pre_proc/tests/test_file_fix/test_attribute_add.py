@@ -8,35 +8,38 @@ import unittest
 
 import mock
 
-from pre_proc.file_fix import (ParentBranchTimeAdd,
-                               ChildBranchTimeAdd,
-                               BranchMethodAdd,
-                               DataSpecsVersionAdd,
-                               EcEarthInstitution,
-                               EcmwfInstitution,
-                               EcmwfReferences,
-                               EcmwfSourceHr,
-                               EcmwfSourceMr,
-                               EcmwfSourceLr,
-                               HadGemMMParentSourceId,
-                               CellMeasuresAreacellaAdd,
-                               CellMeasuresAreacelloAdd,
-                               CellMeasuresAreacelloVolcelloAdd,
-                               CellMethodsAreaTimeMeanAdd,
-                               CellMethodsSeaAreaTimeMeanAdd,
-                               CellMethodsAreaMeanTimePointAdd,
-                               CellMethodsAreaMeanTimeMinimumAdd,
-                               CellMethodsAreaMeanTimeMaximumAdd,
-                               CellMethodsAreaMeanTimeMinDailyAdd,
-                               CellMethodsAreaMeanTimeMaxDailyAdd,
-                               ProductAdd,
-                               AtmosphereCloudIceContentStandardNameAdd,
-                               SeaWaterSalinityStandardNameAdd,
-                               SeaSurfaceTemperatureNameAdd,
-                               ShallowConvectivePrecipitationFluxStandardNameAdd,
-                               VarUnitsToPercent,
-                               VarUnitsToThousandths,
-                               WtemStandardNameAdd)
+from pre_proc.file_fix import (
+    ParentBranchTimeAdd,
+    ChildBranchTimeAdd,
+    BranchMethodAdd,
+    DataSpecsVersionAdd,
+    EcEarthInstitution,
+    EcmwfInstitution,
+    EcmwfReferences,
+    EcmwfSourceHr,
+    EcmwfSourceMr,
+    EcmwfSourceLr,
+    HadGemMMParentSourceId,
+    CellMeasuresAreacellaAdd,
+    CellMeasuresAreacelloAdd,
+    CellMeasuresAreacelloVolcelloAdd,
+    CellMethodsAreaTimeMeanAdd,
+    CellMethodsSeaAreaTimeMeanAdd,
+    CellMethodsAreaMeanTimePointAdd,
+    CellMethodsAreaMeanTimeMinimumAdd,
+    CellMethodsAreaMeanTimeMaximumAdd,
+    CellMethodsAreaMeanTimeMinDailyAdd,
+    CellMethodsAreaMeanTimeMaxDailyAdd,
+    ProductAdd,
+    AtmosphereCloudIceContentStandardNameAdd,
+    SeaWaterSalinityStandardNameAdd,
+    SeaSurfaceTemperatureNameAdd,
+    ShallowConvectivePrecipitationFluxStandardNameAdd,
+    TrackingIdNew,
+    VarUnitsToPercent,
+    VarUnitsToThousandths,
+    WtemStandardNameAdd
+)
 
 
 class BaseTest(unittest.TestCase):
@@ -283,7 +286,8 @@ class TestCellMethodsAreaMeanTimeMaxDailyAdd(BaseTest):
         Test that an external call's been made correctly for
         CellMethodsAreaMeanTimeMaxDailyAdd
         """
-        fix = CellMethodsAreaMeanTimeMaxDailyAdd('sfcWindmax_components.nc', '/a')
+        fix = CellMethodsAreaMeanTimeMaxDailyAdd('sfcWindmax_components.nc',
+                                                 '/a')
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a cell_methods,sfcWindmax,o,c,"
@@ -542,6 +546,22 @@ class TestShallowConvectivePrecipitationFluxStandardNameAdd(BaseTest):
             stderr=subprocess.STDOUT,
             shell=True
         )
+
+
+class TestTrackingIdNew(BaseTest):
+    """ Test TrackingIdNew """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ShallowConvectivePrecipitationFluxStandardNameAdd
+        """
+        fix = TrackingIdNew('prcsh_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once()
+        self.assertRegex(self.mock_subprocess.call_args[0][0],
+                         r"ncatted -h -a tracking_id,global,o,c,"
+                         r"'hdl:21.14100/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}' "
+                         r"/a/prcsh_components.nc")
 
 
 class TestVarUnitsToPercent(BaseTest):

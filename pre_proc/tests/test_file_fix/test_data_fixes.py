@@ -11,7 +11,7 @@ import cf_units
 from iris.tests.stock import realistic_3d
 import numpy as np
 
-from pre_proc.exceptions import ExistingAttributeError
+from pre_proc.exceptions import ExistingAttributeError, NcksError
 from pre_proc.file_fix import LatDirection, ToDegC
 
 
@@ -56,11 +56,19 @@ class TestLatDirection(NcoDataFixBaseTest):
         """
         fix = LatDirection('1.nc', '/a')
         fix.apply_fix()
-        self.mock_subprocess.assert_called_once_with(
-            'ncpdq -a -lat /a/1.nc /a/1.nc.temp',
-            stderr=subprocess.STDOUT,
-            shell=True
-        )
+        calls = [
+            mock.call('ncpdq -a -lat /a/1.nc /a/1.nc.temp',
+                      stderr=subprocess.STDOUT, shell=True),
+            mock.call('ncks -v lat_bnds /a/1.nc /a/1.nc.bnds',
+                      stderr=subprocess.STDOUT, shell=True),
+            mock.call('ncpdq -a -bnds /a/1.nc.bnds /a/1.nc.bnds_corr',
+                      stderr=subprocess.STDOUT, shell=True),
+            mock.call('ncatted -h -a history,global,d,, /a/1.nc.bnds_corr',
+                      stderr=subprocess.STDOUT, shell=True),
+            mock.call('ncks -A -v lat_bnds /a/1.nc.bnds_corr /a/1.nc',
+                      stderr=subprocess.STDOUT, shell=True)
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
 
     def test_remove_called_correctly(self):
         """
@@ -68,7 +76,12 @@ class TestLatDirection(NcoDataFixBaseTest):
         """
         fix = LatDirection('1.nc', '/a')
         fix.apply_fix()
-        self.mock_remove.assert_called_once_with('/a/1.nc')
+        calls = [
+            mock.call('/a/1.nc'),
+            mock.call('/a/1.nc.bnds'),
+            mock.call('/a/1.nc.bnds_corr')
+        ]
+        self.mock_remove.assert_has_calls(calls)
 
     def test_rename_called_correctly(self):
         """
@@ -78,7 +91,7 @@ class TestLatDirection(NcoDataFixBaseTest):
         fix.apply_fix()
         self.mock_rename.assert_called_once_with('/a/1.nc.temp', '/a/1.nc')
 
-    def test_exception_raised(self):
+    def test_decreasing_exception_raised(self):
         """
         Test that an exception is raised if the file's latitude is increasing.
         """
@@ -87,6 +100,20 @@ class TestLatDirection(NcoDataFixBaseTest):
         self.assertRaisesRegex(ExistingAttributeError,
                                'Cannot edit attribute latitude in file 1.nc. '
                                'Latitude is not decreasing.', fix.apply_fix)
+
+    def test_nco_errors_handled(self):
+        """
+        Test that errors in the nco commands to fix the bounds are handled.
+        """
+        fix = LatDirection('1.nc', '/a')
+        self.mock_subprocess.side_effect = [
+            None,
+            None,
+            None,
+            None,
+            RuntimeError('Not in the mood today')
+        ]
+        self.assertRaises(NcksError, fix.apply_fix)
 
 
 class TestLatDirectionLatitudeCheck(unittest.TestCase):

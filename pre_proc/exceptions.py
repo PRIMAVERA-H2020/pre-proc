@@ -8,8 +8,8 @@ import os
 __all__ = ['PreProcError', 'CannotLoadSourceFileError',
            'AttributeNotFoundError', 'AttributeConversionError',
            'ExistingAttributeError', 'InstanceVariableNotDefinedError',
-           'NcattedError', 'NcpdqError', 'Ncap2Error', 'DataRequestNotFound',
-           'MultipleDataRequestsFound']
+           'NcattedError', 'NcpdqError', 'Ncap2Error', 'NcksError',
+           'DataRequestNotFound', 'MultipleDataRequestsFound']
 
 
 class PreProcError(Exception):
@@ -129,6 +129,15 @@ class Ncap2Error(ExternalCommandError):
     """
     def __init__(self, class_name, filename, command, traceback_text):
         super().__init__(class_name, 'ncap2', filename, command,
+                         traceback_text)
+
+
+class NcksError(ExternalCommandError):
+    """
+    When ncks fails.
+    """
+    def __init__(self, class_name, filename, command, traceback_text):
+        super().__init__(class_name, 'ncks', filename, command,
                          traceback_text)
 
 
