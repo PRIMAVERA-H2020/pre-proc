@@ -4,6 +4,8 @@ attribute_add.py
 Workers that fix the netCDF files that are based on the AttributeAdd
 abstract base classes.
 """
+import uuid
+
 from .abstract import AttributeAdd
 
 
@@ -160,8 +162,7 @@ class CellMeasuresAreacelloVolcelloAdd(AttributeAdd):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super().__init__(filename,
-                                                               directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'cell_measures'
         self.attribute_visibility = self.variable_name
         self.attribute_type = 'c'
@@ -327,7 +328,7 @@ class CellMethodsAreaMeanTimeMinDailyAdd(AttributeAdd):
         """
         Set the new value.
         """
-        self.new_value = ('area: mean time: minimum')
+        self.new_value = 'area: mean time: minimum'
 
 
 class CellMethodsAreaMeanTimeMaxDailyAdd(AttributeAdd):
@@ -353,7 +354,7 @@ class CellMethodsAreaMeanTimeMaxDailyAdd(AttributeAdd):
         """
         Set the new value.
         """
-        self.new_value = ('area: mean time: maximum')
+        self.new_value = 'area: mean time: maximum'
 
 
 class EcEarthInstitution(AttributeAdd):
@@ -610,8 +611,8 @@ class ProductAdd(AttributeAdd):
 class AtmosphereCloudIceContentStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
-    `atmosphere_cloud_ice_content`. This is done in overwrite mode and so will work
-    irrespective of whether there is an existing standard_name attribute.
+    `atmosphere_cloud_ice_content`. This is done in overwrite mode and so will
+    work irrespective of whether there is an existing standard_name attribute.
     """
     def __init__(self, filename, directory):
         """
@@ -706,6 +707,30 @@ class ShallowConvectivePrecipitationFluxStandardNameAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'shallow_convective_precipitation_flux'
+
+
+class TrackingIdNew(AttributeAdd):
+    """
+    Replace the tracking_id attribute with a new value. This may be useful
+    when resubmitting files that have been retracted.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'tracking_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = f'hdl:21.14100/{uuid.uuid4()}'
 
 
 class VarUnitsToPercent(AttributeAdd):
