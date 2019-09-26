@@ -135,6 +135,11 @@ class NcoDataFix(DataFix, metaclass=ABCMeta):
         """
         output_file = os.path.join(self.directory, self.filename)
         temp_file = output_file + '.temp'
+        # Remove any temporary file left over from a previous failed
+        # run as it could prevent some nco commands from running.
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
+
         cmd = f'{self.command} {output_file} {temp_file}'
         try:
             run_command(cmd)

@@ -45,6 +45,12 @@ class LatDirection(NcoDataFix):
         bnds_file = original_nc + '.bnds'
         corrected_bnds_file = bnds_file + '_corr'
 
+        # Remove any temporary files left over from a previous failed
+        # run as they can prevent ncks and ncpdq from running.
+        for filename in (bnds_file, corrected_bnds_file):
+            if os.path.exists(filename):
+                os.remove(filename)
+
         commands = [
             # Copy lat_bnds to a new file
             f'ncks -v lat_bnds {original_nc} {bnds_file}',
