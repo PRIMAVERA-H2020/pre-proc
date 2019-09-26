@@ -66,7 +66,7 @@ def main(args):
             tb_list = traceback.format_exception(exc_type, exc_value, exc_tb)
             tb_string = '\n'.join(tb_list)
             logger.error('Processing file {} failed\n{}'.
-                         format(filepath), tb_string)
+                         format(filepath, tb_string))
 
     if files_failed:
         logger.error('{} files failed:\n{}'.format(len(files_failed),
