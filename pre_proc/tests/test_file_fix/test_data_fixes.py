@@ -34,6 +34,11 @@ class NcoDataFixBaseTest(unittest.TestCase):
         self.mock_rename = patch.start()
         self.addCleanup(patch.stop)
 
+        patch = mock.patch('pre_proc.file_fix.data_fixes.os.path.exists')
+        self.mock_exists = patch.start()
+        self.mock_exists.return_value = False
+        self.addCleanup(patch.stop)
+
 
 class TestLatDirection(NcoDataFixBaseTest):
     """
@@ -114,6 +119,20 @@ class TestLatDirection(NcoDataFixBaseTest):
             RuntimeError('Not in the mood today')
         ]
         self.assertRaises(NcksError, fix.apply_fix)
+
+    def test_temp_files_removed(self):
+        self.mock_exists.return_value = True
+        fix = LatDirection('1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call('/a/1.nc.temp'),
+            mock.call('/a/1.nc'),
+            mock.call('/a/1.nc.bnds'),
+            mock.call('/a/1.nc.bnds_corr'),
+            mock.call('/a/1.nc.bnds'),
+            mock.call('/a/1.nc.bnds_corr')
+        ]
+        self.mock_remove.assert_has_calls(calls)
 
 
 class TestLatDirectionLatitudeCheck(unittest.TestCase):
