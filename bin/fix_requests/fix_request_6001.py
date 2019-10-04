@@ -59,6 +59,7 @@ def main():
     data_reqs = uva_reqs | uva7h_reqs
 
     areacella = FileFix.objects.get(name='CellMeasuresAreacellaAdd')
+    ext_vars = FileFix.objects.get(name='ExternalVariablesAreacella')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
@@ -69,6 +70,12 @@ def main():
 
     logger.debug('FileFix {} added to {} data requests.'.
                  format(areacella.name, data_reqs.count()))
+
+    for data_req in uva7h_reqs:
+        data_req.fixes.add(ext_vars)
+
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(ext_vars.name, uva7h_reqs.count()))
 
 
 if __name__ == "__main__":
