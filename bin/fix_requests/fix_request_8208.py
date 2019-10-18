@@ -48,13 +48,14 @@ def main():
         experiment_id__name='highresSST-present',
         table_id='6hrPlevPt',
         cmor_name__in=[
-            'psl', 'uas', 'vas'
+            'hus7h', 'psl', 'ta7h', 'ua7h', 'uas', 'va7h', 'vas', 'zg7h'
         ]
     )
 
     data_reqs = sixhrplevpt
 
     cm_amtp = FileFix.objects.get(name='CellMethodsAreaMeanTimePointAdd')
+    ext_vars = FileFix.objects.get(name='ExternalVariablesAreacella')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
@@ -62,9 +63,12 @@ def main():
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
         data_req.fixes.add(cm_amtp)
+        data_req.fixes.add(ext_vars)
 
     logger.debug('FileFix {} added to {} data requests.'.
                  format(cm_amtp.name, data_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(ext_vars.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
