@@ -13,7 +13,8 @@ import iris
 from .abstract import NcoDataFix
 from pre_proc.common import run_command
 from pre_proc.exceptions import (ExistingAttributeError, Ncap2Error,
-                                 NcattedError, NcpdqError, NcksError)
+                                 NcattedError, NcpdqError, NcksError,
+                                 NcrenameError)
 
 # Ignore warnings displayed when loading data into Iris to check it
 warnings.filterwarnings("ignore")
@@ -88,6 +89,24 @@ class LatDirection(NcoDataFix):
             return True
         else:
             return False
+
+
+class LevToPlev(NcoDataFix):
+    """
+    Rename the lev dimension and variable to plev.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+
+    def apply_fix(self):
+        """
+        Run ncpdq and then swap the columns in lat_bnds.
+        """
+        self.command = 'ncrename -h -d lev,plev -v lev,plev'
+        self._run_nco_command(NcrenameError)
 
 
 class ToDegC(NcoDataFix):

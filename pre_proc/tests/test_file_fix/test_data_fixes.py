@@ -12,7 +12,7 @@ from iris.tests.stock import realistic_3d
 import numpy as np
 
 from pre_proc.exceptions import ExistingAttributeError, NcksError
-from pre_proc.file_fix import LatDirection, ToDegC
+from pre_proc.file_fix import LatDirection, LevToPlev, ToDegC
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -133,6 +133,23 @@ class TestLatDirection(NcoDataFixBaseTest):
             mock.call('/a/1.nc.bnds_corr')
         ]
         self.mock_remove.assert_has_calls(calls)
+
+
+class TestLevToPlev(NcoDataFixBaseTest):
+    """
+    Test LevToPlev main functionality
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        LevToPlev
+        """
+        fix = LevToPlev('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_with(
+            'ncrename -h -d lev,plev -v lev,plev /a/1.nc /a/1.nc.temp',
+            stderr=subprocess.STDOUT, shell=True
+        )
 
 
 class TestLatDirectionLatitudeCheck(unittest.TestCase):
