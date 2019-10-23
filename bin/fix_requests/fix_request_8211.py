@@ -4,7 +4,8 @@ fix_request_8211.py
 
 MPI-M.*.highresSST-present.*.6hrPlev.wap4
 
-Set the cell_methods to "area: time: mean" on one variable.
+Set the cell_methods to "area: time: mean" and external_variables on 6hrPlev
+wap.
 """
 import argparse
 import logging.config
@@ -51,6 +52,7 @@ def main():
     )
 
     cm_atm = FileFix.objects.get(name='CellMethodsAreaTimeMeanAdd')
+    ext_vars = FileFix.objects.get(name='ExternalVariablesAreacella')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
@@ -58,9 +60,12 @@ def main():
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
         data_req.fixes.add(cm_atm)
+        data_req.fixes.add(ext_vars)
 
     logger.debug('FileFix {} added to {} data requests.'.
                  format(cm_atm.name, data_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(ext_vars.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
