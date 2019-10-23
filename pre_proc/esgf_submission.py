@@ -129,7 +129,7 @@ class EsgfSubmission(object):
                     experiment_id__name=self.experiment_id,
                     variant_label=self.variant_label,
                     table_id=self.table_id,
-                    cmor_name__startswith=self.cmor_name
+                    cmor_name__regex=r'{}\d+'.format(self.cmor_name)
                 )
             except django.core.exceptions.ObjectDoesNotExist:
                 raise DataRequestNotFound(self.directory, self.filename)
