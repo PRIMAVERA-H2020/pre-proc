@@ -21,6 +21,7 @@ from pre_proc.file_fix import (
     EcmwfSourceLr,
     ExternalVariablesAreacella,
     ExternalVariablesAreacello,
+    ExternalVariablesAreacelloVolcello,
     HadGemMMParentSourceId,
     CellMeasuresAreacellaAdd,
     CellMeasuresAreacelloAdd,
@@ -473,6 +474,23 @@ class TestExternalVariablesAreacello(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a external_variables,global,o,c,'areacello' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestExternalVariablesAreacelloVolcello(BaseTest):
+    """ Test ExternalVariablesAreacelloVolcello """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        EcmwfSourceLr
+        """
+        fix = ExternalVariablesAreacelloVolcello('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a external_variables,global,o,c,'areacello volcello' "
             "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
