@@ -52,7 +52,7 @@ def main():
     lat_dir = FileFix.objects.get(name='LatDirection')
 
     for data_req in data_reqs:
-        data_req.fixes.add(lat_dir)
+        data_req.fixes.remove(lat_dir)
 
     logger.debug('FileFix {} removed from {} data requests.'.
                  format(lat_dir.name, data_reqs.count()))
