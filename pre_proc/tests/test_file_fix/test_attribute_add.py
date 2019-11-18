@@ -41,6 +41,10 @@ from pre_proc.file_fix import (
     SeaSurfaceTemperatureNameAdd,
     ShallowConvectivePrecipitationFluxStandardNameAdd,
     SiflcondbotStandardNameAdd,
+    SiflfwbotStandardNameAdd,
+    SisaltmassStandardNameAdd,
+    SistrxubotStandardNameAdd,
+    SistryubotStandardNameAdd,
     TrackingIdNew,
     VarUnitsToPercent,
     VarUnitsToThousandths,
@@ -655,6 +659,87 @@ class TestSiflcondbotStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,siflcondbot,o,c,"
             "'sea_ice_basal_net_downward_sensible_heat_flux' "
             "/a/siflcondbot_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSiflfwbotStandardNameAdd(BaseTest):
+    """ Test SiflfwbotStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SiflfwbotStandardNameAdd
+        """
+        fix = SiflfwbotStandardNameAdd(
+            'siflfwbot_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,siflfwbot,o,c,"
+            "'water_flux_into_sea_water_from_sea_ice' "
+            "/a/siflfwbot_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSisaltmassStandardNameAdd(BaseTest):
+    """ Test SisaltmassStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SisaltmassStandardNameAdd
+        """
+        fix = SisaltmassStandardNameAdd(
+            'sisaltmass_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,sisaltmass,o,c,"
+            "'sea_ice_salt_content' "
+            "/a/sisaltmass_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+
+class TestSistrxubotStandardNameAdd(BaseTest):
+    """ Test SistrxubotStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SistrxubotStandardNameAdd
+        """
+        fix = SistrxubotStandardNameAdd(
+            'sistrxubot_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,sistrxubot,o,c,"
+            "'upward_x_stress_at_sea_ice_base' "
+            "/a/sistrxubot_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSistryubotStandardNameAdd(BaseTest):
+    """ Test SistryubotStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SistryubotStandardNameAdd
+        """
+        fix = SistryubotStandardNameAdd(
+            'sistryubot_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,sistryubot,o,c,"
+            "'upward_y_stress_at_sea_ice_base' "
+            "/a/sistryubot_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

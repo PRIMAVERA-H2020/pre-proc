@@ -861,6 +861,111 @@ class SiflcondbotStandardNameAdd(AttributeAdd):
         self.new_value = 'sea_ice_basal_net_downward_sensible_heat_flux'
 
 
+class SiflfwbotStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `water_flux_into_sea_water_from_sea_ice`. This is done in overwrite
+    mode and so will work irrespective of whether there is an existing
+    standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'water_flux_into_sea_water_from_sea_ice'
+
+
+class SisaltmassStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `sea_ice_salt_content`. This is done in overwrite
+    mode and so will work irrespective of whether there is an existing
+    standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'sea_ice_salt_content'
+
+
+class SistrxubotStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `upward_x_stress_at_sea_ice_base`. This is done in overwrite
+    mode and so will work irrespective of whether there is an existing
+    standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'upward_x_stress_at_sea_ice_base'
+
+
+
+class SistryubotStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `upward_y_stress_at_sea_ice_base`. This is done in overwrite
+    mode and so will work irrespective of whether there is an existing
+    standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'upward_y_stress_at_sea_ice_base'
+
+
 class TrackingIdNew(AttributeAdd):
     """
     Replace the tracking_id attribute with a new value. This may be useful
