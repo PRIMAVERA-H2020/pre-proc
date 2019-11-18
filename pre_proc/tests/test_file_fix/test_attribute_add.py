@@ -40,6 +40,7 @@ from pre_proc.file_fix import (
     MsftmzmpaStandardNameAdd,
     SeaSurfaceTemperatureNameAdd,
     ShallowConvectivePrecipitationFluxStandardNameAdd,
+    SiflcondbotStandardNameAdd,
     TrackingIdNew,
     VarUnitsToPercent,
     VarUnitsToThousandths,
@@ -634,6 +635,26 @@ class TestShallowConvectivePrecipitationFluxStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,prcsh,o,c,"
             "'shallow_convective_precipitation_flux' "
             "/a/prcsh_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSiflcondbotStandardNameAdd(BaseTest):
+    """ Test SiflcondbotStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SiflcondbotStandardNameAdd
+        """
+        fix = SiflcondbotStandardNameAdd(
+            'siflcondbot_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,siflcondbot,o,c,"
+            "'sea_ice_basal_net_downward_sensible_heat_flux' "
+            "/a/siflcondbot_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
