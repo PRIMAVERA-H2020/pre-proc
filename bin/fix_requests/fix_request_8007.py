@@ -2,9 +2,9 @@
 """
 fix_request_8006.py
 
-MPI-M.coupled.Omon.hfbasin*,mfo,msftmzmpa
+MPI-M.coupled.Omon.hf[x,y]
 
-Remove cell_measures.
+CellMeasuresAreacelloAdd and CellMethodsSeaAreaTimeMeanAdd
 """
 import argparse
 import logging.config
@@ -46,23 +46,26 @@ def main():
     data_reqs = DataRequest.objects.filter(
         institution_id__name='MPI-M',
         table_id = 'Omon',
-        cmor_name__in = ['hfbasin', 'hfbasinpadv', 'hfbasinpmadv',
-                         'hfbasinpmdiff', 'mfo', 'msftmzmpa']
+        cmor_name__in = ['hfx', 'hfy']
     ).exclude(
         experiment_id__name='highresSST-present'
     )
 
-    cmeas_rm = FileFix.objects.get(name='CellMeasuresDelete')
+    cmeas_aco = FileFix.objects.get(name='CellMeasuresAreacelloAdd')
+    cmeth_mwst = FileFix.objects.get(name='CellMethodsSeaAreaTimeMeanAdd')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(cmeas_rm)
+        data_req.fixes.add(cmeas_aco)
+        data_req.fixes.add(cmeth_mwst)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(cmeas_rm.name, data_reqs.count()))
+                 format(cmeas_aco.name, data_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(cmeth_mwst.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
