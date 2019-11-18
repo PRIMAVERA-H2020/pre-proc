@@ -26,6 +26,7 @@ from pre_proc.file_fix import (
     CellMeasuresAreacellaAdd,
     CellMeasuresAreacelloAdd,
     CellMeasuresAreacelloVolcelloAdd,
+    CellMeasuresDelete,
     CellMethodsAreaTimeMeanAdd,
     CellMethodsSeaAreaTimeMeanAdd,
     CellMethodsAreaMeanTimePointAdd,
@@ -169,6 +170,23 @@ class TestCellMeasuresAreacelloVolcelloAdd(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a cell_measures,so,o,c,"
             "'area: areacello volume: volcello' "
+            "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMeasuresDelete(BaseTest):
+    """ Test CellMeasuresDelete """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMeasuresDelete
+        """
+        fix = CellMeasuresDelete('so_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_measures,so,d,c,0 "
             "/a/so_components.nc",
             stderr=subprocess.STDOUT,
             shell=True

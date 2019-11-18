@@ -6,7 +6,7 @@ abstract base classes.
 """
 import uuid
 
-from .abstract import AttributeAdd
+from .abstract import AttributeAdd, AttributeDelete
 
 
 class ParentBranchTimeAdd(AttributeAdd):
@@ -172,6 +172,30 @@ class CellMeasuresAreacelloVolcelloAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'area: areacello volume: volcello'
+
+
+class CellMeasuresDelete(AttributeDelete):
+    """
+    Delete variable attribute `cellmeasures`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'cell_measures'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        We're deleting so there's nothing to do but make a dummy value for
+        new_value.
+        """
+        self.new_value = 0
 
 
 class CellMethodsAreaTimeMeanAdd(AttributeAdd):
