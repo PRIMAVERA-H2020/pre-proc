@@ -81,7 +81,7 @@ class TestParentBranchTimeDoubleFix(BaseTest):
         fix._calculate_new_value()
         fix.attribute_name = None
         self.assertRaisesRegex(InstanceVariableNotDefinedError,
-                               exception_text, fix._run_ncatted)
+                               exception_text, fix._run_ncatted, 'o')
 
     def test_no_visibility_raises(self):
         """ Test whether missing visibility handled """
@@ -103,7 +103,7 @@ class TestParentBranchTimeDoubleFix(BaseTest):
         fix._calculate_new_value()
         fix.new_value = None
         self.assertRaisesRegex(InstanceVariableNotDefinedError,
-                               exception_text, fix._run_ncatted)
+                               exception_text, fix._run_ncatted, 'o')
 
     def test_subprocess_called_correctly(self):
         """

@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_8000.py
+fix_request_8006.py
 
-MPI-M.*
+MPI-M.coupled.Omon.hf[x,y]
 
-Change the direction of the latitude coordinate to monotonically increasing on
-atmosphere variables.
+CellMeasuresAreacelloAdd and CellMethodsSeaAreaTimeMeanAdd
 """
 import argparse
 import logging.config
@@ -44,32 +43,29 @@ def main():
     """
     Main entry point
     """
-    # First remove this fix from all MPI requests
     data_reqs = DataRequest.objects.filter(
-        institution_id__name='MPI-M'
-    )
-
-    lat_dir = FileFix.objects.get(name='LatDirection')
-
-    for data_req in data_reqs:
-        data_req.fixes.remove(lat_dir)
-
-    logger.debug('FileFix {} removed from {} data requests.'.
-                 format(lat_dir.name, data_reqs.count()))
-
-    # Now add it to all atmosphere requests
-    data_reqs = DataRequest.objects.filter(
-        institution_id__name='MPI-M'
+        institution_id__name='MPI-M',
+        table_id = 'Omon',
+        cmor_name__in = ['hfx', 'hfy']
     ).exclude(
-        table_id__in = ['Oday', 'Ofx', 'Omon', 'PrimOday', 'PrimOmon',
-                        'PrimSIday', 'SIday', 'SImon'],
+        experiment_id__name='highresSST-present'
     )
 
+    cmeas_aco = FileFix.objects.get(name='CellMeasuresAreacelloAdd')
+    cmeth_mwst = FileFix.objects.get(name='CellMethodsSeaAreaTimeMeanAdd')
+
+    # This next line could be done more quickly by:
+    # further_info_url_fix.datarequest_set.add(*data_reqs)
+    # but sqlite3 gives an error of:
+    # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(lat_dir)
+        data_req.fixes.add(cmeas_aco)
+        data_req.fixes.add(cmeth_mwst)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(lat_dir.name, data_reqs.count()))
+                 format(cmeas_aco.name, data_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(cmeth_mwst.name, data_reqs.count()))
 
 
 if __name__ == "__main__":

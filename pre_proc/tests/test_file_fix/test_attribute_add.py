@@ -20,10 +20,13 @@ from pre_proc.file_fix import (
     EcmwfSourceMr,
     EcmwfSourceLr,
     ExternalVariablesAreacella,
+    ExternalVariablesAreacello,
+    ExternalVariablesAreacelloVolcello,
     HadGemMMParentSourceId,
     CellMeasuresAreacellaAdd,
     CellMeasuresAreacelloAdd,
     CellMeasuresAreacelloVolcelloAdd,
+    CellMeasuresDelete,
     CellMethodsAreaTimeMeanAdd,
     CellMethodsSeaAreaTimeMeanAdd,
     CellMethodsAreaMeanTimePointAdd,
@@ -33,9 +36,17 @@ from pre_proc.file_fix import (
     CellMethodsAreaMeanTimeMaxDailyAdd,
     ProductAdd,
     AtmosphereCloudIceContentStandardNameAdd,
+    HfbasinpmadvStandardNameAdd,
+    HfbasinpmdiffStandardNameAdd,
     SeaWaterSalinityStandardNameAdd,
+    MsftmzmpaStandardNameAdd,
     SeaSurfaceTemperatureNameAdd,
     ShallowConvectivePrecipitationFluxStandardNameAdd,
+    SiflcondbotStandardNameAdd,
+    SiflfwbotStandardNameAdd,
+    SisaltmassStandardNameAdd,
+    SistrxubotStandardNameAdd,
+    SistryubotStandardNameAdd,
     TrackingIdNew,
     VarUnitsToPercent,
     VarUnitsToThousandths,
@@ -167,6 +178,23 @@ class TestCellMeasuresAreacelloVolcelloAdd(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a cell_measures,so,o,c,"
             "'area: areacello volume: volcello' "
+            "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMeasuresDelete(BaseTest):
+    """ Test CellMeasuresDelete """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMeasuresDelete
+        """
+        fix = CellMeasuresDelete('so_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_measures,so,d,c,0 "
             "/a/so_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
@@ -461,6 +489,40 @@ class TestExternalVariablesAreacella(BaseTest):
         )
 
 
+class TestExternalVariablesAreacello(BaseTest):
+    """ Test ExternalVariablesAreacello """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        EcmwfSourceLr
+        """
+        fix = ExternalVariablesAreacello('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a external_variables,global,o,c,'areacello' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestExternalVariablesAreacelloVolcello(BaseTest):
+    """ Test ExternalVariablesAreacelloVolcello """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        EcmwfSourceLr
+        """
+        fix = ExternalVariablesAreacelloVolcello('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a external_variables,global,o,c,'areacello volcello' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestHadGemMMParentSourceId(BaseTest):
     """ Test HadGemMMParentSourceId """
     def test_subprocess_called_correctly(self):
@@ -507,6 +569,62 @@ class TestAtmosphereCloudIceContentStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,clivi,o,c,"
             "'atmosphere_cloud_ice_content' "
             "/a/clivi_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestHfbasinpmadvStandardNameAdd(BaseTest):
+    """ Test HfbasinpmadvStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        HfbasinpmadvStandardNameAdd
+        """
+        fix = HfbasinpmadvStandardNameAdd('hfbasinpmadv_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,hfbasinpmadv,o,c,"
+            "'northward_ocean_heat_transport_due_to_parameterized_mesoscale_"
+            "eddy_advection' "
+            "/a/hfbasinpmadv_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestHfbasinpmdiffStandardNameAdd(BaseTest):
+    """ Test HfbasinpmdiffStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        HfbasinpmdiffStandardNameAdd
+        """
+        fix = HfbasinpmdiffStandardNameAdd('hfbasinpmdiff_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,hfbasinpmdiff,o,c,"
+            "'northward_ocean_heat_transport_due_to_parameterized_mesoscale_"
+            "eddy_diffusion' "
+            "/a/hfbasinpmdiff_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestMsftmzmpaStandardNameAdd(BaseTest):
+    """ Test MsftmzmpaStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        MsftmzmpaStandardNameAdd
+        """
+        fix = MsftmzmpaStandardNameAdd('msftmzmpa_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,msftmzmpa,o,c,'ocean_meridional_"
+            "overturning_mass_streamfunction_due_to_parameterized_mesoscale_"
+            "eddy_advection' /a/msftmzmpa_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
@@ -561,6 +679,107 @@ class TestShallowConvectivePrecipitationFluxStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,prcsh,o,c,"
             "'shallow_convective_precipitation_flux' "
             "/a/prcsh_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSiflcondbotStandardNameAdd(BaseTest):
+    """ Test SiflcondbotStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SiflcondbotStandardNameAdd
+        """
+        fix = SiflcondbotStandardNameAdd(
+            'siflcondbot_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,siflcondbot,o,c,"
+            "'sea_ice_basal_net_downward_sensible_heat_flux' "
+            "/a/siflcondbot_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSiflfwbotStandardNameAdd(BaseTest):
+    """ Test SiflfwbotStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SiflfwbotStandardNameAdd
+        """
+        fix = SiflfwbotStandardNameAdd(
+            'siflfwbot_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,siflfwbot,o,c,"
+            "'water_flux_into_sea_water_from_sea_ice' "
+            "/a/siflfwbot_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSisaltmassStandardNameAdd(BaseTest):
+    """ Test SisaltmassStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SisaltmassStandardNameAdd
+        """
+        fix = SisaltmassStandardNameAdd(
+            'sisaltmass_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,sisaltmass,o,c,"
+            "'sea_ice_salt_content' "
+            "/a/sisaltmass_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+
+class TestSistrxubotStandardNameAdd(BaseTest):
+    """ Test SistrxubotStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SistrxubotStandardNameAdd
+        """
+        fix = SistrxubotStandardNameAdd(
+            'sistrxubot_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,sistrxubot,o,c,"
+            "'upward_x_stress_at_sea_ice_base' "
+            "/a/sistrxubot_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSistryubotStandardNameAdd(BaseTest):
+    """ Test SistryubotStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SistryubotStandardNameAdd
+        """
+        fix = SistryubotStandardNameAdd(
+            'sistryubot_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,sistryubot,o,c,"
+            "'upward_y_stress_at_sea_ice_base' "
+            "/a/sistryubot_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

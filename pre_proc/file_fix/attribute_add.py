@@ -6,7 +6,7 @@ abstract base classes.
 """
 import uuid
 
-from .abstract import AttributeAdd
+from .abstract import AttributeAdd, AttributeDelete
 
 
 class ParentBranchTimeAdd(AttributeAdd):
@@ -172,6 +172,30 @@ class CellMeasuresAreacelloVolcelloAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'area: areacello volume: volcello'
+
+
+class CellMeasuresDelete(AttributeDelete):
+    """
+    Delete variable attribute `cellmeasures`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'cell_measures'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        We're deleting so there's nothing to do but make a dummy value for
+        new_value.
+        """
+        self.new_value = 0
 
 
 class CellMethodsAreaTimeMeanAdd(AttributeAdd):
@@ -560,7 +584,7 @@ class EcmwfSourceLr(AttributeAdd):
 
 class ExternalVariablesAreacella(AttributeAdd):
     """
-    Add a global attribute `external_variables` with a value fof `areacella`.
+    Add a global attribute `external_variables` with a value of `areacella`.
     This is done in overwrite mode and so will work irrespective of whether
     there is an existing attribute.
     """
@@ -581,6 +605,56 @@ class ExternalVariablesAreacella(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'areacella'
+
+
+class ExternalVariablesAreacello(AttributeAdd):
+    """
+    Add a global attribute `external_variables` with a value of `areacello`.
+    This is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'external_variables'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'areacello'
+
+
+class ExternalVariablesAreacelloVolcello(AttributeAdd):
+    """
+    Add a global attribute `external_variables` with a value of
+    `areacello volcello`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'external_variables'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'areacello volcello'
 
 
 class HadGemMMParentSourceId(AttributeAdd):
@@ -658,6 +732,87 @@ class AtmosphereCloudIceContentStandardNameAdd(AttributeAdd):
         self.new_value = 'atmosphere_cloud_ice_content'
 
 
+class HfbasinpmadvStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `northward_ocean_heat_transport_due_to_parameterized_mesoscale_eddy_advection`.
+    This is done in overwrite mode and so will work irrespective of whether
+    there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('northward_ocean_heat_transport_due_to_'
+                          'parameterized_mesoscale_eddy_advection')
+
+
+class HfbasinpmdiffStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `northward_ocean_heat_transport_due_to_parameterized_mesoscale_eddy_diffusion`.
+    This is done in overwrite mode and so will work irrespective of whether
+    there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('northward_ocean_heat_transport_due_to_'
+                          'parameterized_mesoscale_eddy_diffusion')
+
+
+class MsftmzmpaStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `ocean_meridional_overturning_mass_streamfunction_due_to_parameterized_
+    mesoscale_eddy_advection`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('ocean_meridional_overturning_mass_streamfunction_'
+                          'due_to_parameterized_mesoscale_eddy_advection')
+
+
 class SeaWaterSalinityStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
@@ -732,6 +887,136 @@ class ShallowConvectivePrecipitationFluxStandardNameAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'shallow_convective_precipitation_flux'
+
+
+class SiflcondbotStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `sea_ice_basal_net_downward_sensible_heat_flux`. This is done in overwrite
+    mode and so will work irrespective of whether there is an existing
+    standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'sea_ice_basal_net_downward_sensible_heat_flux'
+
+
+class SiflfwbotStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `water_flux_into_sea_water_from_sea_ice`. This is done in overwrite
+    mode and so will work irrespective of whether there is an existing
+    standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'water_flux_into_sea_water_from_sea_ice'
+
+
+class SisaltmassStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `sea_ice_salt_content`. This is done in overwrite
+    mode and so will work irrespective of whether there is an existing
+    standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'sea_ice_salt_content'
+
+
+class SistrxubotStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `upward_x_stress_at_sea_ice_base`. This is done in overwrite
+    mode and so will work irrespective of whether there is an existing
+    standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'upward_x_stress_at_sea_ice_base'
+
+
+class SistryubotStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `upward_y_stress_at_sea_ice_base`. This is done in overwrite
+    mode and so will work irrespective of whether there is an existing
+    standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'upward_y_stress_at_sea_ice_base'
 
 
 class TrackingIdNew(AttributeAdd):

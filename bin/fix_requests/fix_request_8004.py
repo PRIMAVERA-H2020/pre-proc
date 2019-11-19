@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_8000.py
+fix_request_8004.py
 
-MPI-M.*
+MPI-M.many (except highresSST-present)
 
-Change the direction of the latitude coordinate to monotonically increasing on
-atmosphere variables.
+Add external_variables areacello volcello.
 """
 import argparse
 import logging.config
@@ -44,32 +43,45 @@ def main():
     """
     Main entry point
     """
-    # First remove this fix from all MPI requests
-    data_reqs = DataRequest.objects.filter(
-        institution_id__name='MPI-M'
-    )
-
-    lat_dir = FileFix.objects.get(name='LatDirection')
-
-    for data_req in data_reqs:
-        data_req.fixes.remove(lat_dir)
-
-    logger.debug('FileFix {} removed from {} data requests.'.
-                 format(lat_dir.name, data_reqs.count()))
-
-    # Now add it to all atmosphere requests
-    data_reqs = DataRequest.objects.filter(
-        institution_id__name='MPI-M'
+    t_Ofx = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        table_id = 'Ofx',
+        cmor_name__in = ['volcello']
     ).exclude(
-        table_id__in = ['Oday', 'Ofx', 'Omon', 'PrimOday', 'PrimOmon',
-                        'PrimSIday', 'SIday', 'SImon'],
+        experiment_id__name='highresSST-present'
     )
 
+    t_Omon = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        table_id = 'Omon',
+        cmor_name__in = ['masscello', 'so', 'thetao', 'thkcello', 'wmo']
+    ).exclude(
+        experiment_id__name='highresSST-present'
+    )
+
+    t_PrimOday = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        table_id = 'PrimOday',
+        cmor_name__in = ['so', 'thetao']
+    ).exclude(
+        experiment_id__name='highresSST-present'
+    )
+
+    data_reqs = (t_Ofx | t_Omon | t_PrimOday)
+
+    ext_var_cello = FileFix.objects.get(
+        name='ExternalVariablesAreacelloVolcello'
+    )
+
+    # This next line could be done more quickly by:
+    # further_info_url_fix.datarequest_set.add(*data_reqs)
+    # but sqlite3 gives an error of:
+    # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(lat_dir)
+        data_req.fixes.add(ext_var_cello)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(lat_dir.name, data_reqs.count()))
+                 format(ext_var_cello.name, data_reqs.count()))
 
 
 if __name__ == "__main__":

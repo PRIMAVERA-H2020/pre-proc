@@ -72,9 +72,11 @@ class AttributeEdit(FileFix, metaclass=ABCMeta):
         """
         pass
 
-    def _run_ncatted(self):
+    def _run_ncatted(self, nco_mode):
         """
         Run the command
+
+        :param str nco_mode: The mode to run nco in.
         """
         for attr_name in ['attribute_name', 'attribute_visibility',
                           'new_value']:
@@ -91,7 +93,7 @@ class AttributeEdit(FileFix, metaclass=ABCMeta):
         cmd = 'ncatted -h -a {},{},{},{},{}{}{} {}'.format(
             self.attribute_name,
             self.attribute_visibility,
-            'o',
+            nco_mode,
             self.attribute_type,
             quote_mark,
             self.new_value,
@@ -172,7 +174,7 @@ class AttributeUpdate(AttributeEdit, metaclass=ABCMeta):
         """
         self._get_existing_value()
         self._calculate_new_value()
-        self._run_ncatted()
+        self._run_ncatted('o')
 
     def _get_existing_value(self):
         """
@@ -207,7 +209,7 @@ class CopyAttribute(AttributeEdit, metaclass=ABCMeta):
         Fix the specified attribute on the file
         """
         self._calculate_new_value()
-        self._run_ncatted()
+        self._run_ncatted('o')
 
     @abstractmethod
     def _calculate_new_value(self):
@@ -295,4 +297,24 @@ class AttributeAdd(AttributeEdit, metaclass=ABCMeta):
         Fix the specified attribute on the file
         """
         self._calculate_new_value()
-        self._run_ncatted()
+        self._run_ncatted('o')
+
+
+class AttributeDelete(AttributeEdit, metaclass=ABCMeta):
+    """
+    An abstract base class for fixes that require the use of `ncatted` to
+    remove a metadata attribute.
+    """
+
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+
+    def apply_fix(self):
+        """
+        Fix the specified attribute on the file
+        """
+        self._calculate_new_value()
+        self._run_ncatted('d')
