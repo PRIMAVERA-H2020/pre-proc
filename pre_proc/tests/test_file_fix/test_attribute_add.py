@@ -37,6 +37,7 @@ from pre_proc.file_fix import (
     ProductAdd,
     AtmosphereCloudIceContentStandardNameAdd,
     HfbasinpmadvStandardNameAdd,
+    HfbasinpmdiffStandardNameAdd,
     SeaWaterSalinityStandardNameAdd,
     MsftmzmpaStandardNameAdd,
     SeaSurfaceTemperatureNameAdd,
@@ -587,6 +588,25 @@ class TestHfbasinpmadvStandardNameAdd(BaseTest):
             "'northward_ocean_heat_transport_due_to_parameterized_mesoscale_"
             "eddy_advection' "
             "/a/hfbasinpmadv_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestHfbasinpmdiffStandardNameAdd(BaseTest):
+    """ Test HfbasinpmdiffStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        HfbasinpmdiffStandardNameAdd
+        """
+        fix = HfbasinpmdiffStandardNameAdd('hfbasinpmdiff_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,hfbasinpmdiff,o,c,"
+            "'northward_ocean_heat_transport_due_to_parameterized_mesoscale_"
+            "eddy_diffusion' "
+            "/a/hfbasinpmdiff_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

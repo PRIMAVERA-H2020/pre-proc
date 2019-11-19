@@ -759,6 +759,33 @@ class HfbasinpmadvStandardNameAdd(AttributeAdd):
                           'parameterized_mesoscale_eddy_advection')
 
 
+class HfbasinpmdiffStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `northward_ocean_heat_transport_due_to_parameterized_mesoscale_eddy_diffusion`.
+    This is done in overwrite mode and so will work irrespective of whether
+    there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('northward_ocean_heat_transport_due_to_'
+                          'parameterized_mesoscale_eddy_diffusion')
+
+
 class MsftmzmpaStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
