@@ -2,7 +2,7 @@
 """
 fix_request_8006.py
 
-MPI-M.coupled.Omon.hfbasin*,mfo,msftmzmpa,simassacrossline
+MPI-M.coupled.[O,SI]mon.hfbasin*,mfo,msftmzmpa,simassacrossline
 
 Remove cell_measures.
 """
@@ -43,15 +43,25 @@ def main():
     """
     Main entry point
     """
-    data_reqs = DataRequest.objects.filter(
+    omon = DataRequest.objects.filter(
         institution_id__name='MPI-M',
         table_id = 'Omon',
         cmor_name__in = ['hfbasin', 'hfbasinpadv', 'hfbasinpmadv',
-                         'hfbasinpmdiff', 'mfo', 'msftmzmpa',
-                         'simassacrossline']
+                         'hfbasinpmdiff', 'mfo', 'msftmzmpa']
     ).exclude(
         experiment_id__name='highresSST-present'
     )
+
+    simon = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        table_id = 'SImon',
+        cmor_name = 'simassacrossline'
+    ).exclude(
+        experiment_id__name='highresSST-present'
+    )
+
+
+    data_reqs = omon | simon
 
     cmeas_rm = FileFix.objects.get(name='CellMeasuresDelete')
 
