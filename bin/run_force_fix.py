@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 """
-run_pre_proc.py
+run_force_fix.py
 
 Run PRIMAVERA pre-processing as part of the CEDA CREPP workflow. A directory
-is specified and all files in this directory are fixed. It is likely that the
-same fixes will be applied to all of the files, however, the fixes to apply
-are calculated again for each file.
+is specified and all files in this directory are fixed with the specified
+FileFix.
 """
 import argparse
 import logging.config
@@ -14,6 +13,7 @@ import sys
 import traceback
 import warnings
 
+import pre_proc
 from pre_proc import EsgfSubmission
 from pre_proc.common import list_files
 
@@ -35,6 +35,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Pre-process PRIMAVERA data.')
     parser.add_argument('directory', help='the directory where the files to '
                                           'fix are stored', type=str)
+    parser.add_argument('fix_name', help='the name of the FileFix class '
+                                         'to apply', type=str)
     parser.add_argument('-l', '--log-level', help='set logging level to one '
                                                   'of debug, info, warn (the '
                                                   'default), or error')
@@ -57,7 +59,9 @@ def main(args):
         logger.debug('Processing {}'.format(filepath))
         try:
             esgf_submission = EsgfSubmission.from_file(filepath)
-            esgf_submission.determine_fixes()
+            esgf_submission.fixes = [getattr(pre_proc.file_fix, args.fix_name)
+                                     (os.path.basename(filepath),
+                                      os.path.dirname(filepath))]
             esgf_submission.run_fixes()
             esgf_submission.update_history()
         except:

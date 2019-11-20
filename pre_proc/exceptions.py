@@ -8,8 +8,8 @@ import os
 __all__ = ['PreProcError', 'CannotLoadSourceFileError',
            'AttributeNotFoundError', 'AttributeConversionError',
            'ExistingAttributeError', 'InstanceVariableNotDefinedError',
-           'NcattedError', 'NcpdqError', 'DataRequestNotFound',
-           'MultipleDataRequestsFound']
+           'NcattedError', 'NcpdqError', 'Ncap2Error', 'NcksError',
+           'NcrenameError', 'DataRequestNotFound', 'MultipleDataRequestsFound']
 
 
 class PreProcError(Exception):
@@ -120,6 +120,33 @@ class NcpdqError(ExternalCommandError):
     """
     def __init__(self, class_name, filename, command, traceback_text):
         super().__init__(class_name, 'ncpdq', filename, command,
+                         traceback_text)
+
+
+class Ncap2Error(ExternalCommandError):
+    """
+    When ncap2 fails.
+    """
+    def __init__(self, class_name, filename, command, traceback_text):
+        super().__init__(class_name, 'ncap2', filename, command,
+                         traceback_text)
+
+
+class NcksError(ExternalCommandError):
+    """
+    When ncks fails.
+    """
+    def __init__(self, class_name, filename, command, traceback_text):
+        super().__init__(class_name, 'ncks', filename, command,
+                         traceback_text)
+
+
+class NcrenameError(ExternalCommandError):
+    """
+    When ncrename fails.
+    """
+    def __init__(self, class_name, filename, command, traceback_text):
+        super().__init__(class_name, 'ncrename', filename, command,
                          traceback_text)
 
 

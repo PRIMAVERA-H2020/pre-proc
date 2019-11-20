@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 """
-fix_request_6001.py
+fix_request_8211.py
 
-MOHC/NERC.HadGEM3-GC31-*.*.*.Amon/day/E3hrPt.[uv]a
+MPI-M.*.highresSST-present.*.6hrPlev.wap4
 
-Add cell_measures area: areacella to all MOHC and NERC Amon ua and va
-variables.
+Set the cell_methods to "area: time: mean" and external_variables on 6hrPlev
+wap.
 """
 import argparse
 import logging.config
@@ -44,21 +44,14 @@ def main():
     """
     Main entry point
     """
-    uva_reqs = DataRequest.objects.filter(
-        institution_id__name__in=['MOHC', 'NERC'],
-        table_id__in=['Amon', 'day'],
-        cmor_name__in=['ua', 'va']
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name='highresSST-present',
+        table_id='6hrPlev',
+        cmor_name='wap4'
     )
 
-    uva7h_reqs = DataRequest.objects.filter(
-        institution_id__name__in=['MOHC', 'NERC'],
-        table_id='E3hrPt',
-        cmor_name__in=['ua7h', 'va7h']
-    )
-
-    data_reqs = uva_reqs | uva7h_reqs
-
-    areacella = FileFix.objects.get(name='CellMeasuresAreacellaAdd')
+    cm_atm = FileFix.objects.get(name='CellMethodsAreaTimeMeanAdd')
     ext_vars = FileFix.objects.get(name='ExternalVariablesAreacella')
 
     # This next line could be done more quickly by:
@@ -66,16 +59,13 @@ def main():
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(areacella)
-
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(areacella.name, data_reqs.count()))
-
-    for data_req in uva7h_reqs:
+        data_req.fixes.add(cm_atm)
         data_req.fixes.add(ext_vars)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(ext_vars.name, uva7h_reqs.count()))
+                 format(cm_atm.name, data_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(ext_vars.name, data_reqs.count()))
 
 
 if __name__ == "__main__":

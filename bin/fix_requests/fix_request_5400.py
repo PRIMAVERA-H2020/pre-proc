@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_6001.py
+fix_request_5400.py
 
-MOHC/NERC.HadGEM3-GC31-*.*.*.Amon/day/E3hrPt.[uv]a
+ECMWF.*.[coupled].*.O[mon/day].tos
 
-Add cell_measures area: areacella to all MOHC and NERC Amon ua and va
-variables.
+Change the units is tos from Kelvin back to degC.
 """
 import argparse
 import logging.config
@@ -44,38 +43,24 @@ def main():
     """
     Main entry point
     """
-    uva_reqs = DataRequest.objects.filter(
-        institution_id__name__in=['MOHC', 'NERC'],
-        table_id__in=['Amon', 'day'],
-        cmor_name__in=['ua', 'va']
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='ECMWF',
+        experiment_id__name__in=['hist-1950', 'control-1950', 'spinup-1950'],
+        table_id__in=['Oday', 'Omon'],
+        cmor_name='tos'
     )
 
-    uva7h_reqs = DataRequest.objects.filter(
-        institution_id__name__in=['MOHC', 'NERC'],
-        table_id='E3hrPt',
-        cmor_name__in=['ua7h', 'va7h']
-    )
-
-    data_reqs = uva_reqs | uva7h_reqs
-
-    areacella = FileFix.objects.get(name='CellMeasuresAreacellaAdd')
-    ext_vars = FileFix.objects.get(name='ExternalVariablesAreacella')
+    tos_fix = FileFix.objects.get(name='ToDegC')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(areacella)
+        data_req.fixes.add(tos_fix)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(areacella.name, data_reqs.count()))
-
-    for data_req in uva7h_reqs:
-        data_req.fixes.add(ext_vars)
-
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(ext_vars.name, uva7h_reqs.count()))
+                 format(tos_fix.name, data_reqs.count()))
 
 
 if __name__ == "__main__":

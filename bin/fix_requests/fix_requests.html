@@ -63,6 +63,8 @@ reference attribute.
 </td></tr>
 <tr><td>5100</td><td>ECMWF.*.highresSST-present.*</td><td>Change the source_type attribute on AMIP files from AOGCM to AGCM.
 </td></tr>
+<tr><td>5400</td><td>ECMWF.*.[coupled].*.O[mon/day].tos</td><td>Change the units is tos from Kelvin back to degC.
+</td></tr>
 <tr><td>6000</td><td>MOHC.*</td><td>Convert the further_info_url attribute on all MOHC and NERC data from HTTP to
 HTTPS. Update data_specs_version to 01.00.23.
 </td></tr>
@@ -75,7 +77,47 @@ MOHC and NERC EmonZ and EdayZ wtem variables.
 <tr><td>6003</td><td>MOHC/NERC.*.*.*.E3hr.prcsh</td><td>Add standard_name shallow_convective_precipitation_flux to all
 MOHC and NERC E3hr prcsh variables.
 </td></tr>
-<tr><td>8000</td><td>MPI-M.*</td><td>Change the direction of the latitude coordinate to monotonically increasing.
+<tr><td>6300</td><td>MOHC/NERC.highresSST-future.*</td><td>In MOHC AMIP future convert branch_time_in_child and branch_time_in_parent
+to a double.
+</td></tr>
+<tr><td>6400</td><td>MOHC.coupled*</td><td>In all MOHC coupled data convert branch_time_in_child and
+branch_time_in_parent to a double.
+</td></tr>
+<tr><td>6401</td><td>*.HadGEM3-GC31-HM.coupled*</td><td>In all HadGEM3-GC31-HM control-1950 and hist-1950 data change
+parent_source_id with HadGEM3-GC31-MM.
+</td></tr>
+<tr><td>8000</td><td>MPI-M.*</td><td>Change the direction of the latitude coordinate to monotonically increasing on
+atmosphere variables.
+</td></tr>
+<tr><td>8001</td><td>MPI-M.* (except highresSST-present)</td><td>Correct the data_specs_version.
+</td></tr>
+<tr><td>8002</td><td>MPI-M.many (except highresSST-present)</td><td>Add external_variables areacella.
+</td></tr>
+<tr><td>8003</td><td>MPI-M.many (except highresSST-present)</td><td>Add external_variables areacello.
+</td></tr>
+<tr><td>8004</td><td>MPI-M.many (except highresSST-present)</td><td>Add external_variables areacello volcello.
+</td></tr>
+<tr><td>8005</td><td>MPI-M.coupled.Oday.tos</td><td>Convert tos from K to degC.
+</td></tr>
+<tr><td>8006</td><td>MPI-M.coupled.[O,SI]mon.hfbasin*,mfo,msftmzmpa,simassacrossline</td><td>Remove cell_measures.
+</td></tr>
+<tr><td>8007</td><td>MPI-M.coupled.Omon.hf[x,y]</td><td>CellMeasuresAreacelloAdd and CellMethodsSeaAreaTimeMeanAdd
+</td></tr>
+<tr><td>8008</td><td>MPI-M.coupled.Omon.msftmzmpa</td><td>MsftmzmpaStandardNameAdd
+</td></tr>
+<tr><td>8009</td><td>MPI-M.coupled.SImon.siflcondbot</td><td>SiflcondbotStandardNameAdd
+</td></tr>
+<tr><td>8010</td><td>MPI-M.coupled.SImon.siflfwbot</td><td>SiflfwbotStandardNameAdd
+</td></tr>
+<tr><td>8011</td><td>MPI-M.coupled.SImon.sistrxubot</td><td>SistrxubotStandardNameAdd
+</td></tr>
+<tr><td>8012</td><td>MPI-M.coupled.SImon.sistryubot</td><td>SistryubotStandardNameAdd
+</td></tr>
+<tr><td>8013</td><td>MPI-M.coupled.Omon.hfbasinpmadv</td><td>HfbasinpmadvStandardNameAdd
+</td></tr>
+<tr><td>8014</td><td>MPI-M.coupled.Omon.hfbasinpmdiff</td><td>HfbasinpmdiffStandardNameAdd
+</td></tr>
+<tr><td>8015</td><td>MPI-M.coupled.SImon.sisaltmass</td><td>SisaltmassStandardNameAdd
 </td></tr>
 <tr><td>8200</td><td>MPI-M.*.highresSST-present.*</td><td>Convert the variant_label index components from strings to ints. Correct the
 product and tracking_id.
@@ -95,6 +137,13 @@ product and tracking_id.
 <tr><td>8207</td><td>MPI-M.*.highresSST-present.*.day.tasmin</td><td>Correct the cell_methods on day for minima.
 </td></tr>
 <tr><td>8208</td><td>MPI-M.*.highresSST-present.*.6hrPlevPt.many</td><td>Set the cell_methods to "area: mean time: point" on various variables.
+</td></tr>
+<tr><td>8209</td><td>MPI-M.*.highresSST-present.*</td><td>Remove the TrackingIdFix and add TrackingIdNew.
+</td></tr>
+<tr><td>8210</td><td>MPI-M.*.highresSST-present.*.6hrPlev[Pt,].many</td><td>Set lev to plev
+</td></tr>
+<tr><td>8211</td><td>MPI-M.*.highresSST-present.*.6hrPlev.wap4</td><td>Set the cell_methods to "area: time: mean" and external_variables on 6hrPlev
+wap.
 </td></tr>
 
 </table>

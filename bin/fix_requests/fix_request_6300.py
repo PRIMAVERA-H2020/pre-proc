@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 """
-fix_request_6001.py
+fix_request_6300.py
 
-MOHC/NERC.HadGEM3-GC31-*.*.*.Amon/day/E3hrPt.[uv]a
+MOHC/NERC.highresSST-future.*
 
-Add cell_measures area: areacella to all MOHC and NERC Amon ua and va
-variables.
+In MOHC AMIP future convert branch_time_in_child and branch_time_in_parent
+to a double.
 """
 import argparse
 import logging.config
@@ -44,38 +44,27 @@ def main():
     """
     Main entry point
     """
-    uva_reqs = DataRequest.objects.filter(
+    data_reqs = DataRequest.objects.filter(
         institution_id__name__in=['MOHC', 'NERC'],
-        table_id__in=['Amon', 'day'],
-        cmor_name__in=['ua', 'va']
+        experiment_id__name='highresSST-future'
     )
 
-    uva7h_reqs = DataRequest.objects.filter(
-        institution_id__name__in=['MOHC', 'NERC'],
-        table_id='E3hrPt',
-        cmor_name__in=['ua7h', 'va7h']
-    )
-
-    data_reqs = uva_reqs | uva7h_reqs
-
-    areacella = FileFix.objects.get(name='CellMeasuresAreacellaAdd')
-    ext_vars = FileFix.objects.get(name='ExternalVariablesAreacella')
+    fixes = [
+        FileFix.objects.get(name='ParentBranchTimeDoubleFix'),
+        FileFix.objects.get(name='ChildBranchTimeDoubleFix')
+    ]
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(areacella)
+        data_req.fixes.add(*fixes)
 
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(areacella.name, data_reqs.count()))
-
-    for data_req in uva7h_reqs:
-        data_req.fixes.add(ext_vars)
-
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(ext_vars.name, uva7h_reqs.count()))
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
 
 
 if __name__ == "__main__":

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_8208.py
+fix_request_8003.py
 
-MPI-M.*.highresSST-present.*.6hrPlevPt.many
+MPI-M.many (except highresSST-present)
 
-Set the cell_methods to "area: mean time: point" on various variables.
+Add external_variables areacello.
 """
 import argparse
 import logging.config
@@ -43,32 +43,80 @@ def main():
     """
     Main entry point
     """
-    sixhrplevpt = DataRequest.objects.filter(
+    t_Oday = DataRequest.objects.filter(
         institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
-        table_id='6hrPlevPt',
-        cmor_name__in=[
-            'hus7h', 'psl', 'ta7h', 'ua7h', 'uas', 'va7h', 'vas', 'zg7h'
-        ]
+        table_id = 'Oday',
+        cmor_name__in = ['omldamax', 'sos', 'tos', 'tossq']
+    ).exclude(
+        experiment_id__name='highresSST-present'
     )
 
-    data_reqs = sixhrplevpt
+    t_Omon = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        table_id = 'Omon',
+        cmor_name__in = ['fsitherm', 'hfds', 'hfx', 'hfy', 'mlotst',
+                         'mlotstsq', 'msftbarot', 'pbo', 'rsntds', 'sfdsi',
+                         'sos', 'tos', 'tossq', 'wfo', 'zos', 'zossq']
+    ).exclude(
+        experiment_id__name='highresSST-present'
+    )
 
-    cm_amtp = FileFix.objects.get(name='CellMethodsAreaMeanTimePointAdd')
-    ext_vars = FileFix.objects.get(name='ExternalVariablesAreacella')
+    t_PrimOday = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        table_id = 'PrimOday',
+        cmor_name__in = ['mlotst', 'zos']
+    ).exclude(
+        experiment_id__name='highresSST-present'
+    )
+
+    t_PrimOmon = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        table_id = 'PrimOmon',
+        cmor_name__in = ['opottemptend', 'somint', 'tomint', 'u2o', 'uso',
+                         'uto', 'v2o', 'vso', 'vto', 'w2o', 'wo', 'wso', 'wto']
+    ).exclude(
+        experiment_id__name='highresSST-present'
+    )
+
+    t_PrimSIday = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        table_id = 'PrimSIday',
+        cmor_name__in = ['simassacrossline', 'sistrxdtop', 'sistrxubot',
+                         'sistrydtop', 'sistryubot', 'sitimefrac']
+    ).exclude(
+        experiment_id__name='highresSST-present'
+    )
+
+    t_SIday = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        table_id = 'SIday',
+        cmor_name__in = ['siconc']
+    ).exclude(
+        experiment_id__name='highresSST-present'
+    )
+
+    t_SImon = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        table_id = 'SImon',
+        cmor_name__in = ['siconc']
+    ).exclude(
+        experiment_id__name='highresSST-present'
+    )
+
+    data_reqs = (t_Oday | t_Omon | t_PrimOday | t_PrimOmon | t_PrimSIday |
+                 t_SIday | t_SImon)
+
+    ext_var_cello = FileFix.objects.get(name='ExternalVariablesAreacello')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(cm_amtp)
-        data_req.fixes.add(ext_vars)
+        data_req.fixes.add(ext_var_cello)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(cm_amtp.name, data_reqs.count()))
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(ext_vars.name, data_reqs.count()))
+                 format(ext_var_cello.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
