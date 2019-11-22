@@ -76,7 +76,8 @@ class EsgfSubmission(object):
         """
         self.fixes = [getattr(pre_proc.file_fix, fix_name.name)(self.filename,
                                                                 self.directory)
-                      for fix_name in self._get_data_request().fixes.all()]
+                      for fix_name in self._get_data_request().
+                          fixes.order_by('name')]
 
     def run_fixes(self):
         """

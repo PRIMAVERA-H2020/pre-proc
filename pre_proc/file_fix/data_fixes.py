@@ -10,11 +10,13 @@ import warnings
 
 import iris
 
-from .abstract import NcoDataFix
+from .abstract import DataFix, NcoDataFix
 from pre_proc.common import run_command
 from pre_proc.exceptions import (ExistingAttributeError, Ncap2Error,
                                  NcattedError, NcpdqError, NcksError,
                                  NcrenameError)
+
+from highresmip_fix.fix_latlon_atmosphere import fix_latlon_atmosphere
 
 # Ignore warnings displayed when loading data into Iris to check it
 warnings.filterwarnings("ignore")
@@ -153,3 +155,28 @@ class ToDegC(NcoDataFix):
         """
         cube = iris.load_cube(os.path.join(self.directory, self.filename))
         return True if cube.units.symbol == 'K' else False
+
+
+class ZZEcEarthAtmosFix(DataFix):
+    """
+    Use the EC-Earth provided module to convert the EC-Earth 2D latitude and
+    longitudes into scalar coordinates. The ZZ at the start of the name causes
+    this to be the last fix to run.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+
+        # Use the default chunk size
+        self.default_chunk_size = '64KiB'
+
+    def apply_fix(self):
+        """
+        Fix the affected file
+        """
+        fix_latlon_atmosphere(
+            os.path.join(self.directory, self.filename),
+            self.default_chunk_size
+        )
