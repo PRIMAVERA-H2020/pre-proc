@@ -9,7 +9,7 @@ CONDA_ENV_DIR=/home/users/jseddon/software/miniconda3/envs/py3-6/bin
 export PATH=$CONDA_DIR:$PATH
 . activate py3-6
 export DJANGO_SETTINGS_MODULE=pre_proc_site.settings
-export PYTHONPATH=$INSTALL_DIR
+export PYTHONPATH=$INSTALL_DIR:$INSTALL_DIR/HighResMIP-fix
 
 export DATABASE_DIR=$INSTALL_DIR/db
 
