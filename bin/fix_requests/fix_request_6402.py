@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 """
-fix_request_6400.py
+fix_request_6402.py
 
-MOHC.coupled*
+*.HadGEM*.spinup-1950.*
 
-In all MOHC coupled data convert branch_time_in_child and
-branch_time_in_parent to a double.
+In all MOHC spinup-1950 remove the branch_time_in_child and
+branch_time_in_parent to a double fixes, which were mistakenly added.
 """
 import argparse
 import logging.config
@@ -46,9 +46,7 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name__in=['MOHC', 'NERC'],
-        experiment_id__name__in=[
-            'hist-1950', 'control-1950', 'highres-future'
-        ]
+        experiment_id__name='spinup-1950'
     )
 
     fixes = [
@@ -56,16 +54,13 @@ def main():
         FileFix.objects.get(name='ChildBranchTimeDoubleFix')
     ]
 
-    # This next line could be done more quickly by:
-    # further_info_url_fix.datarequest_set.add(*data_reqs)
-    # but sqlite3 gives an error of:
-    # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(*fixes)
+        for fix in fixes:
+            data_req.fixes.remove(fix)
 
     num_data_reqs = data_reqs.count()
     for fix in fixes:
-        logger.debug('FileFix {} added to {} data requests.'.
+        logger.debug('FileFix {} removed from {} data requests.'.
                      format(fix.name, num_data_reqs))
 
 
