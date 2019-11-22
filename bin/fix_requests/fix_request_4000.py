@@ -46,7 +46,7 @@ def main():
     data_reqs = DataRequest.objects.filter(
         institution_id__name='EC-Earth-Consortium'
     ).exclude(
-        variable_request__table_name__in=[
+        table_id__in=[
             'Oday', 'Ofx', 'Omon', 'PrimO6hr', 'PrimOday', 'PrimOmon',
             'PrimSIday', 'SIday', 'SImon'
         ]
