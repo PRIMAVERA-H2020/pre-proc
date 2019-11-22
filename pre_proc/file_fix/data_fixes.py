@@ -16,7 +16,8 @@ from pre_proc.exceptions import (ExistingAttributeError, Ncap2Error,
                                  NcattedError, NcpdqError, NcksError,
                                  NcrenameError)
 
-from highresmip_fix.fix_latlon_atmosphere import fix_latlon_atmosphere
+from highresmip_fix.fix_latlon_atmosphere import (fix_latlon_atmosphere,
+                                                  binary_size)
 
 # Ignore warnings displayed when loading data into Iris to check it
 warnings.filterwarnings("ignore")
@@ -178,5 +179,5 @@ class ZZEcEarthAtmosFix(DataFix):
         """
         fix_latlon_atmosphere(
             os.path.join(self.directory, self.filename),
-            self.default_chunk_size
+            binary_size(self.default_chunk_size)
         )
