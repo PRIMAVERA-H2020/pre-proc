@@ -4,7 +4,7 @@ fix_request_8005.py
 
 MPI-M.coupled.Oday.tos
 
-Convert tos from K to degC.
+Convert tos units metadata from K to degC.
 """
 import argparse
 import logging.config
@@ -51,17 +51,24 @@ def main():
         experiment_id__name='highresSST-present'
     )
 
-    ext_var_cello = FileFix.objects.get(name='ToDegC')
+    # Remove data fix from these data requests as it was mistakenly added
+    # previously.
+    data_edit = FileFix.objects.get(name='ToDegC')
 
-    # This next line could be done more quickly by:
-    # further_info_url_fix.datarequest_set.add(*data_reqs)
-    # but sqlite3 gives an error of:
-    # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(ext_var_cello)
+        data_req.fixes.remove(data_edit)
+
+    logger.debug('FileFix {} removed from {} data requests.'.
+                 format(data_edit.name, data_reqs.count()))
+
+    # Add metadata fix to these files
+    metadata_edit = FileFix.objects.get(name='VarUnitsToDegC')
+
+    for data_req in data_reqs:
+        data_req.fixes.add(metadata_edit)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(ext_var_cello.name, data_reqs.count()))
+                 format(metadata_edit.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
