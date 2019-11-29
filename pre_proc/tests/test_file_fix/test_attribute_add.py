@@ -48,6 +48,7 @@ from pre_proc.file_fix import (
     SistrxubotStandardNameAdd,
     SistryubotStandardNameAdd,
     TrackingIdNew,
+    VarUnitsToDegC,
     VarUnitsToPercent,
     VarUnitsToThousandths,
     WtemStandardNameAdd
@@ -744,7 +745,6 @@ class TestSisaltmassStandardNameAdd(BaseTest):
         )
 
 
-
 class TestSistrxubotStandardNameAdd(BaseTest):
     """ Test SistrxubotStandardNameAdd """
     def test_subprocess_called_correctly(self):
@@ -799,6 +799,23 @@ class TestTrackingIdNew(BaseTest):
                          r"ncatted -h -a tracking_id,global,o,c,"
                          r"'hdl:21.14100/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}' "
                          r"/a/prcsh_components.nc")
+
+
+class TestVarUnitsToDegC(BaseTest):
+    """ Test VarUnitsToDegC """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VarUnitsToDegC.
+        """
+        fix = VarUnitsToDegC('tos_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a units,tos,o,c,'degC' "
+            "/a/tos_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
 
 
 class TestVarUnitsToPercent(BaseTest):
