@@ -18,6 +18,7 @@ from pre_proc.exceptions import (ExistingAttributeError, Ncap2Error,
 
 from highresmip_fix.fix_latlon_atmosphere import (fix_latlon_atmosphere,
                                                   binary_size)
+import fix_lons
 
 # Ignore warnings displayed when loading data into Iris to check it
 warnings.filterwarnings("ignore")
@@ -162,7 +163,7 @@ class ZZEcEarthAtmosFix(DataFix):
     """
     Use the EC-Earth provided module to convert the EC-Earth 2D latitude and
     longitudes into scalar coordinates. The ZZ at the start of the name causes
-    this to be the last fix to run.
+    this to be one of the last fixes to run.
     """
     def __init__(self, filename, directory):
         """
@@ -180,4 +181,29 @@ class ZZEcEarthAtmosFix(DataFix):
         fix_latlon_atmosphere(
             os.path.join(self.directory, self.filename),
             binary_size(self.default_chunk_size)
+        )
+
+
+class ZZZEcEarthLongitudeFix(DataFix):
+    """
+    Use the EC-Earth provided module to fix the EC-Earth longitude. The ZZZ
+    at the start of the name causes this to be the last fix to run.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+
+        # Use the default chunk size
+        self.default_chunk_size = '64KiB'
+
+    def apply_fix(self):
+        """
+        Fix the affected file
+        """
+        fix_lons.fix_file(
+            os.path.join(self.directory, self.filename),
+            write=True,
+            keepid=True
         )

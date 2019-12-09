@@ -12,7 +12,8 @@ from iris.tests.stock import realistic_3d
 import numpy as np
 
 from pre_proc.exceptions import ExistingAttributeError, NcksError
-from pre_proc.file_fix import LatDirection, LevToPlev, ToDegC
+from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
+                               ZZEcEarthAtmosFix, ZZZEcEarthLongitudeFix)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -270,3 +271,34 @@ class TestToDegCUnitsCheck(unittest.TestCase):
         self.cube.units = cf_units.Unit('degC')
         fix = ToDegC('tos_table.nc', '/a')
         self.assertFalse(fix._is_kelvin())
+
+
+class TestZZEcEarthAtmosFix(unittest.TestCase):
+    """
+    Test ZZEcEarthAtmosFix
+    """
+    def setUp(self):
+        patch = mock.patch('pre_proc.file_fix.data_fixes.fix_latlon_atmosphere')
+        self.mock_fix = patch.start()
+        self.addCleanup(patch.stop)
+
+    def test_arguments(self):
+        fix = ZZEcEarthAtmosFix('tas_table.nc', '/a')
+        fix.apply_fix()
+        self.mock_fix.assert_called_with('/a/tas_table.nc', 64 * 1024)
+
+
+class TestZZZEcEarthLongitudeFix(unittest.TestCase):
+    """
+    Test ZZZEcEarthLongitudeFix
+    """
+    def setUp(self):
+        patch = mock.patch('pre_proc.file_fix.data_fixes.fix_lons.fix_file')
+        self.mock_fix = patch.start()
+        self.addCleanup(patch.stop)
+
+    def test_arguments(self):
+        fix = ZZZEcEarthLongitudeFix('tas_table.nc', '/a')
+        fix.apply_fix()
+        self.mock_fix.assert_called_with('/a/tas_table.nc', write=True,
+                                         keepid=True)

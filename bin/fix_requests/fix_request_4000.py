@@ -53,7 +53,8 @@ def main():
     )
 
     fixes = [
-        FileFix.objects.get(name='ZZEcEarthAtmosFix')
+        FileFix.objects.get(name='ZZEcEarthAtmosFix'),
+        FileFix.objects.get(name='ZZZEcEarthLongitudeFix')
     ]
 
     # This next line could be done more quickly by:
