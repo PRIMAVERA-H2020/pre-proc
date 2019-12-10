@@ -12,7 +12,8 @@ from iris.tests.stock import realistic_3d
 import numpy as np
 
 from pre_proc.exceptions import ExistingAttributeError, NcksError
-from pre_proc.file_fix import LatDirection, LevToPlev, ToDegC
+from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
+                               SetTimeReference1949)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -270,3 +271,21 @@ class TestToDegCUnitsCheck(unittest.TestCase):
         self.cube.units = cf_units.Unit('degC')
         fix = ToDegC('tos_table.nc', '/a')
         self.assertFalse(fix._is_kelvin())
+
+
+class TestSetTimeReference1949(NcoDataFixBaseTest):
+    """
+    Test SetTimeReference1949
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SetTimeReference1949
+        """
+        fix = SetTimeReference1949('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_with(
+            "cdo -z zip_3 -setreftime,'1949-01-01','00:00:00' /a/1.nc "
+            "/a/1.nc.temp",
+            stderr=subprocess.STDOUT, shell=True
+        )

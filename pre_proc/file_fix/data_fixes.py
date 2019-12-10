@@ -12,7 +12,7 @@ import iris
 
 from .abstract import NcoDataFix
 from pre_proc.common import run_command
-from pre_proc.exceptions import (ExistingAttributeError, Ncap2Error,
+from pre_proc.exceptions import (ExistingAttributeError, CdoError, Ncap2Error,
                                  NcattedError, NcpdqError, NcksError,
                                  NcrenameError)
 
@@ -153,3 +153,21 @@ class ToDegC(NcoDataFix):
         """
         cube = iris.load_cube(os.path.join(self.directory, self.filename))
         return True if cube.units.symbol == 'K' else False
+
+
+class SetTimeReference1949(NcoDataFix):
+    """
+    Rename the lev dimension and variable to plev.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+
+    def apply_fix(self):
+        """
+        Run ncpdq and then swap the columns in lat_bnds.
+        """
+        self.command = "cdo -z zip_3 -setreftime,'1949-01-01','00:00:00'"
+        self._run_nco_command(CdoError)
