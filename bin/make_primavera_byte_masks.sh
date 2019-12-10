@@ -11,13 +11,11 @@ byte_mask_file="ocean_byte_masks.nc"
 temp_file="temp_byte_masks.nc"
 output_file="primavera_byte_masks.nc"
 
-rename_code="-d x,i -d y,j -d deptht,lev"
-
 for resolution in "${resolutions[@]}";
 do
     res_dir=$byte_mask_dir/$resolution
     ncks -3 "$res_dir/$byte_mask_file" "$res_dir/$temp_file";
-    ncrename "$rename_code" "$res_dir/$temp_file" "$res_dir/$output_file";
+    ncrename -d x,i -d y,j -d deptht,lev "$res_dir/$temp_file" "$res_dir/$output_file";
     rm "$res_dir/$temp_file";
 done
 
