@@ -69,6 +69,20 @@ def main():
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
+    # This fix may have been added to these DataRequests earlier.
+    removers = [
+        FileFix.objects.get(name='FurtherInfoUrlToHttps'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in removers:
+            data_req.fixes.remove(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in removers:
+        logger.debug('FileFix {} removed from {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()
