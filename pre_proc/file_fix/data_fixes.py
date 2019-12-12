@@ -171,3 +171,21 @@ class SetTimeReference1949(NcoDataFix):
         """
         self.command = "cdo -z zip_3 -setreftime,'1949-01-01','00:00:00'"
         self._run_nco_command(CdoError)
+
+
+class RemoveHalo(NcoDataFix, metaclass=ABCMeta):
+    """
+    Rename the lev dimension and variable to plev.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+
+    def apply_fix(self):
+        """
+        Run ncpdq and then swap the columns in lat_bnds.
+        """
+        self.command = "cdo -z zip_3 -setreftime,'1949-01-01','00:00:00'"
+        self._run_nco_command(CdoError)
