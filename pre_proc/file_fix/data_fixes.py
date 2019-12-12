@@ -12,7 +12,7 @@ import iris
 
 from .abstract import DataFix, NcoDataFix
 from pre_proc.common import run_command
-from pre_proc.exceptions import (ExistingAttributeError, Ncap2Error,
+from pre_proc.exceptions import (ExistingAttributeError, CdoError, Ncap2Error,
                                  NcattedError, NcpdqError, NcksError,
                                  NcrenameError)
 
@@ -195,9 +195,6 @@ class ZZZEcEarthLongitudeFix(DataFix):
         """
         super().__init__(filename, directory)
 
-        # Use the default chunk size
-        self.default_chunk_size = '64KiB'
-
     def apply_fix(self):
         """
         Fix the affected file
@@ -207,3 +204,21 @@ class ZZZEcEarthLongitudeFix(DataFix):
             write=True,
             keepid=True
         )
+
+
+class SetTimeReference1949(NcoDataFix):
+    """
+    Set the reference time of the time variable to be 1949-01-01
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+
+    def apply_fix(self):
+        """
+        Use cdo to set the reference time.
+        """
+        self.command = "cdo -z zip_3 -setreftime,'1949-01-01','00:00:00'"
+        self._run_nco_command(CdoError)

@@ -8,7 +8,7 @@ import os
 __all__ = ['PreProcError', 'CannotLoadSourceFileError',
            'AttributeNotFoundError', 'AttributeConversionError',
            'ExistingAttributeError', 'InstanceVariableNotDefinedError',
-           'NcattedError', 'NcpdqError', 'Ncap2Error', 'NcksError',
+           'CdoError', 'NcattedError', 'NcpdqError', 'Ncap2Error', 'NcksError',
            'NcrenameError', 'DataRequestNotFound', 'MultipleDataRequestsFound']
 
 
@@ -103,6 +103,15 @@ class ExternalCommandError(PreProcError):
                 'Command was:\n{}\n{}'.
                 format(self.class_name, self.external_command,  self.filename,
                        self.command, self.traceback_text))
+
+
+class CdoError(ExternalCommandError):
+    """
+    When cdo fails.
+    """
+    def __init__(self, class_name, filename, command, traceback_text):
+        super().__init__(class_name, 'cdo', filename, command,
+                         traceback_text)
 
 
 class NcattedError(ExternalCommandError):

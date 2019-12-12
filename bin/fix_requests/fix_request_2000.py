@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 """
-fix_request_6400.py
+fix_request_2000.py
 
-MOHC.coupled*
+CMCC.CMCC-CM2-*.SI[day/mon].*
 
-In all MOHC coupled data convert branch_time_in_child and
-branch_time_in_parent to a double.
+In the sea ice data change the reference time from the year 0000 to 1949 to
+match the other data. 0000 should be valid, but the ESGF publisher struggles
+with it.
 """
 import argparse
 import logging.config
@@ -45,15 +46,12 @@ def main():
     Main entry point
     """
     data_reqs = DataRequest.objects.filter(
-        institution_id__name__in=['MOHC', 'NERC'],
-        experiment_id__name__in=[
-            'hist-1950', 'control-1950', 'highres-future'
-        ]
+        institution_id__name='CMCC',
+        table_id__in=['SIday', 'SImon']
     )
 
     fixes = [
-        FileFix.objects.get(name='ParentBranchTimeDoubleFix'),
-        FileFix.objects.get(name='ChildBranchTimeDoubleFix')
+        FileFix.objects.get(name='SetTimeReference1949'),
     ]
 
     # This next line could be done more quickly by:
@@ -61,7 +59,8 @@ def main():
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(*fixes)
+        for fix in fixes:
+            data_req.fixes.add(fix)
 
     num_data_reqs = data_reqs.count()
     for fix in fixes:

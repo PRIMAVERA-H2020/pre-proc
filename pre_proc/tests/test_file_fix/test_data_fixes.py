@@ -13,7 +13,8 @@ import numpy as np
 
 from pre_proc.exceptions import ExistingAttributeError, NcksError
 from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
-                               ZZEcEarthAtmosFix, ZZZEcEarthLongitudeFix)
+                               ZZEcEarthAtmosFix, ZZZEcEarthLongitudeFix,
+                               SetTimeReference1949)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -302,3 +303,21 @@ class TestZZZEcEarthLongitudeFix(unittest.TestCase):
         fix.apply_fix()
         self.mock_fix.assert_called_with('/a/tas_table.nc', write=True,
                                          keepid=True)
+
+
+class TestSetTimeReference1949(NcoDataFixBaseTest):
+    """
+    Test SetTimeReference1949
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SetTimeReference1949
+        """
+        fix = SetTimeReference1949('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_with(
+            "cdo -z zip_3 -setreftime,'1949-01-01','00:00:00' /a/1.nc "
+            "/a/1.nc.temp",
+            stderr=subprocess.STDOUT, shell=True
+        )
