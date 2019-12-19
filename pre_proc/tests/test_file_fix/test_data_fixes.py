@@ -14,7 +14,7 @@ import numpy as np
 from pre_proc.exceptions import ExistingAttributeError, NcksError
 from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
                                ZZEcEarthAtmosFix, ZZZEcEarthLongitudeFix,
-                               SetTimeReference1949)
+                               SetTimeReference1949, AddHeight2m)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -39,6 +39,11 @@ class NcoDataFixBaseTest(unittest.TestCase):
         patch = mock.patch('pre_proc.file_fix.data_fixes.os.path.exists')
         self.mock_exists = patch.start()
         self.mock_exists.return_value = False
+        self.addCleanup(patch.stop)
+
+        patch = mock.patch('pre_proc.file_fix.data_fixes.shutil.copyfile')
+        self.mock_copyfile = patch.start()
+        self.mock_copyfile.return_value = False
         self.addCleanup(patch.stop)
 
 
@@ -321,3 +326,42 @@ class TestSetTimeReference1949(NcoDataFixBaseTest):
             "/a/1.nc.temp",
             stderr=subprocess.STDOUT, shell=True
         )
+
+
+class TestAddHeight2m(NcoDataFixBaseTest):
+    """
+    Test AddHeight2m
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        AddHeight2m
+        """
+        fix = AddHeight2m('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_with(
+            "ncks -h -A -v height /gws/nopw/j04/primavera1/cache/jseddon/"
+            "reference_files/height2m_reference.nc /a/1.nc.temp",
+            stderr=subprocess.STDOUT, shell=True
+        )
+
+    def test_remove_called_correctly(self):
+        """
+        Test that input files is removed.
+        """
+        self.mock_exists.return_value = True
+        fix = AddHeight2m('1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call('/a/1.nc.temp'),
+            mock.call('/a/1.nc')
+        ]
+        self.mock_remove.assert_has_calls(calls)
+
+    def test_rename_called_correctly(self):
+        """
+        Test that output file is renamed.
+        """
+        fix = AddHeight2m('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_rename.assert_called_once_with('/a/1.nc.temp', '/a/1.nc')

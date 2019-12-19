@@ -5,12 +5,13 @@ Workers that edit the data in netCDF files that are based on the DataFix
 abstract base class.
 """
 import os
+import shutil
 import traceback
 import warnings
 
 import iris
 
-from .abstract import DataFix, NcoDataFix
+from .abstract import DataFix, NcoDataFix, NcksDataFix
 from pre_proc.common import run_command
 from pre_proc.exceptions import (ExistingAttributeError, CdoError, Ncap2Error,
                                  NcattedError, NcpdqError, NcksError,
@@ -222,3 +223,25 @@ class SetTimeReference1949(NcoDataFix):
         """
         self.command = "cdo -z zip_3 -setreftime,'1949-01-01','00:00:00'"
         self._run_nco_command(CdoError)
+
+
+class AddHeight2m(NcksDataFix):
+    """
+    Add a heighr2m dimension from the reference file.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+        self.reference_file = (
+            '/gws/nopw/j04/primavera1/cache/jseddon/reference_files/'
+            'height2m_reference.nc'
+        )
+
+    def apply_fix(self):
+        """
+        Use cdo to set the reference time.
+        """
+        self.command = f"ncks -h -A -v height {self.reference_file}"
+        self._run_ncks_command()
