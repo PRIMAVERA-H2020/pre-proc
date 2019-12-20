@@ -3,4 +3,4 @@
 	url = git@github.com:jonseddon/HighResMIP-fix.git
 [submodule "cmor-fixer"]
 	path = cmor-fixer
-	url = git@github.com:jonseddon/cmor-fixer.git
+	url = git@github.com:EC-Earth/cmor-fixer.git
