@@ -24,6 +24,7 @@ from pre_proc.file_fix import (
     ExternalVariablesAreacello,
     ExternalVariablesAreacelloVolcello,
     HadGemMMParentSourceId,
+    HistoryClearOld,
     CellMeasuresAreacellaAdd,
     CellMeasuresAreacelloAdd,
     CellMeasuresAreacelloVolcelloAdd,
@@ -553,6 +554,23 @@ class TestHadGemMMParentSourceId(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a parent_source_id,global,o,c,'HadGEM3-GC31-MM' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestHistoryClearOld(BaseTest):
+    """ Test HistoryClearOld """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        HistoryClearOld
+        """
+        fix = HistoryClearOld('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a history,global,o,c,'' "
             "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
