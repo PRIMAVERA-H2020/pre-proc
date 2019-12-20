@@ -346,6 +346,11 @@ class AttributeDelete(AttributeEdit, metaclass=ABCMeta):
     """
     An abstract base class for fixes that require the use of `ncatted` to
     remove a metadata attribute.
+
+    _calculate_new_value() doesn't do anything and so could be defined here,
+    but this then ceases to be an abstract class. Therefore
+    _calculate_new_value() must be defined for each concrete implementation
+    of this class, which is a bit of a bodge.
     """
 
     def __init__(self, filename, directory):

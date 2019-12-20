@@ -12,6 +12,7 @@ from pre_proc.file_fix import (
     ParentBranchTimeAdd,
     ChildBranchTimeAdd,
     BranchMethodAdd,
+    BranchTimeDelete,
     DataSpecsVersionAdd,
     EcEarthInstitution,
     EcmwfInstitution,
@@ -110,6 +111,23 @@ class TestBranchMethodAdd(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a branch_method,global,o,c,'no parent' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestBranchTimeDelete(BaseTest):
+    """ Test BranchTimeDelete """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTimeAdd
+        """
+        fix = BranchTimeDelete('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a branch_time,global,d,c,0 "
             "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
