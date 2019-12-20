@@ -52,13 +52,9 @@ def main():
     )
 
     fixes = [
-        FileFix.objects.get(name='AddHeight2m'),
+        FileFix.objects.get(name='ZZZAddHeight2m'),
     ]
 
-    # This next line could be done more quickly by:
-    # further_info_url_fix.datarequest_set.add(*data_reqs)
-    # but sqlite3 gives an error of:
-    # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
         for fix in fixes:
             data_req.fixes.add(fix)

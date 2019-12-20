@@ -14,7 +14,7 @@ import numpy as np
 from pre_proc.exceptions import ExistingAttributeError, NcksError
 from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
                                ZZEcEarthAtmosFix, ZZZEcEarthLongitudeFix,
-                               SetTimeReference1949, AddHeight2m)
+                               SetTimeReference1949, ZZZAddHeight2m)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -328,16 +328,16 @@ class TestSetTimeReference1949(NcoDataFixBaseTest):
         )
 
 
-class TestAddHeight2m(NcoDataFixBaseTest):
+class TestZZZAddHeight2m(NcoDataFixBaseTest):
     """
-    Test AddHeight2m
+    Test ZZZAddHeight2m
     """
     def test_subprocess_called_correctly(self):
         """
         Test that an external call's been made correctly for
-        AddHeight2m
+        ZZZAddHeight2m
         """
-        fix = AddHeight2m('tas_1.nc', '/a')
+        fix = ZZZAddHeight2m('tas_1.nc', '/a')
         fix.apply_fix()
         calls = [
             mock.call(
@@ -357,7 +357,7 @@ class TestAddHeight2m(NcoDataFixBaseTest):
         Test that input files is removed.
         """
         self.mock_exists.return_value = True
-        fix = AddHeight2m('1.nc', '/a')
+        fix = ZZZAddHeight2m('1.nc', '/a')
         fix.apply_fix()
         calls = [
             mock.call('/a/1.nc.temp'),
@@ -369,6 +369,6 @@ class TestAddHeight2m(NcoDataFixBaseTest):
         """
         Test that output file is renamed.
         """
-        fix = AddHeight2m('1.nc', '/a')
+        fix = ZZZAddHeight2m('1.nc', '/a')
         fix.apply_fix()
         self.mock_rename.assert_called_once_with('/a/1.nc.temp', '/a/1.nc')

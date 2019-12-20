@@ -225,7 +225,7 @@ class SetTimeReference1949(NcoDataFix):
         self._run_nco_command(CdoError)
 
 
-class AddHeight2m(NcksDataFix):
+class ZZZAddHeight2m(NcksDataFix):
     """
     Add a heighr2m dimension from the reference file.
     """
