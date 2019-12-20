@@ -337,13 +337,20 @@ class TestAddHeight2m(NcoDataFixBaseTest):
         Test that an external call's been made correctly for
         AddHeight2m
         """
-        fix = AddHeight2m('1.nc', '/a')
+        fix = AddHeight2m('tas_1.nc', '/a')
         fix.apply_fix()
-        self.mock_subprocess.assert_called_with(
-            "ncks -h -A -v height /gws/nopw/j04/primavera1/cache/jseddon/"
-            "reference_files/height2m_reference.nc /a/1.nc.temp",
-            stderr=subprocess.STDOUT, shell=True
-        )
+        calls = [
+            mock.call(
+                "ncks -h -A -v height /gws/nopw/j04/primavera1/cache/jseddon/"
+                "reference_files/height2m_reference.nc /a/tas_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncatted -h -a coordinates,tas,o,c,'height' /a/tas_1.nc",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
 
     def test_remove_called_correctly(self):
         """

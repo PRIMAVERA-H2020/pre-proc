@@ -245,3 +245,12 @@ class AddHeight2m(NcksDataFix):
         """
         self.command = f"ncks -h -A -v height {self.reference_file}"
         self._run_ncks_command()
+
+        units_command = (f"ncatted -h -a coordinates,{self.variable_name},o,c,"
+                         f"'height' "
+                         f"{os.path.join(self.directory, self.filename)}")
+        try:
+            run_command(units_command)
+        except Exception:
+            raise NcattedError(type(self).__name__, self.filename,
+                               units_command, traceback.format_exc())
