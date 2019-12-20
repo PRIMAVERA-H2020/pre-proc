@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_4000.py
+fix_request_4002.py
 
-EC-Earth-Consortium.*atmos
+EC-Earth-Consortium.*
 
-Fix the latitude and longitude on all EC-Earth data on the atmosphere grid.
+Remove branch_time global attribute and clear the global history attribute.
 """
 import argparse
 import logging.config
@@ -45,16 +45,11 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name='EC-Earth-Consortium'
-    ).exclude(
-        table_id__in=[
-            'Oday', 'Ofx', 'Omon', 'PrimO6hr', 'PrimOday', 'PrimOmon',
-            'PrimSIday', 'SIday', 'SImon'
-        ]
     )
 
     fixes = [
-        FileFix.objects.get(name='ZZEcEarthAtmosFix'),
-        FileFix.objects.get(name='ZZZEcEarthLongitudeFix')
+        FileFix.objects.get(name='BranchTimeDelete'),
+        FileFix.objects.get(name='HistoryClearOld')
     ]
 
     # This next line could be done more quickly by:
