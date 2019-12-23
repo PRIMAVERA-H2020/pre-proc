@@ -13,7 +13,8 @@ import numpy as np
 
 from pre_proc.exceptions import ExistingAttributeError, NcksError
 from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
-                               SetTimeReference1949)
+                               ZZEcEarthAtmosFix, ZZZEcEarthLongitudeFix,
+                               SetTimeReference1949, ZZZAddHeight2m)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -38,6 +39,11 @@ class NcoDataFixBaseTest(unittest.TestCase):
         patch = mock.patch('pre_proc.file_fix.data_fixes.os.path.exists')
         self.mock_exists = patch.start()
         self.mock_exists.return_value = False
+        self.addCleanup(patch.stop)
+
+        patch = mock.patch('pre_proc.file_fix.data_fixes.shutil.copyfile')
+        self.mock_copyfile = patch.start()
+        self.mock_copyfile.return_value = False
         self.addCleanup(patch.stop)
 
 
@@ -273,6 +279,37 @@ class TestToDegCUnitsCheck(unittest.TestCase):
         self.assertFalse(fix._is_kelvin())
 
 
+class TestZZEcEarthAtmosFix(unittest.TestCase):
+    """
+    Test ZZEcEarthAtmosFix
+    """
+    def setUp(self):
+        patch = mock.patch('pre_proc.file_fix.data_fixes.fix_latlon_atmosphere')
+        self.mock_fix = patch.start()
+        self.addCleanup(patch.stop)
+
+    def test_arguments(self):
+        fix = ZZEcEarthAtmosFix('tas_table.nc', '/a')
+        fix.apply_fix()
+        self.mock_fix.assert_called_with('/a/tas_table.nc', 64 * 1024)
+
+
+class TestZZZEcEarthLongitudeFix(unittest.TestCase):
+    """
+    Test ZZZEcEarthLongitudeFix
+    """
+    def setUp(self):
+        patch = mock.patch('pre_proc.file_fix.data_fixes.fix_lons.fix_file')
+        self.mock_fix = patch.start()
+        self.addCleanup(patch.stop)
+
+    def test_arguments(self):
+        fix = ZZZEcEarthLongitudeFix('tas_table.nc', '/a')
+        fix.apply_fix()
+        self.mock_fix.assert_called_with('/a/tas_table.nc', write=True,
+                                         keepid=True)
+
+
 class TestSetTimeReference1949(NcoDataFixBaseTest):
     """
     Test SetTimeReference1949
@@ -289,3 +326,49 @@ class TestSetTimeReference1949(NcoDataFixBaseTest):
             "/a/1.nc.temp",
             stderr=subprocess.STDOUT, shell=True
         )
+
+
+class TestZZZAddHeight2m(NcoDataFixBaseTest):
+    """
+    Test ZZZAddHeight2m
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ZZZAddHeight2m
+        """
+        fix = ZZZAddHeight2m('tas_1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call(
+                "ncks -h -A -v height /gws/nopw/j04/primavera1/cache/jseddon/"
+                "reference_files/height2m_reference.nc /a/tas_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncatted -h -a coordinates,tas,o,c,'height' /a/tas_1.nc",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
+
+    def test_remove_called_correctly(self):
+        """
+        Test that input files is removed.
+        """
+        self.mock_exists.return_value = True
+        fix = ZZZAddHeight2m('1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call('/a/1.nc.temp'),
+            mock.call('/a/1.nc')
+        ]
+        self.mock_remove.assert_has_calls(calls)
+
+    def test_rename_called_correctly(self):
+        """
+        Test that output file is renamed.
+        """
+        fix = ZZZAddHeight2m('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_rename.assert_called_once_with('/a/1.nc.temp', '/a/1.nc')

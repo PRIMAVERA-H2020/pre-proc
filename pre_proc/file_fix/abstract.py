@@ -5,13 +5,15 @@ The abstract base file fixes.
 """
 from abc import ABCMeta, abstractmethod
 import os
+import shutil
 import traceback
 
 from netCDF4 import Dataset
 
 from pre_proc.common import run_command
-from pre_proc.exceptions import (AttributeNotFoundError, NcattedError,
-                                 InstanceVariableNotDefinedError)
+from pre_proc.exceptions import (AttributeNotFoundError,
+                                 InstanceVariableNotDefinedError,
+                                 NcattedError, NcksError)
 
 
 class FileFix(object, metaclass=ABCMeta):
@@ -146,11 +148,51 @@ class NcoDataFix(DataFix, metaclass=ABCMeta):
         try:
             run_command(cmd)
         except Exception:
+            if os.path.exists(temp_file):
+                os.remove(temp_file)
             raise command_error(type(self).__name__, self.filename, cmd,
                                      traceback.format_exc())
 
         os.remove(output_file)
         os.rename(temp_file, output_file)
+
+
+class NcksDataFix(DataFix, metaclass=ABCMeta):
+    """
+    An abstract base class for fixes that edit the data in a netCDF file
+    using ncks, which is slightly different to the other NCO tools.
+    """
+
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+        self.command = None
+
+    def _run_ncks_command(self):
+        """
+        Run the nco command
+        """
+        output_file = os.path.join(self.directory, self.filename)
+        temp_file = output_file + '.temp'
+        # Remove any temporary file left over from a previous failed
+        # run as it could prevent some nco commands from running.
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
+
+        shutil.copyfile(output_file, temp_file)
+
+        cmd = f'{self.command} {temp_file}'
+        try:
+            run_command(cmd)
+        except Exception:
+            os.remove(temp_file)
+            raise NcksError(type(self).__name__, self.filename, cmd,
+                            traceback.format_exc())
+        else:
+            os.remove(output_file)
+            os.rename(temp_file, output_file)
 
 
 class AttributeUpdate(AttributeEdit, metaclass=ABCMeta):
@@ -304,6 +346,11 @@ class AttributeDelete(AttributeEdit, metaclass=ABCMeta):
     """
     An abstract base class for fixes that require the use of `ncatted` to
     remove a metadata attribute.
+
+    _calculate_new_value() doesn't do anything and so could be defined here,
+    but this then ceases to be an abstract class. Therefore
+    _calculate_new_value() must be defined for each concrete implementation
+    of this class, which is a bit of a bodge.
     """
 
     def __init__(self, filename, directory):
