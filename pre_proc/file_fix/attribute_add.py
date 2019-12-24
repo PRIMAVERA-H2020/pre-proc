@@ -78,6 +78,30 @@ class BranchMethodAdd(AttributeAdd):
         self.new_value = 'no parent'
 
 
+class BranchTimeDelete(AttributeDelete):
+    """
+    Delete variable attribute `branch_time`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        We're deleting so there's nothing to do but make a dummy value for
+        new_value.
+        """
+        self.new_value = 0
+
+
 class DataSpecsVersionAdd(AttributeAdd):
     """
     Add a global attribute `data_specs_version` with a value of '01.00.23'.
@@ -680,6 +704,31 @@ class HadGemMMParentSourceId(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'HadGEM3-GC31-MM'
+
+
+class HistoryClearOld(AttributeAdd):
+    """
+    Set the global history attribute to be an empty string.
+    This is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'history'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ''
 
 
 class ProductAdd(AttributeAdd):

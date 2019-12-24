@@ -1,0 +1,6 @@
+[submodule "HighResMIP-fix"]
+	path = HighResMIP-fix
+	url = git@github.com:jonseddon/HighResMIP-fix.git
+[submodule "cmor-fixer"]
+	path = cmor-fixer
+	url = git@github.com:EC-Earth/cmor-fixer.git

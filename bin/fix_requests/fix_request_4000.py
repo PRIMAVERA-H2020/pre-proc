@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_4200.py
+fix_request_4000.py
 
-EC-Earth-Consortium.*.highresSST-present.r1i1p1f1.*
+EC-Earth-Consortium.*atmos
 
-Convert the further_info_url attribute on all EC-Earth data from HTTP to
-HTTPS. Update data_specs_version to 01.00.23. Update the institution
-attribute.
+Fix the latitude and longitude on all EC-Earth data on the atmosphere grid.
 """
 import argparse
 import logging.config
@@ -46,14 +44,17 @@ def main():
     Main entry point
     """
     data_reqs = DataRequest.objects.filter(
-        institution_id__name='EC-Earth-Consortium',
-        experiment_id__name='highresSST-present',
-        variant_label='r1i1p1f1'
+        institution_id__name='EC-Earth-Consortium'
+    ).exclude(
+        table_id__in=[
+            'Oday', 'Ofx', 'Omon', 'PrimO6hr', 'PrimOday', 'PrimOmon',
+            'PrimSIday', 'SIday', 'SImon'
+        ]
     )
 
     fixes = [
-        FileFix.objects.get(name='DataSpecsVersionAdd'),
-        FileFix.objects.get(name='EcEarthInstitution')
+        FileFix.objects.get(name='ZZEcEarthAtmosFix'),
+        FileFix.objects.get(name='ZZZEcEarthLongitudeFix')
     ]
 
     # This next line could be done more quickly by:
@@ -67,20 +68,6 @@ def main():
     num_data_reqs = data_reqs.count()
     for fix in fixes:
         logger.debug('FileFix {} added to {} data requests.'.
-                     format(fix.name, num_data_reqs))
-
-    # This fix may have been added to these DataRequests earlier.
-    removers = [
-        FileFix.objects.get(name='FurtherInfoUrlToHttps'),
-    ]
-
-    for data_req in data_reqs:
-        for fix in removers:
-            data_req.fixes.remove(fix)
-
-    num_data_reqs = data_reqs.count()
-    for fix in removers:
-        logger.debug('FileFix {} removed from {} data requests.'.
                      format(fix.name, num_data_reqs))
 
 
