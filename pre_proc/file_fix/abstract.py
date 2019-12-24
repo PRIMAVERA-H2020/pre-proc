@@ -13,7 +13,7 @@ from netCDF4 import Dataset
 from pre_proc.common import run_command
 from pre_proc.exceptions import (AttributeNotFoundError,
                                  InstanceVariableNotDefinedError,
-                                 NcattedError, NcksError)
+                                 Ncap2Error, NcattedError, NcksError)
 
 
 class FileFix(object, metaclass=ABCMeta):
@@ -151,7 +151,7 @@ class NcoDataFix(DataFix, metaclass=ABCMeta):
             if os.path.exists(temp_file):
                 os.remove(temp_file)
             raise command_error(type(self).__name__, self.filename, cmd,
-                                     traceback.format_exc())
+                                traceback.format_exc())
 
         os.remove(output_file)
         os.rename(temp_file, output_file)
@@ -396,7 +396,7 @@ class RemoveHalo(NcoDataFix, metaclass=ABCMeta):
         self._run_nco_command(NcksError)
 
 
-class FixMask(NcoDataFix, metaclass=ABCMeta):
+class FixMask(DataFix, metaclass=ABCMeta):
     """
     Fix the land sea mask in the HadGEM ORCA grids.
     """
@@ -406,16 +406,75 @@ class FixMask(NcoDataFix, metaclass=ABCMeta):
         """
         super().__init__(filename, directory)
         self.byte_mask_file = None
+        self.mask_var_name = None
+        self.intermediate_files = []
+
+    @abstractmethod
+    def _set_byte_mask(self):
+        """
+        In concrete implementations, specify the byte_mask file and mask
+        variable name here.
+        """
+        pass
 
     def apply_fix(self):
         """
         Add the byte mask, mask the relevant points and remove the mask.
-
-        ncks -A -v mask_3D_V primavera_byte_masks.nc vo.nc
-
-        ncap2 -s 'where(mask_3D_V != 0) vo=vo@_FillValue' vo.nc vo_masked.nc
-
-        ncks -x -v mask_3D_V vo_masked.nc vo_Omon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc
         """
-        self.command = "cdo -z zip_3 -setreftime,'1949-01-01','00:00:00'"
-        self._run_nco_command(CdoError)
+        self._set_byte_mask()
+        # Make a temporary copy of the file that will be worked upon
+        output_file = os.path.join(self.directory, self.filename)
+        temp_file = output_file + '.temp'
+        masked_file = output_file + '.temp_masked'
+        final_file = output_file + '.temp_final'
+        self.intermediate_files = [temp_file, masked_file, final_file]
+
+        # Remove any temporary file left over from a previous failed
+        # run as it could prevent some nco commands from running.
+        for fn in self.intermediate_files:
+            if os.path.exists(fn):
+                os.remove(fn)
+        shutil.copyfile(output_file, temp_file)
+
+        # Copy the mask into the file
+        command = (f"ncks -h -A -v {self.mask_var_name} {self.byte_mask_file} "
+                   f"{temp_file}")
+        self._run_command(command, NcksError)
+
+        # Do the masking
+        command = (f"ncap2 -h -s 'where({self.mask_var_name} != 0) "
+                   f"{self.variable_name}={self.variable_name}@_FillValue' "
+                   f"{temp_file} {masked_file}")
+        self._run_command(command, Ncap2Error)
+
+        # Remove the mask
+        command = (f"ncks -h -x -v {self.mask_var_name} {masked_file} "
+                   f"{final_file}")
+        self._run_command(command, NcksError)
+
+        # Set the name on the file and remove intermediate files
+        os.remove(output_file)
+        os.rename(final_file, output_file)
+        self.intermediate_files.remove(final_file)
+        for fn in self.intermediate_files:
+            os.remove(fn)
+
+    def _run_command(self, cmd, cmd_error):
+        """
+        Run `cmd` and raise `cmd_error` if it fails when the specified
+        temporary files are deleted.
+
+        :param str cmd: The command to run
+        :param PreProcError cmd_error: The exception to raise if the command
+            fails
+        :param list temp_files: Intermediate files to delete if there's a
+            problem
+        """
+        try:
+            run_command(cmd)
+        except Exception:
+            for fn in self.intermediate_files:
+                if os.path.exists(fn):
+                    os.remove(fn)
+            raise cmd_error(type(self).__name__, self.filename, cmd,
+                            traceback.format_exc())

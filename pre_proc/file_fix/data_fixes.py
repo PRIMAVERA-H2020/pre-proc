@@ -10,7 +10,8 @@ import warnings
 
 import iris
 
-from .abstract import (DataFix, NcoDataFix, NcksAppendDataFix, RemoveHalo)
+from .abstract import (DataFix, FixMask, NcoDataFix, NcksAppendDataFix,
+                       RemoveHalo)
 from pre_proc.common import run_command
 from pre_proc.exceptions import (ExistingAttributeError, CdoError, Ncap2Error,
                                  NcattedError, NcpdqError, NcksError,
@@ -260,15 +261,11 @@ class RemoveOrca1Halo(RemoveHalo):
     Remove the halo from files on the HadGEM ORCA1 grid.
     """
     def __init__(self, filename, directory):
-        """
-        Initialise the class
-        """
+        """Initialise the class"""
         super().__init__(filename, directory)
 
     def _set_row_spec(self):
-        """
-        For the ORCA1 grid set the row specification used in the ncks command.
-        """
+        """Set the row specification"""
         self.row_spec = '-dx,1,360 -dy,1,330'
 
 
@@ -277,13 +274,26 @@ class RemoveOrca025Halo(RemoveHalo):
     Remove the halo from files on the HadGEM ORCA025 grid.
     """
     def __init__(self, filename, directory):
-        """
-        Initialise the class
-        """
+        """Initialise the class"""
         super().__init__(filename, directory)
 
     def _set_row_spec(self):
-        """
-        For the ORCA1 grid set the row specification used in the ncks command.
-        """
+        """Set the row specification"""
         self.row_spec = '-dx,1,1440 -dy,1,1205'
+
+
+class MaskOrca1V(FixMask):
+    """
+    Fix the mask for data on the ORCA1 v-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = (
+            '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/bytes_masks/'
+            'HadGEM3-GC31-LL/primavera_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_3D_V'

@@ -15,7 +15,8 @@ from pre_proc.exceptions import ExistingAttributeError, NcksError
 from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
                                ZZEcEarthAtmosFix, ZZZEcEarthLongitudeFix,
                                SetTimeReference1949, ZZZAddHeight2m,
-                               RemoveOrca1Halo, RemoveOrca025Halo)
+                               RemoveOrca1Halo, RemoveOrca025Halo,
+                               MaskOrca1V)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -336,8 +337,7 @@ class TestZZZAddHeight2m(NcoDataFixBaseTest):
     """
     def test_subprocess_called_correctly(self):
         """
-        Test that an external call's been made correctly for
-        ZZZAddHeight2m
+        Test that external calls are made correctly for ZZZAddHeight2m
         """
         fix = ZZZAddHeight2m('tas_1.nc', '/a')
         fix.apply_fix()
@@ -408,3 +408,35 @@ class TestRemoveOrca025Halo(NcoDataFixBaseTest):
             "ncks -h -dx,1,1440 -dy,1,1205 /a/tas_1.nc /a/tas_1.nc.temp",
             stderr=subprocess.STDOUT, shell=True
 )
+
+
+class TestMaskOrca1V(NcoDataFixBaseTest):
+    """
+    Test MaskOrca1V
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that external calls are made correctly for MaskOrca1V
+        """
+        fix = MaskOrca1V('vo_1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call(
+                "ncks -h -A -v mask_3D_V "
+                "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
+                "bytes_masks/HadGEM3-GC31-LL/primavera_byte_masks.nc "
+                "/a/vo_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncap2 -h -s 'where(mask_3D_V != 0) vo=vo@_FillValue' "
+                "/a/vo_1.nc.temp /a/vo_1.nc.temp_masked",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h -x -v mask_3D_V "
+                "/a/vo_1.nc.temp_masked /a/vo_1.nc.temp_final",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
