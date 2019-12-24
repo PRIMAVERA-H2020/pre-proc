@@ -5,13 +5,12 @@ Workers that edit the data in netCDF files that are based on the DataFix
 abstract base class.
 """
 import os
-import shutil
 import traceback
 import warnings
 
 import iris
 
-from .abstract import DataFix, NcoDataFix, NcksDataFix
+from .abstract import (DataFix, NcoDataFix, NcksAppendDataFix, RemoveHalo)
 from pre_proc.common import run_command
 from pre_proc.exceptions import (ExistingAttributeError, CdoError, Ncap2Error,
                                  NcattedError, NcpdqError, NcksError,
@@ -225,7 +224,7 @@ class SetTimeReference1949(NcoDataFix):
         self._run_nco_command(CdoError)
 
 
-class ZZZAddHeight2m(NcksDataFix):
+class ZZZAddHeight2m(NcksAppendDataFix):
     """
     Add a heighr2m dimension from the reference file.
     """
@@ -256,21 +255,35 @@ class ZZZAddHeight2m(NcksDataFix):
                                units_command, traceback.format_exc())
 
 
-class RemoveHalo(NcoDataFix, metaclass=ABCMeta):
+class RemoveOrca1Halo(RemoveHalo):
     """
-    Rename the lev dimension and variable to plev.
+    Remove the halo from files on the HadGEM ORCA1 grid.
     """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+
+    def _set_row_spec(self):
+        """
+        For the ORCA1 grid set the row specification used in the ncks command.
+        """
+        self.row_spec = '-dx,1,360 -dy,1,330'
 
 
-def __init__(self, filename, directory):
+class RemoveOrca025Halo(RemoveHalo):
     """
-    Initialise the class
+    Remove the halo from files on the HadGEM ORCA025 grid.
     """
-    super().__init__(filename, directory)
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
 
-def apply_fix(self):
-    """
-    Run ncpdq and then swap the columns in lat_bnds.
-    """
-    self.command = "cdo -z zip_3 -setreftime,'1949-01-01','00:00:00'"
-    self._run_nco_command(CdoError)
+    def _set_row_spec(self):
+        """
+        For the ORCA1 grid set the row specification used in the ncks command.
+        """
+        self.row_spec = '-dx,1,1440 -dy,1,1205'

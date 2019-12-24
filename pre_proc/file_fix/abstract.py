@@ -123,9 +123,9 @@ class DataFix(FileFix, metaclass=ABCMeta):
 class NcoDataFix(DataFix, metaclass=ABCMeta):
     """
     An abstract base class for fixes that edit the data in a netCDF file
-    using the NCO tools.
+    using the NCO tools. The specified command is run and the input and output
+    names are appended by this class.
     """
-
     def __init__(self, filename, directory):
         """
         Initialise the class
@@ -157,10 +157,12 @@ class NcoDataFix(DataFix, metaclass=ABCMeta):
         os.rename(temp_file, output_file)
 
 
-class NcksDataFix(DataFix, metaclass=ABCMeta):
+class NcksAppendDataFix(DataFix, metaclass=ABCMeta):
     """
     An abstract base class for fixes that edit the data in a netCDF file
-    using ncks, which is slightly different to the other NCO tools.
+    using ncks to append a reference file into the specified file. The file
+    to append should be specified in the command and the specified file's name
+    will be added to this by the class when the command is run.
     """
 
     def __init__(self, filename, directory):
@@ -172,7 +174,7 @@ class NcksDataFix(DataFix, metaclass=ABCMeta):
 
     def _run_ncks_command(self):
         """
-        Run the nco command
+        Run the nco command.
         """
         output_file = os.path.join(self.directory, self.filename)
         temp_file = output_file + '.temp'
@@ -365,3 +367,55 @@ class AttributeDelete(AttributeEdit, metaclass=ABCMeta):
         """
         self._calculate_new_value()
         self._run_ncatted('d')
+
+
+class RemoveHalo(NcoDataFix, metaclass=ABCMeta):
+    """
+    Remove the halo from in the HadGEM ORCA grids.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+        self.row_spec = None
+
+    @abstractmethod
+    def _set_row_spec(self):
+        """
+        Specify the rows to be removed.
+        """
+        pass
+
+    def apply_fix(self):
+        """
+        Remove the halo.
+        """
+        self._set_row_spec()
+        self.command = f'ncks -h {self.row_spec}'
+        self._run_nco_command(NcksError)
+
+
+class FixMask(NcoDataFix, metaclass=ABCMeta):
+    """
+    Fix the land sea mask in the HadGEM ORCA grids.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+        self.byte_mask_file = None
+
+    def apply_fix(self):
+        """
+        Add the byte mask, mask the relevant points and remove the mask.
+
+        ncks -A -v mask_3D_V primavera_byte_masks.nc vo.nc
+
+        ncap2 -s 'where(mask_3D_V != 0) vo=vo@_FillValue' vo.nc vo_masked.nc
+
+        ncks -x -v mask_3D_V vo_masked.nc vo_Omon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc
+        """
+        self.command = "cdo -z zip_3 -setreftime,'1949-01-01','00:00:00'"
+        self._run_nco_command(CdoError)

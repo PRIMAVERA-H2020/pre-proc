@@ -14,7 +14,8 @@ import numpy as np
 from pre_proc.exceptions import ExistingAttributeError, NcksError
 from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
                                ZZEcEarthAtmosFix, ZZZEcEarthLongitudeFix,
-                               SetTimeReference1949, ZZZAddHeight2m)
+                               SetTimeReference1949, ZZZAddHeight2m,
+                               RemoveOrca1Halo, RemoveOrca025Halo)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -41,7 +42,7 @@ class NcoDataFixBaseTest(unittest.TestCase):
         self.mock_exists.return_value = False
         self.addCleanup(patch.stop)
 
-        patch = mock.patch('pre_proc.file_fix.data_fixes.shutil.copyfile')
+        patch = mock.patch('pre_proc.file_fix.abstract.shutil.copyfile')
         self.mock_copyfile = patch.start()
         self.mock_copyfile.return_value = False
         self.addCleanup(patch.stop)
@@ -330,7 +331,8 @@ class TestSetTimeReference1949(NcoDataFixBaseTest):
 
 class TestZZZAddHeight2m(NcoDataFixBaseTest):
     """
-    Test ZZZAddHeight2m
+    Test ZZZAddHeight2m with some additional tests to check that
+    NcksAppendDataFix works as intended.
     """
     def test_subprocess_called_correctly(self):
         """
@@ -372,3 +374,37 @@ class TestZZZAddHeight2m(NcoDataFixBaseTest):
         fix = ZZZAddHeight2m('1.nc', '/a')
         fix.apply_fix()
         self.mock_rename.assert_called_once_with('/a/1.nc.temp', '/a/1.nc')
+
+
+class TestRemoveOrca1Halo(NcoDataFixBaseTest):
+    """
+    Test RemoveOrca1Halo
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        RemoveOrca1Halo
+        """
+        fix = RemoveOrca1Halo('tas_1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_with(
+            "ncks -h -dx,1,360 -dy,1,330 /a/tas_1.nc /a/tas_1.nc.temp",
+            stderr=subprocess.STDOUT, shell=True
+)
+
+
+class TestRemoveOrca025Halo(NcoDataFixBaseTest):
+    """
+    Test RemoveOrca025Halo
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        RemoveOrca025Halo
+        """
+        fix = RemoveOrca025Halo('tas_1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_with(
+            "ncks -h -dx,1,1440 -dy,1,1205 /a/tas_1.nc /a/tas_1.nc.temp",
+            stderr=subprocess.STDOUT, shell=True
+)
