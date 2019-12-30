@@ -260,22 +260,10 @@ class ZZZAddHeight2m(NcksAppendDataFix):
                                units_command, traceback.format_exc())
 
 
-class RemoveOrca1Halo(RemoveHalo):
+class AAARemoveOrca1Halo(RemoveHalo):
     """
-    Remove the halo from files on the HadGEM ORCA1 grid.
-    """
-    def __init__(self, filename, directory):
-        """Initialise the class"""
-        super().__init__(filename, directory)
-
-    def _set_row_spec(self):
-        """Set the row specification"""
-        self.row_spec = '-dx,1,360 -dy,1,330'
-
-
-class RemoveOrca025Halo(RemoveHalo):
-    """
-    Remove the halo from files on the HadGEM ORCA025 grid.
+    Remove the halo from files on the HadGEM ORCA1 grid. AAA in the class'
+    name causes it to run first.
     """
     def __init__(self, filename, directory):
         """Initialise the class"""
@@ -283,7 +271,21 @@ class RemoveOrca025Halo(RemoveHalo):
 
     def _set_row_spec(self):
         """Set the row specification"""
-        self.row_spec = '-dx,1,1440 -dy,1,1205'
+        self.row_spec = '-di,1,360 -dj,1,330'
+
+
+class AAARemoveOrca025Halo(RemoveHalo):
+    """
+    Remove the halo from files on the HadGEM ORCA025 grid. AAA in the class'
+    name causes it to run first.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_row_spec(self):
+        """Set the row specification"""
+        self.row_spec = '-di,1,1440 -dj,1,1205'
 
 
 class FixMaskOrca1V(FixHadGEMMask):

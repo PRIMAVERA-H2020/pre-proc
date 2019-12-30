@@ -52,14 +52,11 @@ def main():
         cmor_name='siconc'
     )
 
+    # Add fix
     fixes = [
-        FileFix.objects.get(name='RemoveOrca1Halo'),
+        FileFix.objects.get(name='AAARemoveOrca1Halo'),
     ]
 
-    # This next line could be done more quickly by:
-    # further_info_url_fix.datarequest_set.add(*data_reqs)
-    # but sqlite3 gives an error of:
-    # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
         data_req.fixes.add(*fixes)
 
@@ -67,6 +64,20 @@ def main():
     for fix in fixes:
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
+
+    # Remove fix with old name
+    fixes = [
+        FileFix.objects.get(name='RemoveOrca1Halo'),
+    ]
+
+    for data_req in data_reqs:
+        data_req.fixes.remove(*fixes)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} removed from {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
 
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ from pre_proc.exceptions import ExistingAttributeError, NcksError
 from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
                                ZZEcEarthAtmosFix, ZZZEcEarthLongitudeFix,
                                SetTimeReference1949, ZZZAddHeight2m,
-                               RemoveOrca1Halo, RemoveOrca025Halo,
+                               AAARemoveOrca1Halo, AAARemoveOrca025Halo,
                                FixMaskOrca1V, FixGridOrca1V)
 
 
@@ -385,10 +385,10 @@ class TestRemoveOrca1Halo(NcoDataFixBaseTest):
         Test that an external call's been made correctly for
         RemoveOrca1Halo
         """
-        fix = RemoveOrca1Halo('tas_1.nc', '/a')
+        fix = AAARemoveOrca1Halo('tas_1.nc', '/a')
         fix.apply_fix()
         self.mock_subprocess.assert_called_with(
-            "ncks -h -dx,1,360 -dy,1,330 /a/tas_1.nc /a/tas_1.nc.temp",
+            "ncks -h -di,1,360 -dj,1,330 /a/tas_1.nc /a/tas_1.nc.temp",
             stderr=subprocess.STDOUT, shell=True
 )
 
@@ -402,10 +402,10 @@ class TestRemoveOrca025Halo(NcoDataFixBaseTest):
         Test that an external call's been made correctly for
         RemoveOrca025Halo
         """
-        fix = RemoveOrca025Halo('tas_1.nc', '/a')
+        fix = AAARemoveOrca025Halo('tas_1.nc', '/a')
         fix.apply_fix()
         self.mock_subprocess.assert_called_with(
-            "ncks -h -dx,1,1440 -dy,1,1205 /a/tas_1.nc /a/tas_1.nc.temp",
+            "ncks -h -di,1,1440 -dj,1,1205 /a/tas_1.nc /a/tas_1.nc.temp",
             stderr=subprocess.STDOUT, shell=True
 )
 
