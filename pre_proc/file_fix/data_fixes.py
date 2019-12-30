@@ -10,7 +10,7 @@ import warnings
 
 import iris
 
-from .abstract import (DataFix, FixMask, NcoDataFix, NcksAppendDataFix,
+from .abstract import (DataFix, FixHadGEMMask, NcoDataFix, NcksAppendDataFix,
                        RemoveHalo)
 from pre_proc.common import run_command
 from pre_proc.exceptions import (ExistingAttributeError, CdoError, Ncap2Error,
@@ -282,7 +282,7 @@ class RemoveOrca025Halo(RemoveHalo):
         self.row_spec = '-dx,1,1440 -dy,1,1205'
 
 
-class MaskOrca1V(FixMask):
+class FixMaskOrca1V(FixHadGEMMask):
     """
     Fix the mask for data on the ORCA1 v-grid.
     """

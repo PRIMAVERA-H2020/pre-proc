@@ -396,14 +396,12 @@ class RemoveHalo(NcoDataFix, metaclass=ABCMeta):
         self._run_nco_command(NcksError)
 
 
-class FixMask(DataFix, metaclass=ABCMeta):
+class FixHadGEMMask(DataFix, metaclass=ABCMeta):
     """
     Fix the land sea mask in the HadGEM ORCA grids.
     """
     def __init__(self, filename, directory):
-        """
-        Initialise the class
-        """
+        """Initialise the class"""
         super().__init__(filename, directory)
         self.byte_mask_file = None
         self.mask_var_name = None
@@ -458,6 +456,86 @@ class FixMask(DataFix, metaclass=ABCMeta):
         self.intermediate_files.remove(final_file)
         for fn in self.intermediate_files:
             os.remove(fn)
+
+    def _run_command(self, cmd, cmd_error):
+        """
+        Run `cmd` and raise `cmd_error` if it fails when the specified
+        temporary files are deleted.
+
+        :param str cmd: The command to run
+        :param PreProcError cmd_error: The exception to raise if the command
+            fails
+        :param list temp_files: Intermediate files to delete if there's a
+            problem
+        """
+        try:
+            run_command(cmd)
+        except Exception:
+            for fn in self.intermediate_files:
+                if os.path.exists(fn):
+                    os.remove(fn)
+            raise cmd_error(type(self).__name__, self.filename, cmd,
+                            traceback.format_exc())
+
+
+# TODO make this and the above class have a common parent that includes _run_command()
+class InsertHadGEMGrid(DataFix, metaclass=ABCMeta):
+    """
+    Insert the correct grid into HadGEM ocean and ice files.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+        self.known_good_file = None
+        self.intermediate_files = []
+
+    def apply_fix(self):
+        """
+        Insert the correct grid. The file is first converted to netCDF3
+        because the version 4 library has known bugs that prevent these
+        operations.
+
+        ncks -3 --no_alphabetize vo_Omon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc vo.nc
+        ncks -A -v latitude,longitude,vertices_latitude,vertices_longitude known_good.nc vo.nc
+        rm vo_Omon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc
+        ncks -7 --deflate=3 vo.nc vo_Omon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc
+        """
+        self._set_known_good()
+        output_file = os.path.join(self.directory, self.filename)
+        temp_file = output_file + '.temp'
+        backup_file = output_file + '.temp_backup'
+        self.intermediate_files = [temp_file, backup_file]
+
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
+
+        # Convert to netCDF3
+        command = f'ncks -h -3 --no_alphabetize {output_file} {temp_file}'
+        self._run_command(command, NcksError)
+
+        # Paste in the grid
+        command = (f'ncks -h -A -v latitude,longitude,vertices_latitude,'
+                   f'vertices_longitude {self.known_good_file} {temp_file}')
+        self._run_command(command, NcksError)
+
+        # All's gone well so rename the original file
+        os.rename(output_file, backup_file)
+
+        # Save as netCDF v4
+        command = f'ncks -h -7 --deflate=3 {temp_file} {output_file}'
+        self._run_command(command, NcksError)
+
+        # Complete so remove the intermediate files
+        for fn in self.intermediate_files:
+            os.remove(fn)
+
+    @abstractmethod
+    def _set_known_good(self):
+        """
+        In concrete implementations, specify the file containging the known
+        good grid here.
+        """
+        pass
 
     def _run_command(self, cmd, cmd_error):
         """

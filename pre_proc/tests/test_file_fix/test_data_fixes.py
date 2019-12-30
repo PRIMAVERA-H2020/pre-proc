@@ -16,7 +16,7 @@ from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
                                ZZEcEarthAtmosFix, ZZZEcEarthLongitudeFix,
                                SetTimeReference1949, ZZZAddHeight2m,
                                RemoveOrca1Halo, RemoveOrca025Halo,
-                               MaskOrca1V)
+                               FixMaskOrca1V)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -412,13 +412,13 @@ class TestRemoveOrca025Halo(NcoDataFixBaseTest):
 
 class TestMaskOrca1V(NcoDataFixBaseTest):
     """
-    Test MaskOrca1V
+    Test FixMaskOrca1V
     """
     def test_subprocess_called_correctly(self):
         """
-        Test that external calls are made correctly for MaskOrca1V
+        Test that external calls are made correctly for FixMaskOrca1V
         """
-        fix = MaskOrca1V('vo_1.nc', '/a')
+        fix = FixMaskOrca1V('vo_1.nc', '/a')
         fix.apply_fix()
         calls = [
             mock.call(
