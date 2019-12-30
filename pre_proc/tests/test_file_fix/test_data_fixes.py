@@ -16,7 +16,7 @@ from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
                                ZZEcEarthAtmosFix, ZZZEcEarthLongitudeFix,
                                SetTimeReference1949, ZZZAddHeight2m,
                                RemoveOrca1Halo, RemoveOrca025Halo,
-                               FixMaskOrca1V)
+                               FixMaskOrca1V, FixGridOrca1V)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -436,6 +436,35 @@ class TestMaskOrca1V(NcoDataFixBaseTest):
             mock.call(
                 "ncks -h -x -v mask_3D_V "
                 "/a/vo_1.nc.temp_masked /a/vo_1.nc.temp_final",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
+
+
+class TestFixGridOrca1V(NcoDataFixBaseTest):
+    """
+    Test FixGridOrca1V
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that external calls are made correctly for FixGridOrca1V
+        """
+        fix = FixGridOrca1V('vo_1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call(
+                "ncks -h -3 --no_alphabetize /a/vo_1.nc /a/vo_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h -A -v latitude,longitude,vertices_latitude,vertices_"
+                "longitude /gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
+                "grids/ORCA1_grid-v.nc /a/vo_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h -7 --deflate=3 /a/vo_1.nc.temp /a/vo_1.nc",
                 stderr=subprocess.STDOUT, shell=True
             ),
         ]

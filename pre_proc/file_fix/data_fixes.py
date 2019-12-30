@@ -11,7 +11,7 @@ import warnings
 import iris
 
 from .abstract import (DataFix, FixHadGEMMask, NcoDataFix, NcksAppendDataFix,
-                       RemoveHalo)
+                       RemoveHalo, InsertHadGEMGrid)
 from pre_proc.common import run_command
 from pre_proc.exceptions import (ExistingAttributeError, CdoError, Ncap2Error,
                                  NcattedError, NcpdqError, NcksError,
@@ -24,6 +24,10 @@ import fix_lons
 # Ignore warnings displayed when loading data into Iris to check it
 warnings.filterwarnings("ignore")
 
+# The directory where the byte masks are stored
+BYTE_MASK_DIR = '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/bytes_masks'
+# The directory where the known good grids to paste in are stored
+KNOWN_GOOD_GRID_DIR = '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/grids'
 
 class LatDirection(NcoDataFix):
     """
@@ -292,8 +296,22 @@ class FixMaskOrca1V(FixHadGEMMask):
 
     def _set_byte_mask(self):
         """Set the mask file and name"""
-        self.byte_mask_file = (
-            '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/bytes_masks/'
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
             'HadGEM3-GC31-LL/primavera_byte_masks.nc'
         )
         self.mask_var_name = 'mask_3D_V'
+
+
+class FixGridOrca1V(InsertHadGEMGrid):
+    """
+    Fix the grid for data on the HadGEM ORCA1 v-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(KNOWN_GOOD_GRID_DIR,
+                                            'ORCA1_grid-v.nc')

@@ -541,7 +541,7 @@ class InsertHadGEMGrid(MultiStageDataFix, metaclass=ABCMeta):
     @abstractmethod
     def _set_known_good(self):
         """
-        In concrete implementations, specify the file containging the known
+        In concrete implementations, specify the file containing the known
         good grid here.
         """
         pass
