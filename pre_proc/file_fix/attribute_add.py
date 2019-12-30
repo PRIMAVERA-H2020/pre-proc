@@ -1167,6 +1167,54 @@ class VarUnitsToThousandths(AttributeAdd):
         self.new_value = '0.001'
 
 
+class VerticesLatStdNameDelete(AttributeDelete):
+    """
+    Delete `standard_name` attribute from `vertices_latitude`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = 'vertices_latitude'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        We're deleting so there's nothing to do but make a dummy value for
+        new_value.
+        """
+        self.new_value = 0
+
+
+class VerticesLonStdNameDelete(AttributeDelete):
+    """
+    Delete `standard_name` attribute from `vertices_longitude`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = 'vertices_longitude'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        We're deleting so there's nothing to do but make a dummy value for
+        new_value.
+        """
+        self.new_value = 0
+
+
 class WtemStandardNameAdd(AttributeAdd):
     """
     Replace the variable's `standard_name` with
