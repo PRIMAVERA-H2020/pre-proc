@@ -288,6 +288,40 @@ class AAARemoveOrca025Halo(RemoveHalo):
         self.row_spec = '-di,1,1440 -dj,1,1205'
 
 
+class FixMaskOrca1T(FixHadGEMMask):
+    """
+    Fix the mask for data on the ORCA1 t-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
+            'HadGEM3-GC31-LL/primavera_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_3D_T'
+
+
+class FixMaskOrca1U(FixHadGEMMask):
+    """
+    Fix the mask for data on the ORCA1 u-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
+            'HadGEM3-GC31-LL/primavera_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_3D_U'
+
+
 class FixMaskOrca1V(FixHadGEMMask):
     """
     Fix the mask for data on the ORCA1 v-grid.
@@ -303,6 +337,33 @@ class FixMaskOrca1V(FixHadGEMMask):
             'HadGEM3-GC31-LL/primavera_byte_masks.nc'
         )
         self.mask_var_name = 'mask_3D_V'
+
+
+class FixGridOrca1T(InsertHadGEMGrid):
+    """
+    Fix the grid for data on the HadGEM ORCA1 t-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(KNOWN_GOOD_GRID_DIR,
+                                            'ORCA1_grid-t.nc')
+
+class FixGridOrca1U(InsertHadGEMGrid):
+    """
+    Fix the grid for data on the HadGEM ORCA1 u-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(KNOWN_GOOD_GRID_DIR,
+                                            'ORCA1_grid-u.nc')
 
 
 class FixGridOrca1V(InsertHadGEMGrid):
