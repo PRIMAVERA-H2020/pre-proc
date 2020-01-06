@@ -2,7 +2,7 @@
 """
 fix_request_6403.py
 
-MOHC.coupled_ORCA1.*
+MOHC.ocean_ORCA1.*
 
 In all MOHC coupled data on the ORCA1 grid remove the halo.
 """
@@ -45,11 +45,7 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-LL',
-        table_id__in=['SIday', 'PrimSIday', 'SImon', 'Oday', 'PrimOday',
-                      'Omon', 'PrimOmon']
-    ).exclude(
-        table_id='SIday',
-        cmor_name='siconc'
+        table_id__in=['Oday', 'PrimOday', 'Omon', 'PrimOmon', 'Ofx']
     )
 
     # Add fix

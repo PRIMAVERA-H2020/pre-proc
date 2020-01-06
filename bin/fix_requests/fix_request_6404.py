@@ -2,9 +2,9 @@
 """
 fix_request_6404.py
 
-MOHC.coupled_ORCA1_grid-t.*
+MOHC.ocean_ORCA1_grid-t.*
 
-In all MOHC coupled data on the ORCA1 t-grid fix the mask and grid.
+In all MOHC ocean data on the ORCA1 t-grid fix the mask and grid.
 """
 import argparse
 import logging.config
@@ -46,16 +46,31 @@ def main():
     omon = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-LL',
         table_id='Omon',
-        cmor_name__in=['tos']
+        cmor_name__in=['agessc', 'ficeberg2d', 'friver', 'hfds', 'hfrainds',
+                       'masscello', 'mlotst', 'mlotstsq', 'pbo', 'rsdo',
+                       'thetao', 'thkcello', 'tos', 'tossq', 'so', 'sos',
+                       'zfull', 'zos', 'zossq']
     )
 
     oday = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-LL',
-        table_id='PrimOday',
-        cmor_name__in=['tos']
+        table_id='Oday',
+        cmor_name__in=['tos', 'tossq', 'sos']
     )
 
-    data_reqs = (omon | oday)
+    primoday = DataRequest.objects.filter(
+        source_id__name='HadGEM3-GC31-LL',
+        table_id='PrimOday',
+        cmor_name__in=['mlotst', 'zos']
+    )
+
+    primomon = DataRequest.objects.filter(
+        source_id__name='HadGEM3-GC31-LL',
+        table_id='PrimOmon',
+        cmor_name__in=['somint']
+    )
+
+    data_reqs = (omon | oday | primoday | primomon)
 
     fixes = [
         FileFix.objects.get(name='FixMaskOrca1T'),

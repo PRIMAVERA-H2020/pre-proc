@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_6406.py
+fix_request_6407.py
 
-MOHC.ocean_ORCA1_grid-v.*
+MOHC.ocean_ORCA1_grid-w.*
 
-In all MOHC ocean data on the ORCA1 v-grid fix the mask and grid.
+In all MOHC ocean data on the ORCA1 w-grid fix the mask and grid.
 """
 import argparse
 import logging.config
@@ -46,21 +46,16 @@ def main():
     omon = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-LL',
         table_id='Omon',
-        cmor_name__in=['tauvo', 'vo', 'vmo']
-    )
-
-    primoday = DataRequest.objects.filter(
-        source_id__name='HadGEM3-GC31-LL',
-        table_id='PrimOday',
-        cmor_name__in=['tauvo', 'vo']
+        cmor_name__in=['wmo']
     )
 
     primomon = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-LL',
         table_id='PrimOmon',
-        cmor_name__in=['v2o', 'vso', 'vto']
+        cmor_name__in=['wo']
     )
-    data_reqs = (omon | primoday | primomon)
+
+    data_reqs = (omon | primomon)
 
     fixes = [
         FileFix.objects.get(name='FixMaskOrca1V'),
