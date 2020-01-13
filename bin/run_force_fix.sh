@@ -6,6 +6,13 @@ INSTALL_DIR=/home/users/jseddon/primavera/pre-proc
 CONDA_DIR=/home/users/jseddon/software/miniconda3/bin
 CONDA_ENV_DIR=/home/users/jseddon/software/miniconda3/envs/py3-6/bin
 
+# Force NumPy not to parallelise
+export OMP_NUM_THREADS=1
+export OPENBLAS_NUM_THREADS=1
+export MKL_NUM_THREADS=1
+export VECLIB_MAXIMUM_THREADS=1
+export NUMEXPR_NUM_THREADS=1
+
 export PATH=$CONDA_DIR:$PATH
 . activate py3-6
 export DJANGO_SETTINGS_MODULE=pre_proc_site.settings
