@@ -9,6 +9,8 @@ import logging.config
 import os
 import sys
 
+import dask
+
 from pre_proc import EsgfSubmission
 from pre_proc.exceptions import PreProcError
 
@@ -42,6 +44,9 @@ def main(args):
     """
     Main entry point
     """
+    # Assume that this will be run with one CPU allocated
+    dask.config.set(scheduler='synchronous')
+
     logger.debug('Database directory is {}'.
                  format(os.environ['DATABASE_DIR']))
 

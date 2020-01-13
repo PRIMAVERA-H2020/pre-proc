@@ -14,6 +14,8 @@ import sys
 import traceback
 import warnings
 
+import dask
+
 from pre_proc import EsgfSubmission
 from pre_proc.common import list_files
 
@@ -49,6 +51,9 @@ def main(args):
     """
     Main entry point
     """
+    # Assume that this will be run with one CPU allocated
+    dask.config.set(scheduler='synchronous')
+
     logger.debug('Database directory is {}'.
                  format(os.environ['DATABASE_DIR']))
 
