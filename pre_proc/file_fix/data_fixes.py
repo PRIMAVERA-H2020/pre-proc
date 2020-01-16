@@ -350,7 +350,7 @@ class FixGridOrca1T(InsertHadGEMGrid):
     def _set_known_good(self):
         """Set the known good grid"""
         self.known_good_file = os.path.join(KNOWN_GOOD_GRID_DIR,
-                                            'ORCA1_grid-t.nc')
+                                            'ORCA1/ORCA1_grid-t.nc')
 
 class FixGridOrca1U(InsertHadGEMGrid):
     """
@@ -363,7 +363,7 @@ class FixGridOrca1U(InsertHadGEMGrid):
     def _set_known_good(self):
         """Set the known good grid"""
         self.known_good_file = os.path.join(KNOWN_GOOD_GRID_DIR,
-                                            'ORCA1_grid-u.nc')
+                                            'ORCA1/ORCA1_grid-u.nc')
 
 
 class FixGridOrca1V(InsertHadGEMGrid):
@@ -377,4 +377,5 @@ class FixGridOrca1V(InsertHadGEMGrid):
     def _set_known_good(self):
         """Set the known good grid"""
         self.known_good_file = os.path.join(KNOWN_GOOD_GRID_DIR,
-                                            'ORCA1_grid-v.nc')
+                                            'ORCA1/ORCA1_grid-v.nc')
+
