@@ -58,7 +58,7 @@ def main():
     data_reqs = (omon | primomon)
 
     fixes = [
-        FileFix.objects.get(name='FixMaskOrca1T'),
+        FileFix.objects.get(name='FixMaskOrca1TOlevel'),
         FileFix.objects.get(name='FixGridOrca1T')
     ]
 

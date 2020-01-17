@@ -2,7 +2,7 @@
 """
 fix_request_6405.py
 
-MOHC.ocean_ORCA1_grid-u.*
+MOHC.ocean_ORCA1_grid-u_olevel.*
 
 In all MOHC ocean data on the ORCA1 u-grid fix the mask and grid.
 """
@@ -46,13 +46,13 @@ def main():
     omon = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-LL',
         table_id='Omon',
-        cmor_name__in=['tauuo', 'uo', 'umo']
+        cmor_name__in=['uo', 'umo']
     )
 
     primoday = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-LL',
         table_id='PrimOday',
-        cmor_name__in=['tauuo', 'uo']
+        cmor_name__in=['uo']
     )
 
     primomon = DataRequest.objects.filter(
@@ -64,7 +64,7 @@ def main():
     data_reqs = (omon | primoday | primomon)
 
     fixes = [
-        FileFix.objects.get(name='FixMaskOrca1U'),
+        FileFix.objects.get(name='FixMaskOrca1UOlevel'),
         FileFix.objects.get(name='FixGridOrca1U')
     ]
 

@@ -288,7 +288,57 @@ class AAARemoveOrca025Halo(RemoveHalo):
         self.row_spec = '-di,1,1440 -dj,1,1205'
 
 
-class FixMaskOrca1T(FixHadGEMMask):
+class FixMaskOrca1TSurface(FixHadGEMMask):
+    """
+    Fix the mask for data on the ORCA1 t-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
+            'HadGEM3-GC31-LL/primavera_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_2D_T'
+
+
+class FixMaskOrca1USurface(FixHadGEMMask):
+    """
+    Fix the mask for data on the ORCA1 u-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
+            'HadGEM3-GC31-LL/primavera_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_2D_U'
+
+
+class FixMaskOrca1VSurface(FixHadGEMMask):
+    """
+    Fix the mask for data on the ORCA1 v-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
+            'HadGEM3-GC31-LL/primavera_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_2D_V'
+
+class FixMaskOrca1TOlevel(FixHadGEMMask):
     """
     Fix the mask for data on the ORCA1 t-grid.
     """
@@ -305,7 +355,7 @@ class FixMaskOrca1T(FixHadGEMMask):
         self.mask_var_name = 'mask_3D_T'
 
 
-class FixMaskOrca1U(FixHadGEMMask):
+class FixMaskOrca1UOlevel(FixHadGEMMask):
     """
     Fix the mask for data on the ORCA1 u-grid.
     """
@@ -322,7 +372,7 @@ class FixMaskOrca1U(FixHadGEMMask):
         self.mask_var_name = 'mask_3D_U'
 
 
-class FixMaskOrca1V(FixHadGEMMask):
+class FixMaskOrca1VOlevel(FixHadGEMMask):
     """
     Fix the mask for data on the ORCA1 v-grid.
     """
@@ -337,7 +387,6 @@ class FixMaskOrca1V(FixHadGEMMask):
             'HadGEM3-GC31-LL/primavera_byte_masks.nc'
         )
         self.mask_var_name = 'mask_3D_V'
-
 
 class FixGridOrca1T(InsertHadGEMGrid):
     """

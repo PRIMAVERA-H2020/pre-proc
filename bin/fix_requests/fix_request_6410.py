@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
-fix_request_6404.py
+fix_request_6410.py
 
-MOHC.ocean_ORCA1_grid-t_olevel.*
+MOHC.ocean_ORCA1_grid-t_surface.*
 
 In all MOHC ocean data on the ORCA1 t-grid fix the mask and grid.
 """
@@ -46,14 +46,32 @@ def main():
     omon = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-LL',
         table_id='Omon',
-        cmor_name__in=['agessc', 'masscello', 'rsdo', 'thetao', 'thkcello',
-                       'so', 'zfullo']
+        cmor_name__in=['ficeberg2d', 'friver', 'hfds', 'hfrainds', 'mlotst',
+                       'mlotstsq', 'pbo', 'tos', 'tossq', 'sos', 'zos', 'zossq']
     )
 
-    data_reqs = (omon)
+    oday = DataRequest.objects.filter(
+        source_id__name='HadGEM3-GC31-LL',
+        table_id='Oday',
+        cmor_name__in=['tos', 'tossq', 'sos']
+    )
+
+    primoday = DataRequest.objects.filter(
+        source_id__name='HadGEM3-GC31-LL',
+        table_id='PrimOday',
+        cmor_name__in=['mlotst', 'zos']
+    )
+
+    primomon = DataRequest.objects.filter(
+        source_id__name='HadGEM3-GC31-LL',
+        table_id='PrimOmon',
+        cmor_name__in=['somint']
+    )
+
+    data_reqs = (omon | oday | primoday | primomon)
 
     fixes = [
-        FileFix.objects.get(name='FixMaskOrca1TOlevel'),
+        FileFix.objects.get(name='FixMaskOrca1TSurface'),
         FileFix.objects.get(name='FixGridOrca1T')
     ]
 
