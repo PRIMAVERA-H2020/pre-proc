@@ -392,7 +392,7 @@ class RemoveHalo(NcoDataFix, metaclass=ABCMeta):
         Remove the halo.
         """
         self._set_row_spec()
-        self.command = f'ncks -h {self.row_spec}'
+        self.command = f'ncks -h --no_alphabetize {self.row_spec}'
         self._run_nco_command(NcksError)
 
 
@@ -466,8 +466,8 @@ class FixHadGEMMask(MultiStageDataFix, metaclass=ABCMeta):
         shutil.copyfile(output_file, temp_file)
 
         # Copy the mask into the file
-        command = (f"ncks -h -A -v {self.mask_var_name} {self.byte_mask_file} "
-                   f"{temp_file}")
+        command = (f"ncks -h --no_alphabetize -A -v {self.mask_var_name} "
+                   f"{self.byte_mask_file} {temp_file}")
         self._run_command(command, NcksError)
 
         # Do the masking
@@ -477,8 +477,8 @@ class FixHadGEMMask(MultiStageDataFix, metaclass=ABCMeta):
         self._run_command(command, Ncap2Error)
 
         # Remove the mask
-        command = (f"ncks -h -x -v {self.mask_var_name} {masked_file} "
-                   f"{final_file}")
+        command = (f"ncks -h --no_alphabetize -x -v {self.mask_var_name} "
+                   f"{masked_file} {final_file}")
         self._run_command(command, NcksError)
 
         # Set the name on the file and remove intermediate files
@@ -519,19 +519,22 @@ class InsertHadGEMGrid(MultiStageDataFix, metaclass=ABCMeta):
             os.remove(temp_file)
 
         # Convert to netCDF3
-        command = f'ncks -h -3 --no_alphabetize {output_file} {temp_file}'
+        command = (f'ncks -h --no_alphabetize -3 '
+                   f'{output_file} {temp_file}')
         self._run_command(command, NcksError)
 
         # Paste in the grid
-        command = (f'ncks -h -A -v latitude,longitude,vertices_latitude,'
-                   f'vertices_longitude {self.known_good_file} {temp_file}')
+        command = (f'ncks -h --no_alphabetize -A -v latitude,longitude,'
+                   f'vertices_latitude,vertices_longitude '
+                   f'{self.known_good_file} {temp_file}')
         self._run_command(command, NcksError)
 
         # All's gone well so rename the original file
         os.rename(output_file, backup_file)
 
         # Save as netCDF v4
-        command = f'ncks -h -7 --deflate=3 {temp_file} {output_file}'
+        command = (f'ncks -h --no_alphabetize -7 --deflate=3 {temp_file} '
+                   f'{output_file}')
         self._run_command(command, NcksError)
 
         # Complete so remove the intermediate files

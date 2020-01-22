@@ -391,7 +391,8 @@ class TestRemoveOrca1Halo(NcoDataFixBaseTest):
         fix = AAARemoveOrca1Halo('tas_1.nc', '/a')
         fix.apply_fix()
         self.mock_subprocess.assert_called_with(
-            "ncks -h -di,1,360 -dj,1,330 /a/tas_1.nc /a/tas_1.nc.temp",
+            "ncks -h --no_alphabetize -di,1,360 -dj,1,330 /a/tas_1.nc "
+            "/a/tas_1.nc.temp",
             stderr=subprocess.STDOUT, shell=True
         )
 
@@ -408,7 +409,8 @@ class TestRemoveOrca025Halo(NcoDataFixBaseTest):
         fix = AAARemoveOrca025Halo('tas_1.nc', '/a')
         fix.apply_fix()
         self.mock_subprocess.assert_called_with(
-            "ncks -h -di,1,1440 -dj,1,1205 /a/tas_1.nc /a/tas_1.nc.temp",
+            "ncks -h --no_alphabetize -di,1,1440 -dj,1,1205 /a/tas_1.nc "
+            "/a/tas_1.nc.temp",
             stderr=subprocess.STDOUT, shell=True
         )
 
@@ -424,7 +426,7 @@ class TestMaskOrca1TOlevel(NcoDataFixBaseTest):
         fix.apply_fix()
         calls = [
             mock.call(
-                "ncks -h -A -v mask_3D_T "
+                "ncks -h --no_alphabetize -A -v mask_3D_T "
                 "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
                 "bytes_masks/HadGEM3-GC31-LL/primavera_byte_masks.nc "
                 "/a/tos_1.nc.temp",
@@ -436,7 +438,7 @@ class TestMaskOrca1TOlevel(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncks -h -x -v mask_3D_T "
+                "ncks -h --no_alphabetize -x -v mask_3D_T "
                 "/a/tos_1.nc.temp_masked /a/tos_1.nc.temp_final",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -456,7 +458,7 @@ class TestMaskOrca1UOlevel(NcoDataFixBaseTest):
         fix.apply_fix()
         calls = [
             mock.call(
-                "ncks -h -A -v mask_3D_U "
+                "ncks -h --no_alphabetize -A -v mask_3D_U "
                 "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
                 "bytes_masks/HadGEM3-GC31-LL/primavera_byte_masks.nc "
                 "/a/uo_1.nc.temp",
@@ -468,7 +470,7 @@ class TestMaskOrca1UOlevel(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncks -h -x -v mask_3D_U "
+                "ncks -h --no_alphabetize -x -v mask_3D_U "
                 "/a/uo_1.nc.temp_masked /a/uo_1.nc.temp_final",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -488,7 +490,7 @@ class TestMaskOrca1VOlevel(NcoDataFixBaseTest):
         fix.apply_fix()
         calls = [
             mock.call(
-                "ncks -h -A -v mask_3D_V "
+                "ncks -h --no_alphabetize -A -v mask_3D_V "
                 "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
                 "bytes_masks/HadGEM3-GC31-LL/primavera_byte_masks.nc "
                 "/a/vo_1.nc.temp",
@@ -500,7 +502,7 @@ class TestMaskOrca1VOlevel(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncks -h -x -v mask_3D_V "
+                "ncks -h --no_alphabetize -x -v mask_3D_V "
                 "/a/vo_1.nc.temp_masked /a/vo_1.nc.temp_final",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -519,7 +521,7 @@ class TestMaskOrca1TSurface(NcoDataFixBaseTest):
         fix.apply_fix()
         calls = [
             mock.call(
-                "ncks -h -A -v mask_2D_T "
+                "ncks -h --no_alphabetize -A -v mask_2D_T "
                 "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
                 "bytes_masks/HadGEM3-GC31-LL/primavera_byte_masks.nc "
                 "/a/tos_1.nc.temp",
@@ -531,7 +533,7 @@ class TestMaskOrca1TSurface(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncks -h -x -v mask_2D_T "
+                "ncks -h --no_alphabetize -x -v mask_2D_T "
                 "/a/tos_1.nc.temp_masked /a/tos_1.nc.temp_final",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -551,7 +553,7 @@ class TestMaskOrca1USurface(NcoDataFixBaseTest):
         fix.apply_fix()
         calls = [
             mock.call(
-                "ncks -h -A -v mask_2D_U "
+                "ncks -h --no_alphabetize -A -v mask_2D_U "
                 "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
                 "bytes_masks/HadGEM3-GC31-LL/primavera_byte_masks.nc "
                 "/a/uo_1.nc.temp",
@@ -563,7 +565,7 @@ class TestMaskOrca1USurface(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncks -h -x -v mask_2D_U "
+                "ncks -h --no_alphabetize -x -v mask_2D_U "
                 "/a/uo_1.nc.temp_masked /a/uo_1.nc.temp_final",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -583,7 +585,7 @@ class TestMaskOrca1VSurface(NcoDataFixBaseTest):
         fix.apply_fix()
         calls = [
             mock.call(
-                "ncks -h -A -v mask_2D_V "
+                "ncks -h --no_alphabetize -A -v mask_2D_V "
                 "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
                 "bytes_masks/HadGEM3-GC31-LL/primavera_byte_masks.nc "
                 "/a/vo_1.nc.temp",
@@ -595,7 +597,7 @@ class TestMaskOrca1VSurface(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncks -h -x -v mask_2D_V "
+                "ncks -h --no_alphabetize -x -v mask_2D_V "
                 "/a/vo_1.nc.temp_masked /a/vo_1.nc.temp_final",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -614,17 +616,19 @@ class TestFixGridOrca1T(NcoDataFixBaseTest):
         fix.apply_fix()
         calls = [
             mock.call(
-                "ncks -h -3 --no_alphabetize /a/tos_1.nc /a/tos_1.nc.temp",
+                "ncks -h --no_alphabetize -3 /a/tos_1.nc /a/tos_1.nc.temp",
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncks -h -A -v latitude,longitude,vertices_latitude,vertices_"
-                "longitude /gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
+                "ncks -h --no_alphabetize -A -v latitude,longitude,"
+                "vertices_latitude,vertices_longitude "
+                "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
                 "grids/ORCA1/ORCA1_grid-t.nc /a/tos_1.nc.temp",
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncks -h -7 --deflate=3 /a/tos_1.nc.temp /a/tos_1.nc",
+                "ncks -h --no_alphabetize -7 --deflate=3 /a/tos_1.nc.temp "
+                "/a/tos_1.nc",
                 stderr=subprocess.STDOUT, shell=True
             ),
         ]
@@ -643,17 +647,19 @@ class TestFixGridOrca1U(NcoDataFixBaseTest):
         fix.apply_fix()
         calls = [
             mock.call(
-                "ncks -h -3 --no_alphabetize /a/uo_1.nc /a/uo_1.nc.temp",
+                "ncks -h --no_alphabetize -3 /a/uo_1.nc /a/uo_1.nc.temp",
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncks -h -A -v latitude,longitude,vertices_latitude,vertices_"
-                "longitude /gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
+                "ncks -h --no_alphabetize -A -v latitude,longitude,"
+                "vertices_latitude,vertices_longitude "
+                "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
                 "grids/ORCA1/ORCA1_grid-u.nc /a/uo_1.nc.temp",
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncks -h -7 --deflate=3 /a/uo_1.nc.temp /a/uo_1.nc",
+                "ncks -h --no_alphabetize -7 --deflate=3 /a/uo_1.nc.temp "
+                "/a/uo_1.nc",
                 stderr=subprocess.STDOUT, shell=True
             ),
         ]
@@ -672,17 +678,19 @@ class TestFixGridOrca1V(NcoDataFixBaseTest):
         fix.apply_fix()
         calls = [
             mock.call(
-                "ncks -h -3 --no_alphabetize /a/vo_1.nc /a/vo_1.nc.temp",
+                "ncks -h --no_alphabetize -3 /a/vo_1.nc /a/vo_1.nc.temp",
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncks -h -A -v latitude,longitude,vertices_latitude,vertices_"
-                "longitude /gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
+                "ncks -h --no_alphabetize -A -v latitude,longitude,"
+                "vertices_latitude,vertices_longitude "
+                "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
                 "grids/ORCA1/ORCA1_grid-v.nc /a/vo_1.nc.temp",
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncks -h -7 --deflate=3 /a/vo_1.nc.temp /a/vo_1.nc",
+                "ncks -h --no_alphabetize -7 --deflate=3 /a/vo_1.nc.temp "
+                "/a/vo_1.nc",
                 stderr=subprocess.STDOUT, shell=True
             ),
         ]
