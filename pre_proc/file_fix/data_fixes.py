@@ -26,8 +26,11 @@ warnings.filterwarnings("ignore")
 
 # The directory where the byte masks are stored
 BYTE_MASK_DIR = '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/bytes_masks'
-# The directory where the known good grids to paste in are stored
-KNOWN_GOOD_GRID_DIR = '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/grids'
+# The directories where the known good grids to paste in are stored
+NEMO_GRID_DIR = '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/grids'
+CICE_COORDS_DIR = ('/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/'
+                   'cice_coords')
+
 
 class LatDirection(NcoDataFix):
     """
@@ -338,6 +341,7 @@ class FixMaskOrca1VSurface(FixHadGEMMask):
         )
         self.mask_var_name = 'mask_2D_V'
 
+
 class FixMaskOrca1TOlevel(FixHadGEMMask):
     """
     Fix the mask for data on the ORCA1 t-grid.
@@ -388,6 +392,7 @@ class FixMaskOrca1VOlevel(FixHadGEMMask):
         )
         self.mask_var_name = 'mask_3D_V'
 
+
 class FixGridOrca1T(InsertHadGEMGrid):
     """
     Fix the grid for data on the HadGEM ORCA1 t-grid.
@@ -398,8 +403,9 @@ class FixGridOrca1T(InsertHadGEMGrid):
 
     def _set_known_good(self):
         """Set the known good grid"""
-        self.known_good_file = os.path.join(KNOWN_GOOD_GRID_DIR,
+        self.known_good_file = os.path.join(NEMO_GRID_DIR,
                                             'ORCA1/ORCA1_grid-t.nc')
+
 
 class FixGridOrca1U(InsertHadGEMGrid):
     """
@@ -411,7 +417,7 @@ class FixGridOrca1U(InsertHadGEMGrid):
 
     def _set_known_good(self):
         """Set the known good grid"""
-        self.known_good_file = os.path.join(KNOWN_GOOD_GRID_DIR,
+        self.known_good_file = os.path.join(NEMO_GRID_DIR,
                                             'ORCA1/ORCA1_grid-u.nc')
 
 
@@ -425,6 +431,37 @@ class FixGridOrca1V(InsertHadGEMGrid):
 
     def _set_known_good(self):
         """Set the known good grid"""
-        self.known_good_file = os.path.join(KNOWN_GOOD_GRID_DIR,
+        self.known_good_file = os.path.join(NEMO_GRID_DIR,
                                             'ORCA1/ORCA1_grid-v.nc')
 
+
+class FixCiceCoords1T(InsertHadGEMGrid):
+    """
+    Fix the coords for CICE data on the HadGEM ORCA1 t-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(
+            CICE_COORDS_DIR,
+            'eORCA1/cice_eORCA1_coords_grid-t.nc'
+        )
+
+
+class FixCiceCoords1UV(InsertHadGEMGrid):
+    """
+    Fix the coords for CICE data on the HadGEM ORCA1 u and v-grids.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(
+            CICE_COORDS_DIR,
+            'eORCA1/cice_eORCA1_coords_grid-uv.nc'
+        )

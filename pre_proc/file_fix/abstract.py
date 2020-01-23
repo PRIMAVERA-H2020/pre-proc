@@ -415,8 +415,6 @@ class MultiStageDataFix(DataFix, metaclass=ABCMeta):
         :param str cmd: The command to run
         :param PreProcError cmd_error: The exception to raise if the command
             fails
-        :param list temp_files: Intermediate files to delete if there's a
-            problem
         """
         try:
             run_command(cmd)
@@ -503,11 +501,6 @@ class InsertHadGEMGrid(MultiStageDataFix, metaclass=ABCMeta):
         Insert the correct grid. The file is first converted to netCDF3
         because the version 4 library has known bugs that prevent these
         operations.
-
-        ncks -3 --no_alphabetize vo_Omon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc vo.nc
-        ncks -A -v latitude,longitude,vertices_latitude,vertices_longitude known_good.nc vo.nc
-        rm vo_Omon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc
-        ncks -7 --deflate=3 vo.nc vo_Omon_HadGEM3-GC31-LL_hist-1950_r1i1p1f1_gn_195001-195012.nc
         """
         self._set_known_good()
         output_file = os.path.join(self.directory, self.filename)

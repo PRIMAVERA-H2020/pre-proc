@@ -19,7 +19,8 @@ from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
                                FixMaskOrca1TSurface, FixMaskOrca1TOlevel,
                                FixMaskOrca1USurface, FixMaskOrca1UOlevel,
                                FixMaskOrca1VSurface, FixMaskOrca1VOlevel,
-                               FixGridOrca1T, FixGridOrca1U, FixGridOrca1V)
+                               FixGridOrca1T, FixGridOrca1U, FixGridOrca1V,
+                               FixCiceCoords1T, FixCiceCoords1UV)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -414,6 +415,7 @@ class TestRemoveOrca025Halo(NcoDataFixBaseTest):
             stderr=subprocess.STDOUT, shell=True
         )
 
+
 class TestMaskOrca1TOlevel(NcoDataFixBaseTest):
     """
     Test FixMaskOrca1TOlevel
@@ -508,6 +510,7 @@ class TestMaskOrca1VOlevel(NcoDataFixBaseTest):
             ),
         ]
         self.mock_subprocess.assert_has_calls(calls)
+
 
 class TestMaskOrca1TSurface(NcoDataFixBaseTest):
     """
@@ -604,6 +607,7 @@ class TestMaskOrca1VSurface(NcoDataFixBaseTest):
         ]
         self.mock_subprocess.assert_has_calls(calls)
 
+
 class TestFixGridOrca1T(NcoDataFixBaseTest):
     """
     Test FixGridOrca1T
@@ -691,6 +695,70 @@ class TestFixGridOrca1V(NcoDataFixBaseTest):
             mock.call(
                 "ncks -h --no_alphabetize -7 --deflate=3 /a/vo_1.nc.temp "
                 "/a/vo_1.nc",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
+
+
+class TestFixCiceCoords1T(NcoDataFixBaseTest):
+    """
+    Test FixCiceCoords1T
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that external calls are made correctly for FixCiceCoords1T
+        """
+        fix = FixCiceCoords1T('siconc_1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call(
+                "ncks -h --no_alphabetize -3 /a/siconc_1.nc "
+                "/a/siconc_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h --no_alphabetize -A -v latitude,longitude,"
+                "vertices_latitude,vertices_longitude "
+                "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/cice_coords/"
+                "eORCA1/cice_eORCA1_coords_grid-t.nc /a/siconc_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h --no_alphabetize -7 --deflate=3 /a/siconc_1.nc.temp "
+                "/a/siconc_1.nc",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
+
+
+class TestFixCiceCoords1UV(NcoDataFixBaseTest):
+    """
+    Test FixCiceCoords1UV
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that external calls are made correctly for FixCiceCoords1UV
+        """
+        fix = FixCiceCoords1UV('siv_1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call(
+                "ncks -h --no_alphabetize -3 /a/siv_1.nc "
+                "/a/siv_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h --no_alphabetize -A -v latitude,longitude,"
+                "vertices_latitude,vertices_longitude "
+                "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/cice_coords/"
+                "eORCA1/cice_eORCA1_coords_grid-uv.nc /a/siv_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h --no_alphabetize -7 --deflate=3 /a/siv_1.nc.temp "
+                "/a/siv_1.nc",
                 stderr=subprocess.STDOUT, shell=True
             ),
         ]
