@@ -4,7 +4,8 @@ fix_request_6415.py
 
 MOHC.ice_ORCA.*
 
-In all MOHC ice data on ORCA grids fix change cell_measures to be areacello.
+In all MOHC ice data on ORCA grids fix change cell_measures and
+external_variables to be areacello.
 """
 import argparse
 import logging.config
@@ -75,6 +76,7 @@ def main():
 
     fixes = [
         FileFix.objects.get(name='CellMeasuresAreacelloAdd'),
+        FileFix.objects.get(name='ExternalVariablesAreacello'),
     ]
 
     # This next line could be done more quickly by:
