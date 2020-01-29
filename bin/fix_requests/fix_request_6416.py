@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_6415.py
+fix_request_6416.py
 
-MOHC.ice_ORCA.*
+MOHC.coupled.SImon.siflcondbot
 
-In all MOHC ice data on ORCA grids fix change cell_measures to be areacello.
+SiflcondbotStandardNameAdd
 """
 import argparse
 import logging.config
@@ -43,38 +43,14 @@ def main():
     """
     Main entry point
     """
-    simon = DataRequest.objects.filter(
+    data_reqs = DataRequest.objects.filter(
         institution_id__name__in=['MOHC', 'NERC'],
         table_id='SImon',
-        cmor_name__in=[
-            'sitimefrac', 'simass', 'sithick', 'sivol', 'sisnconc', 'sisnmass',
-            'sisnthick', 'sitempbot', 'siage', 'sihc', 'sisnhc', 'siflfwdrain',
-            'sidmassth', 'sidmassdyn', 'sidmassmelttop', 'sidmassmeltbot',
-            'sifllatstop', 'siflsensupbot', 'siflcondtop', 'siflcondbot',
-            'sipr', 'siflsaltbot', 'siflfwbot', 'siu', 'siv', 'sispeed',
-            'sistrxdtop', 'sistrydtop', 'sistrxubot', 'sistryubot', 'sidivvel'
-        ]
+        cmor_name='siflcondbot'
     )
-
-    siday = DataRequest.objects.filter(
-        institution_id__name__in=['MOHC', 'NERC'],
-        table_id='SIday',
-        cmor_name__in=['sithick', 'siu', 'siv']
-    )
-
-    primsiday = DataRequest.objects.filter(
-        institution_id__name__in=['MOHC', 'NERC'],
-        table_id='SIday',
-        cmor_name__in=[
-            'sitimefrac', 'sistrxdtop', 'sistrydtop', 'sistrxubot',
-            'sistryubot', 'siforceintstrx', 'siforceintstry', 'sidivvel'
-        ]
-    )
-
-    data_reqs = (simon | siday | primsiday)
 
     fixes = [
-        FileFix.objects.get(name='CellMeasuresAreacelloAdd'),
+        FileFix.objects.get(name='SiflcondbotStandardNameAdd'),
     ]
 
     # This next line could be done more quickly by:
