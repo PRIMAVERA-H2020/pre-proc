@@ -52,8 +52,13 @@ def main():
         table_id__in=['SIday', 'PrimSIday', 'SImon', 'Oday', 'PrimOday',
                       'Omon', 'PrimOmon']
     ).exclude(
+        # Exclude ice variables that are on the atmosphere grid
         table_id='SIday',
         cmor_name='siconc'
+    ).exclude(
+        table_id='SImon',
+        cmor_name=['siconc', 'sitemptop', 'siflswdtop', 'siflswutop',
+                   'sifllwdtop', 'sifllwutop', 'siflsenstop']
     )
 
     # Add fix
@@ -68,6 +73,37 @@ def main():
     num_data_reqs = data_reqs.count()
     for fix in fixes:
         logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    # Remove these fixes from some variables that they may have been
+    # erroneously added to earlier
+    siday = DataRequest.objects.filter(
+        institution_id__name__in=['MOHC', 'NERC'],
+        experiment_id__name__in=[
+            'hist-1950', 'control-1950', 'highres-future', 'spinup-1950'
+        ],
+        table_id='SIday',
+        cmor_name='siconc'
+    )
+
+    simon = DataRequest.objects.filter(
+        institution_id__name__in=['MOHC', 'NERC'],
+        experiment_id__name__in=[
+            'hist-1950', 'control-1950', 'highres-future', 'spinup-1950'
+        ],
+        table_id='SImon',
+        cmor_name=['siconc', 'sitemptop', 'siflswdtop', 'siflswutop',
+                   'sifllwdtop', 'sifllwutop', 'siflsenstop']
+    )
+
+    remove_reqs = siday | simon
+
+    for data_req in remove_reqs:
+        data_req.fixes.remove(*fixes)
+
+    num_data_reqs = remove_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} removed from {} data requests.'.
                      format(fix.name, num_data_reqs))
 
 

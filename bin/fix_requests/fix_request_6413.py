@@ -46,7 +46,7 @@ def main():
     simon = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-LL',
         table_id='SImon',
-        cmor_name__in=['siage', 'siconc', 'sidmassdyn', 'sidmassmeltbot',
+        cmor_name__in=['siage', 'sidmassdyn', 'sidmassmeltbot',
                        'sidmassmelttop', 'sidmassth', 'siflcondbot',
                        'siflcondtop', 'siflfwbot', 'siflfwdrain',
                        'sifllatstop', 'siflsaltbot', 'siflsensupbot', 'sihc',
@@ -58,7 +58,7 @@ def main():
     siday = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-LL',
         table_id='SIday',
-        cmor_name__in=['siconc', 'sithick']
+        cmor_name__in=['sithick']
     )
 
     primsiday = DataRequest.objects.filter(
@@ -84,6 +84,23 @@ def main():
     for fix in fixes:
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
+
+    # Remove this fix from siconc where it may have previously been erroneously
+    # added.
+    siconc = DataRequest.objects.filter(
+        source_id__name='HadGEM3-GC31-LL',
+        table_id__in=['SIday', 'SImon'],
+        cmor_name='siconc'
+    )
+
+    for data_req in siconc:
+        data_req.fixes.remove(FileFix.objects.get(name='FixCiceCoords1T'))
+
+    num_data_reqs = siconc.count()
+    logger.debug('FileFix {} removed from {} data requests.'.
+                 format(FileFix.objects.get(name='FixCiceCoords1T').name,
+                        num_data_reqs))
+
 
 
 if __name__ == "__main__":
