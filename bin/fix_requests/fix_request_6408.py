@@ -57,7 +57,7 @@ def main():
         cmor_name='siconc'
     ).exclude(
         table_id='SImon',
-        cmor_name=['siconc', 'sitemptop', 'siflswdtop', 'siflswutop',
+        cmor_name__in=['siconc', 'sitemptop', 'siflswdtop', 'siflswutop',
                    'sifllwdtop', 'sifllwutop', 'siflsenstop']
     )
 
@@ -92,7 +92,7 @@ def main():
             'hist-1950', 'control-1950', 'highres-future', 'spinup-1950'
         ],
         table_id='SImon',
-        cmor_name=['siconc', 'sitemptop', 'siflswdtop', 'siflswutop',
+        cmor_name__in=['siconc', 'sitemptop', 'siflswdtop', 'siflswutop',
                    'sifllwdtop', 'sifllwutop', 'siflsenstop']
     )
 
