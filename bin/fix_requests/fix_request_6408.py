@@ -99,7 +99,8 @@ def main():
     remove_reqs = siday | simon
 
     for data_req in remove_reqs:
-        data_req.fixes.remove(*fixes)
+        for fix in fixes:
+            data_req.fixes.remove(fix)
 
     num_data_reqs = remove_reqs.count()
     for fix in fixes:
