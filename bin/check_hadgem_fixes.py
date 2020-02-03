@@ -7,7 +7,6 @@ some reference files in the CEDA archive.
 """
 import argparse
 import logging.config
-import os
 import sys
 
 import iris
@@ -36,7 +35,7 @@ def parse_args():
     return args
 
 
-def main(args):
+def main():
     """
     Main entry point
     """
@@ -73,7 +72,7 @@ def main(args):
         rube_slice = tube
     if not np.allclose(rube_slice.data.mask, tube_slice.data.mask):
         logger.error(f'Mask does not match the reference for file {test_file}')
-        error_encoutered
+        error_encoutered = True
 
     if error_encoutered:
         sys.exit(1)
