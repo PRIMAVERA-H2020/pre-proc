@@ -34,7 +34,7 @@ def get_reference_file(test_file, ref_base):
     :param str test_file: the file being tested
     :param str ref_base: the path to the reference files in DRS format at the
         level to the variant_label. The table and then variable names can be
-        appeneded to these
+        appended to these
     :returns: the path to a suitable reference file for the specified test file
     :rtype: str
     """
@@ -49,6 +49,25 @@ def get_reference_file(test_file, ref_base):
         raise ValueError(msg)
     ref_files.sort()
     return ref_files[0]
+
+
+def get_test_files(test_dir):
+    """
+    Find the first file for each variable below `test_dir`, which is in DRS
+    format at the level of the variant_label. The table and then variable
+    names can be appended to these.
+
+    :param str test_dir: the path of the top-level to search
+    :returns: the path of the first file for each variable
+    :rtype: list
+    """
+    files = []
+    tables = os.listdir(test_dir)
+    for table in tables:
+        variables = os.listdir(os.path.join(test_dir, table))
+        for var in variables:
+            files.append(list_files(os.path.join(test_dir, table, var))[0])
+    return files
 
 
 def parse_args():
@@ -70,26 +89,20 @@ def main():
     """
     Main entry point
     """
-    # ref_file = (
-    #     '/badc/cmip6/data/CMIP6/CMIP/MOHC/HadGEM3-GC31-LL/historical/r1i1p1f3/'
-    #     'Omon/tos/gn/v20190624/'
-    #     'tos_Omon_HadGEM3-GC31-LL_historical_r1i1p1f3_gn_185001-194912.nc'
-    # )
     ref_base = (
         '/badc/cmip6/data/CMIP6/CMIP/MOHC/HadGEM3-GC31-LL/historical/r1i1p1f3/'
     )
 
-    test_files = [
+    test_base = (
         '/gws/nopw/j04/primavera3/cache/jseddon/test_stream1/CMIP6/HighResMIP/'
-        'MOHC/HadGEM3-GC31-LL/hist-1950/r1i2p1f1/Omon/tos/gn/v20190418/'
-        'tos_Omon_HadGEM3-GC31-LL_hist-1950_r1i2p1f1_gn_195001-195012.nc',
-    ]
+        'MOHC/HadGEM3-GC31-LL/hist-1950/r1i2p1f1'
+    )
 
     error_encoutered = False
-    for test_file in test_files:
+    for test_file in get_test_files(test_base):
+        logger.debug(test_file)
         try:
             ref_file = get_reference_file(test_file, ref_base)
-            logger.debug(ref_file)
         except ValueError:
             continue
 
