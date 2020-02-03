@@ -42,8 +42,9 @@ def get_reference_file(test_file, ref_base):
     filename_cmpts = filename.split('_')
     var_name = filename_cmpts[0]
     table_name = filename_cmpts[1]
-    ref_files = list_files(os.path.join(ref_base, table_name, var_name))
-    if not ref_files:
+    try:
+        ref_files = list_files(os.path.join(ref_base, table_name, var_name))
+    except FileNotFoundError:
         msg = f'No reference files found for {test_file} in {ref_base}'
         logger.error(msg)
         raise ValueError(msg)
