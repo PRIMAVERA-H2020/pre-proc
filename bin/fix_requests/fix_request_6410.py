@@ -46,8 +46,9 @@ def main():
     omon = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-LL',
         table_id='Omon',
-        cmor_name__in=['ficeberg2d', 'friver', 'hfds', 'hfrainds', 'mlotst',
-                       'mlotstsq', 'pbo', 'tos', 'tossq', 'sos', 'zos', 'zossq']
+        cmor_name__in=['ficeberg', 'ficeberg2d', 'friver', 'hfds', 'hfrainds',
+                       'mlotst', 'mlotstsq', 'pbo', 'tos', 'tossq', 'sos',
+                       'zos', 'zossq']
     )
 
     oday = DataRequest.objects.filter(
