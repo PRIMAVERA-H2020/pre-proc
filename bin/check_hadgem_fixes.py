@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 warnings.filterwarnings("ignore")
 
 
-def get_reference_file(test_file, ref_base):
+def get_reference_file(test_file, ref_base, alt_vars):
     """
     From `ref_base` find the path to a file that's equivalent to `test_file`.
 
@@ -35,6 +35,8 @@ def get_reference_file(test_file, ref_base):
     :param str ref_base: the path to the reference files in DRS format at the
         level to the variant_label. The table and then variable names can be
         appended to these
+    :param dict alt_vars: alternative mappings to try if there isn't a
+        reference file for this variable
     :returns: the path to a suitable reference file for the specified test file
     :rtype: str
     """
@@ -42,11 +44,22 @@ def get_reference_file(test_file, ref_base):
     filename_cmpts = filename.split('_')
     var_name = filename_cmpts[0]
     table_name = filename_cmpts[1]
+
+    var_table = f'{var_name}_{table_name}'
+    if var_table in alt_vars:
+        alt_cmpts = alt_vars[var_table]
+        if alt_cmpts is None:
+            msg = f'File is not on ORCA grid for {test_file} in {ref_base}'
+            logger.warning(msg)
+            return None
+        else:
+            logger.warning(f'Using {alt_cmpts} for file {test_file}')
+            var_name, table_name = alt_cmpts
     try:
         ref_files = list_files(os.path.join(ref_base, table_name, var_name))
     except FileNotFoundError:
         msg = f'No reference files found for {test_file} in {ref_base}'
-        logger.warning(msg)
+        logger.error(msg)
         raise ValueError(msg)
     ref_files.sort()
     return ref_files[0]
@@ -99,12 +112,34 @@ def main():
         'MOHC/HadGEM3-GC31-LL/hist-1950/r1i2p1f1'
     )
 
+    alt_ref_vars = {
+        'sos_Oday': ('tos', 'Oday'),
+        'siconc_SIday': None,
+        'sithick_SIday': ('siage', 'SImon'),
+        'siu_SIday': ('siu', 'SImon'),
+        'siv_SIday': ('siv', 'SImon'),
+        'siconc_SImon': None,
+        'sidivvel_SImon': ('siv', 'SImon'),
+        'sifllatstop_SImon': ('tos', 'Omon'),
+        'siflsenstop_SImon': None,
+        'siflsensupbot_SImon': ('siage', 'SImon'),
+        'siflswdtop_SImon': None,
+        'siflswutop_SImon': None,
+        'sistrxdtop_SImon': ('siu', 'SImon'),
+        'sistrxubot_SImon': ('siu', 'SImon'),
+        'sistrydtop_SImon': ('siv', 'SImon'),
+        'sistryubot_SImon': ('siv', 'SImon')
+    }
+
     error_encoutered = False
     for test_file in get_test_files(test_base):
         logger.debug(test_file)
         try:
-            ref_file = get_reference_file(test_file, ref_base)
+            ref_file = get_reference_file(test_file, ref_base, alt_ref_vars)
         except ValueError:
+            error_encoutered = True
+            continue
+        if ref_file is None:
             continue
 
         tube = iris.load_cube(test_file)
@@ -119,8 +154,9 @@ def main():
                                  f'reference for file {test_file}')
                     error_encoutered = True
             except ValueError:
-                logger.warning(f'Grid {coord_name} cannot be compared with the '
+                logger.error(f'Grid {coord_name} cannot be compared with the '
                              f'reference for file {test_file}')
+                error_encoutered = True
         # Test mask
         if tube.coords()[0].name() == 'time':
             tube_slice = tube[0, ...]
@@ -136,8 +172,9 @@ def main():
                              f'{test_file}')
                 error_encoutered = True
         except ValueError:
-            logger.warning(f'Mask cannot be compared with the reference for '
-                           f'file {test_file}')
+            logger.error(f'Mask cannot be compared with the reference for '
+                         f'file {test_file}')
+            error_encoutered = True
 
     if error_encoutered:
         sys.exit(1)
