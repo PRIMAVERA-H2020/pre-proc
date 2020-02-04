@@ -46,7 +46,7 @@ def get_reference_file(test_file, ref_base):
         ref_files = list_files(os.path.join(ref_base, table_name, var_name))
     except FileNotFoundError:
         msg = f'No reference files found for {test_file} in {ref_base}'
-        logger.error(msg)
+        logger.warning(msg)
         raise ValueError(msg)
     ref_files.sort()
     return ref_files[0]
@@ -119,9 +119,8 @@ def main():
                                  f'reference for file {test_file}')
                     error_encoutered = True
             except ValueError:
-                logger.error(f'Grid {coord_name} does not match the '
+                logger.warning(f'Grid {coord_name} cannot be compared with the '
                              f'reference for file {test_file}')
-                error_encoutered = True
         # Test mask
         if tube.coords()[0].name() == 'time':
             tube_slice = tube[0, ...]
@@ -137,9 +136,8 @@ def main():
                              f'{test_file}')
                 error_encoutered = True
         except ValueError:
-            logger.error(f'Mask does not match the reference for file '
-                         f'{test_file}')
-            error_encoutered = True
+            logger.warning(f'Mask cannot be compared with the reference for '
+                           f'file {test_file}')
 
     if error_encoutered:
         sys.exit(1)
