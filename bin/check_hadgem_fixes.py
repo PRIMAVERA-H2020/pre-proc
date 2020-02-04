@@ -112,10 +112,15 @@ def main():
 
         # Test grid
         for coord_name in ['latitude', 'longitude']:
-            if not np.allclose(rube.coord(coord_name).points,
-                               tube.coord(coord_name).points):
-                logger.error(f'Grid {coord_name} does not match the reference '
-                             f'for file {test_file}')
+            try:
+                if not np.allclose(rube.coord(coord_name).points,
+                                   tube.coord(coord_name).points):
+                    logger.error(f'Grid {coord_name} does not match the '
+                                 f'reference for file {test_file}')
+                    error_encoutered = True
+            except ValueError:
+                logger.error(f'Grid {coord_name} does not match the '
+                             f'reference for file {test_file}')
                 error_encoutered = True
         # Test mask
         if tube.coords()[0].name() == 'time':
@@ -126,7 +131,12 @@ def main():
             rube_slice = tube[0, ...]
         else:
             rube_slice = tube
-        if not np.allclose(rube_slice.data.mask, tube_slice.data.mask):
+        try:
+            if not np.allclose(rube_slice.data.mask, tube_slice.data.mask):
+                logger.error(f'Mask does not match the reference for file '
+                             f'{test_file}')
+                error_encoutered = True
+        except ValueError:
             logger.error(f'Mask does not match the reference for file '
                          f'{test_file}')
             error_encoutered = True
