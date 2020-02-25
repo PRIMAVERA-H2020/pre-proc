@@ -50,7 +50,7 @@ def main():
     )
 
     fixes = [
-        FileFix.objects.get(name='FixMaskOrca1T'),
+        FileFix.objects.get(name='FixMaskOrca1TSurface'),
     ]
 
     # This next line could be done more quickly by:
