@@ -1015,6 +1015,32 @@ class SiflfwbotStandardNameAdd(AttributeAdd):
         self.new_value = 'water_flux_into_sea_water_from_sea_ice'
 
 
+class SiflsensupbotStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `upward_sea_ice_basal_heat_flux`. This is done in overwrite
+    mode and so will work irrespective of whether there is an existing
+    standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'upward_sea_ice_basal_heat_flux'
+
+
 class SisaltmassStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
@@ -1091,6 +1117,32 @@ class SistryubotStandardNameAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'upward_y_stress_at_sea_ice_base'
+
+
+class SitempbotStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `sea_ice_basal_temperature`. This is done in overwrite
+    mode and so will work irrespective of whether there is an existing
+    standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'sea_ice_basal_temperature'
 
 
 class TrackingIdNew(AttributeAdd):
@@ -1190,6 +1242,54 @@ class VarUnitsToThousandths(AttributeAdd):
         Set the new value.
         """
         self.new_value = '0.001'
+
+
+class VerticesLatStdNameDelete(AttributeDelete):
+    """
+    Delete `standard_name` attribute from `vertices_latitude`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = 'vertices_latitude'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        We're deleting so there's nothing to do but make a dummy value for
+        new_value.
+        """
+        self.new_value = 0
+
+
+class VerticesLonStdNameDelete(AttributeDelete):
+    """
+    Delete `standard_name` attribute from `vertices_longitude`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = 'vertices_longitude'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        We're deleting so there's nothing to do but make a dummy value for
+        new_value.
+        """
+        self.new_value = 0
 
 
 class WtemStandardNameAdd(AttributeAdd):

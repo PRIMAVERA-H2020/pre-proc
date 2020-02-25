@@ -2,3 +2,4 @@ db
 setup*.sh
 *.pyc
 .idea
+.vscode

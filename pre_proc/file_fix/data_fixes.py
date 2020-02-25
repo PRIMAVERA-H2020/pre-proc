@@ -5,13 +5,13 @@ Workers that edit the data in netCDF files that are based on the DataFix
 abstract base class.
 """
 import os
-import shutil
 import traceback
 import warnings
 
 import iris
 
-from .abstract import DataFix, NcoDataFix, NcksDataFix
+from .abstract import (DataFix, FixHadGEMMask, NcoDataFix, NcksAppendDataFix,
+                       RemoveHalo, InsertHadGEMGrid)
 from pre_proc.common import run_command
 from pre_proc.exceptions import (ExistingAttributeError, CdoError, Ncap2Error,
                                  NcattedError, NcpdqError, NcksError,
@@ -23,6 +23,13 @@ import fix_lons
 
 # Ignore warnings displayed when loading data into Iris to check it
 warnings.filterwarnings("ignore")
+
+# The directory where the byte masks are stored
+BYTE_MASK_DIR = '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/bytes_masks'
+# The directories where the known good grids to paste in are stored
+NEMO_GRID_DIR = '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/grids'
+CICE_COORDS_DIR = ('/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/'
+                   'cice_coords')
 
 
 class LatDirection(NcoDataFix):
@@ -225,7 +232,7 @@ class SetTimeReference1949(NcoDataFix):
         self._run_nco_command(CdoError)
 
 
-class ZZZAddHeight2m(NcksDataFix):
+class ZZZAddHeight2m(NcksAppendDataFix):
     """
     Add a heighr2m dimension from the reference file.
     """
@@ -254,3 +261,207 @@ class ZZZAddHeight2m(NcksDataFix):
         except Exception:
             raise NcattedError(type(self).__name__, self.filename,
                                units_command, traceback.format_exc())
+
+
+class AAARemoveOrca1Halo(RemoveHalo):
+    """
+    Remove the halo from files on the HadGEM ORCA1 grid. AAA in the class'
+    name causes it to run first.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_row_spec(self):
+        """Set the row specification"""
+        self.row_spec = '-di,1,360 -dj,1,330'
+
+
+class AAARemoveOrca025Halo(RemoveHalo):
+    """
+    Remove the halo from files on the HadGEM ORCA025 grid. AAA in the class'
+    name causes it to run first.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_row_spec(self):
+        """Set the row specification"""
+        self.row_spec = '-di,1,1440 -dj,1,1205'
+
+
+class FixMaskOrca1TSurface(FixHadGEMMask):
+    """
+    Fix the mask for data on the ORCA1 t-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
+            'HadGEM3-GC31-LL/primavera_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_2D_T'
+
+
+class FixMaskOrca1USurface(FixHadGEMMask):
+    """
+    Fix the mask for data on the ORCA1 u-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
+            'HadGEM3-GC31-LL/primavera_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_2D_U'
+
+
+class FixMaskOrca1VSurface(FixHadGEMMask):
+    """
+    Fix the mask for data on the ORCA1 v-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
+            'HadGEM3-GC31-LL/primavera_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_2D_V'
+
+
+class FixMaskOrca1TOlevel(FixHadGEMMask):
+    """
+    Fix the mask for data on the ORCA1 t-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
+            'HadGEM3-GC31-LL/primavera_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_3D_T'
+
+
+class FixMaskOrca1UOlevel(FixHadGEMMask):
+    """
+    Fix the mask for data on the ORCA1 u-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
+            'HadGEM3-GC31-LL/primavera_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_3D_U'
+
+
+class FixMaskOrca1VOlevel(FixHadGEMMask):
+    """
+    Fix the mask for data on the ORCA1 v-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
+            'HadGEM3-GC31-LL/primavera_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_3D_V'
+
+
+class FixGridOrca1T(InsertHadGEMGrid):
+    """
+    Fix the grid for data on the HadGEM ORCA1 t-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(NEMO_GRID_DIR,
+                                            'ORCA1/ORCA1_grid-t.nc')
+
+
+class FixGridOrca1U(InsertHadGEMGrid):
+    """
+    Fix the grid for data on the HadGEM ORCA1 u-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(NEMO_GRID_DIR,
+                                            'ORCA1/ORCA1_grid-u.nc')
+
+
+class FixGridOrca1V(InsertHadGEMGrid):
+    """
+    Fix the grid for data on the HadGEM ORCA1 v-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(NEMO_GRID_DIR,
+                                            'ORCA1/ORCA1_grid-v.nc')
+
+
+class FixCiceCoords1T(InsertHadGEMGrid):
+    """
+    Fix the coords for CICE data on the HadGEM ORCA1 t-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(
+            CICE_COORDS_DIR,
+            'eORCA1/cice_eORCA1_coords_grid-t.nc'
+        )
+
+
+class FixCiceCoords1UV(InsertHadGEMGrid):
+    """
+    Fix the coords for CICE data on the HadGEM ORCA1 u and v-grids.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(
+            CICE_COORDS_DIR,
+            'eORCA1/cice_eORCA1_coords_grid-uv.nc'
+        )

@@ -47,13 +47,17 @@ from pre_proc.file_fix import (
     ShallowConvectivePrecipitationFluxStandardNameAdd,
     SiflcondbotStandardNameAdd,
     SiflfwbotStandardNameAdd,
+    SiflsensupbotStandardNameAdd,
     SisaltmassStandardNameAdd,
     SistrxubotStandardNameAdd,
     SistryubotStandardNameAdd,
+    SitempbotStandardNameAdd,
     TrackingIdNew,
     VarUnitsToDegC,
     VarUnitsToPercent,
     VarUnitsToThousandths,
+    VerticesLatStdNameDelete,
+    VerticesLonStdNameDelete,
     WtemStandardNameAdd
 )
 
@@ -779,6 +783,26 @@ class TestSiflfwbotStandardNameAdd(BaseTest):
         )
 
 
+class TestSiflsensupbotStandardNameAdd(BaseTest):
+    """ Test SiflsensupbotStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SiflsensupbotStandardNameAdd
+        """
+        fix = SiflsensupbotStandardNameAdd(
+            'siflsensupbot_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,siflsensupbot,o,c,"
+            "'upward_sea_ice_basal_heat_flux' "
+            "/a/siflsensupbot_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestSisaltmassStandardNameAdd(BaseTest):
     """ Test SisaltmassStandardNameAdd """
     def test_subprocess_called_correctly(self):
@@ -834,6 +858,26 @@ class TestSistryubotStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,sistryubot,o,c,"
             "'upward_y_stress_at_sea_ice_base' "
             "/a/sistryubot_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSitempbotStandardNameAdd(BaseTest):
+    """ Test SitempbotStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SitempbotStandardNameAdd
+        """
+        fix = SitempbotStandardNameAdd(
+            'sitempbot_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,sitempbot,o,c,"
+            "'sea_ice_basal_temperature' "
+            "/a/sitempbot_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
@@ -901,6 +945,40 @@ class TestVarUnitsToThousandths(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a units,so,o,c,'0.001' "
             "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVerticesLatStdNameDelete(BaseTest):
+    """ Test VerticesLatStdNameDelete """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VerticesLatStdNameDelete
+        """
+        fix = VerticesLatStdNameDelete('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,vertices_latitude,d,c,0 "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVerticesLonStdNameDelete(BaseTest):
+    """ Test VerticesLonStdNameDelete """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VerticesLonStdNameDelete
+        """
+        fix = VerticesLonStdNameDelete('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,vertices_longitude,d,c,0 "
+            "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
