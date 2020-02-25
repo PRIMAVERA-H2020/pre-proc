@@ -163,9 +163,9 @@ def main():
         else:
             tube_slice = tube
         if rube.coords()[0].name() == 'time':
-            rube_slice = tube[0, ...]
+            rube_slice = rube[0, ...]
         else:
-            rube_slice = tube
+            rube_slice = rube
         try:
             if not np.allclose(rube_slice.data.mask, tube_slice.data.mask):
                 logger.error(f'Mask does not match the reference for file '
