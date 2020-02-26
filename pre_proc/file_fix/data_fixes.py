@@ -509,6 +509,20 @@ class FixGridOrca1T(InsertHadGEMGrid):
                                             'ORCA1/ORCA1_grid-t.nc')
 
 
+class FixGridOrca025T(InsertHadGEMGrid):
+    """
+    Fix the grid for data on the HadGEM ORCA025 t-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(NEMO_GRID_DIR,
+                                            'ORCA025/ORCA025_grid-t.nc')
+
+
 class FixGridOrca1U(InsertHadGEMGrid):
     """
     Fix the grid for data on the HadGEM ORCA1 u-grid.
@@ -523,6 +537,20 @@ class FixGridOrca1U(InsertHadGEMGrid):
                                             'ORCA1/ORCA1_grid-u.nc')
 
 
+class FixGridOrca025U(InsertHadGEMGrid):
+    """
+    Fix the grid for data on the HadGEM ORCA025 u-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(NEMO_GRID_DIR,
+                                            'ORCA025/ORCA025_grid-u.nc')
+
+
 class FixGridOrca1V(InsertHadGEMGrid):
     """
     Fix the grid for data on the HadGEM ORCA1 v-grid.
@@ -535,6 +563,20 @@ class FixGridOrca1V(InsertHadGEMGrid):
         """Set the known good grid"""
         self.known_good_file = os.path.join(NEMO_GRID_DIR,
                                             'ORCA1/ORCA1_grid-v.nc')
+
+
+class FixGridOrca025V(InsertHadGEMGrid):
+    """
+    Fix the grid for data on the HadGEM ORCA025 v-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(NEMO_GRID_DIR,
+                                            'ORCA025/ORCA025_grid-v.nc')
 
 
 class FixCiceCoords1T(InsertHadGEMGrid):

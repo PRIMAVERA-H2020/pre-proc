@@ -22,7 +22,9 @@ from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
                                FixMaskOrca1UOlevel, FixMaskOrca025UOlevel,
                                FixMaskOrca1VSurface, FixMaskOrca025VSurface,
                                FixMaskOrca1VOlevel, FixMaskOrca025VOlevel,
-                               FixGridOrca1T, FixGridOrca1U, FixGridOrca1V,
+                               FixGridOrca1T, FixGridOrca025T,
+                               FixGridOrca1U, FixGridOrca025U,
+                               FixGridOrca1V, FixGridOrca025V,
                                FixCiceCoords1T, FixCiceCoords1UV)
 
 
@@ -834,6 +836,37 @@ class TestFixGridOrca1T(NcoDataFixBaseTest):
         self.mock_subprocess.assert_has_calls(calls)
 
 
+class TestFixGridOrca025T(NcoDataFixBaseTest):
+    """
+    Test FixGridOrca025T
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that external calls are made correctly for FixGridOrca025T
+        """
+        fix = FixGridOrca025T('tos_1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call(
+                "ncks -h --no_alphabetize -3 /a/tos_1.nc /a/tos_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h --no_alphabetize -A -v latitude,longitude,"
+                "vertices_latitude,vertices_longitude "
+                "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
+                "grids/ORCA025/ORCA025_grid-t.nc /a/tos_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h --no_alphabetize -7 --deflate=3 /a/tos_1.nc.temp "
+                "/a/tos_1.nc",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
+
+
 class TestFixGridOrca1U(NcoDataFixBaseTest):
     """
     Test FixGridOrca1U
@@ -865,6 +898,37 @@ class TestFixGridOrca1U(NcoDataFixBaseTest):
         self.mock_subprocess.assert_has_calls(calls)
 
 
+class TestFixGridOrca025U(NcoDataFixBaseTest):
+    """
+    Test FixGridOrca025U
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that external calls are made correctly for FixGridOrca025U
+        """
+        fix = FixGridOrca025U('uo_1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call(
+                "ncks -h --no_alphabetize -3 /a/uo_1.nc /a/uo_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h --no_alphabetize -A -v latitude,longitude,"
+                "vertices_latitude,vertices_longitude "
+                "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
+                "grids/ORCA025/ORCA025_grid-u.nc /a/uo_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h --no_alphabetize -7 --deflate=3 /a/uo_1.nc.temp "
+                "/a/uo_1.nc",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
+
+
 class TestFixGridOrca1V(NcoDataFixBaseTest):
     """
     Test FixGridOrca1V
@@ -885,6 +949,37 @@ class TestFixGridOrca1V(NcoDataFixBaseTest):
                 "vertices_latitude,vertices_longitude "
                 "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
                 "grids/ORCA1/ORCA1_grid-v.nc /a/vo_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h --no_alphabetize -7 --deflate=3 /a/vo_1.nc.temp "
+                "/a/vo_1.nc",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
+
+
+class TestFixGridOrca025V(NcoDataFixBaseTest):
+    """
+    Test FixGridOrca025V
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that external calls are made correctly for FixGridOrca025V
+        """
+        fix = FixGridOrca025V('vo_1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call(
+                "ncks -h --no_alphabetize -3 /a/vo_1.nc /a/vo_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h --no_alphabetize -A -v latitude,longitude,"
+                "vertices_latitude,vertices_longitude "
+                "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/"
+                "grids/ORCA025/ORCA025_grid-v.nc /a/vo_1.nc.temp",
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
