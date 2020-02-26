@@ -29,3 +29,24 @@ ncks -3 --no_alphabetize -v "$nc_vars" "$good_file" "${output_dir}/${grid}/${gri
 sub_grid="v"
 good_file="/badc/cmip6/data/CMIP6/CMIP/MOHC/HadGEM3-GC31-LL/historical/r1i1p1f3/Omon/vo/gn/v20190624/vo_Omon_HadGEM3-GC31-LL_historical_r1i1p1f3_gn_185001-189912.nc"
 ncks -3 --no_alphabetize -v "$nc_vars" "$good_file" "${output_dir}/${grid}/${grid}_grid-${sub_grid}.nc"
+
+#########
+# ORCA025 #
+#########
+grid="ORCA025"
+mkdir -p "$output_dir/$grid"
+
+# t-grid
+sub_grid="t"
+good_file="/badc/cmip6/data/CMIP6/CMIP/MOHC/HadGEM3-GC31-MM/historical/r1i1p1f3/Omon/tos/gn/v20191207/tos_Omon_HadGEM3-GC31-MM_historical_r1i1p1f3_gn_185001-186912.nc"
+ncks -3 --no_alphabetize -v "$nc_vars" "$good_file" "${output_dir}/${grid}/${grid}_grid-${sub_grid}.nc"
+
+# u-grid
+sub_grid="u"
+good_file="/badc/cmip6/data/CMIP6/CMIP/MOHC/HadGEM3-GC31-MM/historical/r1i1p1f3/Omon/uo/gn/v20191216/uo_Omon_HadGEM3-GC31-MM_historical_r1i1p1f3_gn_185001-185912.nc"
+ncks -3 --no_alphabetize -v "$nc_vars" "$good_file" "${output_dir}/${grid}/${grid}_grid-${sub_grid}.nc"
+
+# v-grid
+sub_grid="v"
+good_file="/badc/cmip6/data/CMIP6/CMIP/MOHC/HadGEM3-GC31-MM/historical/r1i1p1f3/Omon/vo/gn/v20191216/vo_Omon_HadGEM3-GC31-MM_historical_r1i1p1f3_gn_185001-185912.nc"
+ncks -3 --no_alphabetize -v "$nc_vars" "$good_file" "${output_dir}/${grid}/${grid}_grid-${sub_grid}.nc"
