@@ -46,6 +46,9 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name__in=['MOHC', 'NERC']
+    ).exclude(
+        source_id__name='HadGEM3-GC31-HH',
+        experiment_id__name__in=['control-1950', 'hist-1950']
     )
 
     further_info_url_fix = FileFix.objects.get(name='FurtherInfoUrlToHttps')
@@ -63,6 +66,17 @@ def main():
                  format(further_info_url_fix.name, data_reqs.count()))
     logger.debug('FileFix {} added to {} data requests.'.
                  format(data_specs.name, data_reqs.count()))
+
+    # Remove from existing -HH
+    data_reqs = DataRequest.objects.filter(
+        source_id__name='HadGEM3-GC31-HH',
+        experiment_id__name__in=['control-1950', 'hist-1950']
+    )
+    for data_req in data_reqs:
+        data_req.fixes.remove(further_info_url_fix)
+
+    logger.debug('FileFix {} removed from {} data requests.'.
+                 format(further_info_url_fix.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
