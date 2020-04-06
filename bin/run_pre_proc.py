@@ -10,7 +10,9 @@ are calculated again for each file.
 import argparse
 import logging.config
 import os
+import shutil
 import sys
+import tempfile
 import traceback
 import warnings
 
@@ -37,6 +39,9 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Pre-process PRIMAVERA data.')
     parser.add_argument('directory', help='the directory where the files to '
                                           'fix are stored', type=str)
+    parser.add_argument('-t', '--temp-dir',
+                        help='copy each file to the specified temporary '
+                             'directory before processing it')
     parser.add_argument('-l', '--log-level', help='set logging level to one '
                                                   'of debug, info, warn (the '
                                                   'default), or error')
@@ -61,10 +66,24 @@ def main(args):
     for filepath in sorted(list_files(args.directory)):
         logger.debug('Processing {}'.format(filepath))
         try:
-            esgf_submission = EsgfSubmission.from_file(filepath)
+            if args.temp_dir:
+                temp_dir = tempfile.mkdtemp(dir=args.temp_dir)
+                logger.debug('Temporary directory is {}'.format(temp_dir))
+                temp_path = os.path.join(temp_dir, os.path.basename(filepath))
+                shutil.copyfile(filepath, temp_path)
+                process_path = temp_path
+            else:
+                process_path = filepath
+            esgf_submission = EsgfSubmission.from_file(process_path)
             esgf_submission.determine_fixes()
             esgf_submission.run_fixes()
             esgf_submission.update_history()
+            if args.temp_dir:
+                os.rename(filepath, filepath + '.old')
+                shutil.copyfile(temp_path, filepath)
+                os.remove(temp_path)
+                os.rmdir(temp_dir)
+                os.remove(filepath + '.old')
         except:
             files_failed.append(filepath)
             exc_type, exc_value, exc_tb = sys.exc_info()
