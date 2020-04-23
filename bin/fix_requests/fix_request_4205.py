@@ -70,7 +70,7 @@ def main():
     data_reqs = emon | sixhrplevpt | sixhrplev
 
     fixes = [
-        FileFix.objects.get(name='VarNameToFileName')
+        FileFix.objects.get(name='AAVarNameToFileName')
     ]
 
     # This next line could be done more quickly by:
