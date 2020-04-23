@@ -167,6 +167,38 @@ class ToDegC(NcoDataFix):
         return True if cube.units.symbol == 'K' else False
 
 
+class VarNameToFileName(NcoDataFix):
+    """
+    Rename the variable itself and variable_id global attribute to the first
+    component of the filename.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+        """
+        super().__init__(filename, directory)
+
+    def apply_fix(self):
+        """
+        Rename the variable and then the global attribute
+        """
+        var_name = self.filename.split('_')[0]
+        existing_name = self._get_existing_name()
+
+        self.command = f'ncrename -h -v {existing_name},{var_name}'
+        self._run_nco_command(NcrenameError)
+
+        self.command = f'ncatted -h -a variable_id,global,m,c,{var_name}'
+        self._run_nco_command(NcattedError)
+
+    def _get_existing_name(self):
+        """
+        Get the global attribute variable_id
+        """
+        cube = iris.load_cube(os.path.join(self.directory, self.filename))
+        return cube.attributes['variable_id']
+
+
 class ZZEcEarthAtmosFix(DataFix):
     """
     Use the EC-Earth provided module to convert the EC-Earth 2D latitude and
