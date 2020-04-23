@@ -86,6 +86,15 @@ def main():
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
+    ## Remove old fix
+    old_fix = FileFix.objects.get(name='VarNameToFileName')
+    for data_req in data_reqs:
+        data_req.fixes.remove(old_fix)
+
+    num_data_reqs = data_reqs.count()
+    logger.debug('FileFix {} removed from {} data requests.'.
+                 format(old_fix.name, num_data_reqs))
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()
