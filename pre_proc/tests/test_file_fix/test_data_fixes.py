@@ -12,7 +12,7 @@ from iris.tests.stock import realistic_3d
 import numpy as np
 
 from pre_proc.exceptions import ExistingAttributeError, NcksError
-from pre_proc.file_fix import (LatDirection, LevToPlev, VarNameToFileName,
+from pre_proc.file_fix import (LatDirection, LevToPlev, AAVarNameToFileName,
                                ToDegC, ZZEcEarthAtmosFix,
                                ZZZEcEarthLongitudeFix,
                                SetTimeReference1949, ZZZAddHeight2m,
@@ -204,15 +204,15 @@ class TestLatDirectionLatitudeCheck(unittest.TestCase):
         self.assertFalse(fix._is_lat_decreasing())
 
 
-class TestVarNameToFileName(NcoDataFixBaseTest):
+class TestAAVarNameToFileName(NcoDataFixBaseTest):
     """
-    Test VarNameToFileName main functionality
+    Test AAVarNameToFileName main functionality
     """
     def setUp(self):
         """Patch call to Iris"""
         super().setUp()
 
-        patch = mock.patch('pre_proc.file_fix.data_fixes.VarNameToFileName.'
+        patch = mock.patch('pre_proc.file_fix.data_fixes.AAVarNameToFileName.'
                            '_get_existing_name')
         self.mock_iris = patch.start()
         self.mock_iris.return_value = 'hus7h'
@@ -221,9 +221,9 @@ class TestVarNameToFileName(NcoDataFixBaseTest):
     def test_subprocess_called_correctly(self):
         """
         Test that an external call's been made correctly for
-        VarNameToFileName
+        AAVarNameToFileName
         """
-        fix = VarNameToFileName('hus_blah_blah.nc', '/a')
+        fix = AAVarNameToFileName('hus_blah_blah.nc', '/a')
         fix.apply_fix()
         calls = [
             mock.call('ncrename -h -v hus7h,hus /a/hus_blah_blah.nc '

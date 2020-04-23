@@ -167,7 +167,7 @@ class ToDegC(NcoDataFix):
         return True if cube.units.symbol == 'K' else False
 
 
-class VarNameToFileName(NcoDataFix):
+class AAVarNameToFileName(NcoDataFix):
     """
     Rename the variable itself and variable_id global attribute to the first
     component of the filename.
