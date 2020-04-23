@@ -12,8 +12,9 @@ from iris.tests.stock import realistic_3d
 import numpy as np
 
 from pre_proc.exceptions import ExistingAttributeError, NcksError
-from pre_proc.file_fix import (LatDirection, LevToPlev, ToDegC,
-                               ZZEcEarthAtmosFix, ZZZEcEarthLongitudeFix,
+from pre_proc.file_fix import (LatDirection, LevToPlev, VarNameToFileName,
+                               ToDegC, ZZEcEarthAtmosFix,
+                               ZZZEcEarthLongitudeFix,
                                SetTimeReference1949, ZZZAddHeight2m,
                                AAARemoveOrca1Halo, AAARemoveOrca025Halo,
                                FixMaskOrca1TSurface, FixMaskOrca025TSurface,
@@ -201,6 +202,38 @@ class TestLatDirectionLatitudeCheck(unittest.TestCase):
         """
         fix = LatDirection('1.nc', '/a')
         self.assertFalse(fix._is_lat_decreasing())
+
+
+class TestVarNameToFileName(NcoDataFixBaseTest):
+    """
+    Test VarNameToFileName main functionality
+    """
+    def setUp(self):
+        """Patch call to Iris"""
+        super().setUp()
+
+        patch = mock.patch('pre_proc.file_fix.data_fixes.VarNameToFileName.'
+                           '_get_existing_name')
+        self.mock_iris = patch.start()
+        self.mock_iris.return_value = 'hus7h'
+        self.addCleanup(patch.stop)
+
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VarNameToFileName
+        """
+        fix = VarNameToFileName('hus_blah_blah.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call('ncrename -h -v hus7h,hus /a/hus_blah_blah.nc '
+                      '/a/hus_blah_blah.nc.temp',
+                      stderr=subprocess.STDOUT, shell=True),
+            mock.call('ncatted -h -a variable_id,global,m,c,hus '
+                      '/a/hus_blah_blah.nc /a/hus_blah_blah.nc.temp',
+                      stderr=subprocess.STDOUT, shell=True)
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
 
 
 class TestToDegC(NcoDataFixBaseTest):
