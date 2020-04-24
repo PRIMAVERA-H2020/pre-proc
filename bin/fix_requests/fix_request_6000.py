@@ -78,6 +78,21 @@ def main():
     logger.debug('FileFix {} removed from {} data requests.'.
                  format(further_info_url_fix.name, data_reqs.count()))
 
+    # But add the data_spec fix back in
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name__in=['MOHC', 'NERC'],
+        source_id__name='HadGEM3-GC31-HH',
+        experiment_id__name__in=['control-1950', 'hist-1950']
+    )
+
+    data_specs = FileFix.objects.get(name='DataSpecsVersionAdd')
+
+    for data_req in data_reqs:
+        data_req.fixes.add(data_specs)
+
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(data_specs.name, data_reqs.count()))
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()
