@@ -253,6 +253,43 @@ class FurtherInfoUrlAWISourceIdAndHttps(AttributeUpdate):
             raise AttributeNotFoundError(self.filename, 'source_id')
 
 
+class FurtherInfoUrlPrimToHttps(AttributeUpdate):
+    """
+    Change the protocol in the further_info_url attribute from HTTP to
+    HTTPS and the mip_era from CMIP6 to PRIMAVERA.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'further_info_url'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        The new value is the existing string converted to a double.
+        """
+        if not self.existing_value.startswith(
+                'http://furtherinfo.es-doc.org/CMIP6'):
+            raise ExistingAttributeError(
+                self.filename,
+                self.attribute_name,
+                'Existing further_info_url attribute does not start with '
+                'http://furtherinfo.es-doc.org/CMIP6'
+            )
+
+        self.new_value = self.existing_value.replace(
+            'http://furtherinfo.es-doc.org/CMIP6',
+            'https://furtherinfo.es-doc.org/PRIMAVERA',
+            1
+        )
+
+
 class AogcmToAgcm(AttributeUpdate):
     """
     Change the global attribute `source_type` from `AOGCM` to `AGCM`.
