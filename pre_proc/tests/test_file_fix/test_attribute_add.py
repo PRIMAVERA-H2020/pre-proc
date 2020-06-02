@@ -58,7 +58,8 @@ from pre_proc.file_fix import (
     VarUnitsToThousandths,
     VerticesLatStdNameDelete,
     VerticesLonStdNameDelete,
-    WtemStandardNameAdd
+    WtemStandardNameAdd,
+    WindSpeedStandardNameAdd
 )
 
 
@@ -997,6 +998,24 @@ class TestWtemStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,wtem,o,c,"
             "'upward_transformed_eulerian_mean_air_velocity' "
             "/a/wtem_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestWindSpeedStandardNameAdd(BaseTest):
+    """ Test WindSpeedStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        WindSpeedStandardNameAdd
+        """
+        fix = WindSpeedStandardNameAdd('sfcWindmax_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,sfcWindmax,o,c,"
+            "'wind_speed' "
+            "/a/sfcWindmax_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
