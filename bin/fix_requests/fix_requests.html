@@ -89,6 +89,13 @@ MOHC and NERC EmonZ and EdayZ wtem variables.
 <tr><td>6003</td><td>MOHC/NERC.*.*.*.E3hr.prcsh</td><td>Add standard_name shallow_convective_precipitation_flux to all
 MOHC and NERC E3hr prcsh variables.
 </td></tr>
+<tr><td>6004</td><td>MOHC.*.Prim*</td><td>Convert the further_info_url attribute on all MOHC and NERC data from HTTP to
+HTTPS and update the activity_id.
+</td></tr>
+<tr><td>6005</td><td>MOHC.*.Primday[pt].[uv]a[]23 PrimmonZ.several</td><td>Add cell_measures "area: areacella" to several wind variables.
+</td></tr>
+<tr><td>6006</td><td>MOHC.*.Prim6hr.sfcWindmax</td><td>Change standard_name to wind_speed.
+</td></tr>
 <tr><td>6300</td><td>MOHC/NERC.highresSST-future.*</td><td>In MOHC AMIP future convert branch_time_in_child and branch_time_in_parent
 to a double.
 </td></tr>
@@ -158,6 +165,14 @@ external_variables to be areacello.
 <tr><td>6437</td><td>MOHC.ocean_ORCA025_grid-v_surface.*</td><td>In all MOHC ocean data on the ORCA025 v-grid fix the mask and grid.
 </td></tr>
 <tr><td>6438</td><td>MOHC.ocean_ORCA025.Ofx.*</td><td>In all MOHC ocean data on the ORCA025 Ofx table fix the mask.
+</td></tr>
+<tr><td>6439</td><td>MOHC.ocean_ORCA1.PrimOday.uo</td><td>Fix the correct mask.
+</td></tr>
+<tr><td>6440</td><td>MOHC.ocean_ORCA1.PrimOday.vo</td><td>Fix the correct mask.
+</td></tr>
+<tr><td>6441</td><td>MOHC.ocean_ORCA025.PrimOday.uo</td><td>Fix the correct mask.
+</td></tr>
+<tr><td>6442</td><td>MOHC.ocean_ORCA025.PrimOday.vo</td><td>Fix the correct mask.
 </td></tr>
 <tr><td>8000</td><td>MPI-M.*</td><td>Change the direction of the latitude coordinate to monotonically increasing on
 atmosphere variables.
