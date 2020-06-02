@@ -408,6 +408,23 @@ class FixMaskOrca025USurface(FixHadGEMMask):
         self.mask_var_name = 'mask_2D_U'
 
 
+class FixMaskOrca025USingleLevel(FixHadGEMMask):
+    """
+    Fix the mask for single level data on the ORCA025 u-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
+            'HadGEM3-GC31-MM/primavera_single_level_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_3D_U'
+
+
 class FixMaskOrca1VSurface(FixHadGEMMask):
     """
     Fix the mask for data on the ORCA1 v-grid.
@@ -457,6 +474,23 @@ class FixMaskOrca025VSurface(FixHadGEMMask):
             'HadGEM3-GC31-MM/primavera_byte_masks.nc'
         )
         self.mask_var_name = 'mask_2D_V'
+
+
+class FixMaskOrca025VSingleLevel(FixHadGEMMask):
+    """
+    Fix the mask for single level data on the ORCA025 v-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            BYTE_MASK_DIR,
+            'HadGEM3-GC31-MM/primavera_single_level_byte_masks.nc'
+        )
+        self.mask_var_name = 'mask_3D_V'
 
 
 class FixMaskOrca1TOlevel(FixHadGEMMask):
