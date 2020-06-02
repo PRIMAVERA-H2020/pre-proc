@@ -2,7 +2,7 @@
 """
 fix_request_6005.py
 
-MOHC.*.Primday[pt].[uv]a[]23
+MOHC.*.Primday[pt].[uv]a[]23 PrimmonZ.several
 
 Add cell_measures "area: areacella" to several wind variables.
 """
@@ -43,11 +43,19 @@ def main():
     """
     Main entry point
     """
-    data_reqs = DataRequest.objects.filter(
+    primday = DataRequest.objects.filter(
         institution_id__name__in=['MOHC', 'NERC'],
         table_id__in=['Primday', 'PrimdayPt'],
         cmor_name__in=['ua23', 'ua', 'va23', 'va']
     )
+
+    primmonz = DataRequest.objects.filter(
+        institution_id__name__in=['MOHC', 'NERC'],
+        table_id='PrimmonZ',
+        cmor_name__in=['ua', 'va', 'vstarbar', 'wstarbar']
+    )
+
+    data_reqs = primday | primmonz
 
     areacella_fix = FileFix.objects.get(name='CellMeasuresAreacellaAdd')
 
