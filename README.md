@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/122643471.svg)](https://zenodo.org/badge/latestdoi/122643471)
+
 # pre-proc
 PRIMAVERA Pre-Proc script for submission to ESGF
 
