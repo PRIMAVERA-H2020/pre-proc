@@ -1,0 +1,76 @@
+{
+    "source_id": [
+        {
+            "__class__": "ClimateModel",
+            "__module__": "pdata_app.models",
+            "__kwargs__": {
+                "short_name": "ECMWF-IFS-HR"
+            }
+        },
+        {
+            "__class__": "ClimateModel",
+            "__module__": "pdata_app.models",
+            "__kwargs__": {
+                "short_name": "MPI-ESM1-2-XR"
+            }
+        }
+    ],
+    "experiment_id": [
+        {
+            "__class__": "Experiment",
+            "__module__": "pdata_app.models",
+            "__kwargs__": {
+                "short_name": "hist-1950"
+            }
+        },
+        {
+            "__class__": "Experiment",
+            "__module__": "pdata_app.models",
+            "__kwargs__": {
+                "short_name": "highresSST-4co2"
+            }
+        }
+    ],
+    "institution_id": [
+        {
+            "__class__": "Institution",
+            "__module__": "pdata_app.models",
+            "__kwargs__": {
+                "short_name": "MPI-M"
+            }
+        },
+        {
+            "__class__": "Institution",
+            "__module__": "pdata_app.models",
+            "__kwargs__": {
+                "short_name": "ECMWF"
+            }
+        }
+    ],
+    "data_requests": [
+        {
+            "__class__": "DataRequest",
+            "__module__": "pdata_app.models",
+            "__kwargs__": {
+                "table_id": "Amon",
+                "cmor_name": "tas",
+                "institution_id__name": "MPI-M",
+                "source_id__name": "MPI-ESM1-2-XR",
+                "experiment_id__name": "hist-1950",
+                "variant_label": "r1i1p1f1"
+            }
+        },
+        {
+            "__class__": "DataRequest",
+            "__module__": "pdata_app.models",
+            "__kwargs__": {
+                "table_id": "Omon",
+                "cmor_name": "tauuo",
+                "institution_id__name": "ECMWF",
+                "source_id__name": "ECMWF-IFS-HR",
+                "experiment_id__name": "hist-1950",
+                "variant_label": "r1i1p1f1"
+            }
+        }
+    ]
+}
