@@ -26,6 +26,8 @@ It should now be possible to run the main processing script:
 
 `./bin/run_pre_proc.sh <data_dir>`
 
+A Rose suite has been developed to provide optional control and monitoring of pre_proc. `u-av973` is the suite's id.
+
 To add new data requests to the Rose suite:
 
 1. In the DMT code: `./scripts/make_esgf_json.py -l debug <filename.json>` to get the data requests that files have been received for.
