@@ -41,4 +41,4 @@ To add new data requests to the Rose suite:
 1. Make the Rose suite aware of these new tasks: `rose suite-run --reload --no-gcontrol`
 1. In the Rose suite (but under Python 3): `bin/add_new_tasks.py -l debug <rose_task_names_new.json>`  
 
-pre-proc uses the Django framework for database access. The database is an sqlite database that allows fixes to be mapped to datarequests. To run the tests: `python manage.py test`.
+pre-proc uses the Django framework for database access. The database is an sqlite database that allows fixes to be mapped to data requests. To run the tests: `python manage.py test`.
