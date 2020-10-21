@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_2203.py
+fix_request_2204.py
 
-CMCC.CMCC-CM2-[V]HR4.highresSST-present.r1i1p1f1.Prim6hr.selected
+CMCC.CMCC-CM2-[V]HR4.highresSST-present.r1i1p1f1.Prim6hr.sfcWindmax
 
-Set the mip_era and further_info_url appropriately.
+Set the standard_name appropriately.
 """
 import argparse
 import logging.config
@@ -47,12 +47,11 @@ def main():
         source_id__name__in=['CMCC-CM2-HR4', 'CMCC-CM2-VHR4'],
         experiment_id__name='highresSST-present',
         table_id='Prim6hr',
-        cmor_name__in=['clt', 'pr', 'ps', 'sfcWindmax']
+        cmor_name='sfcWindmax'
     )
 
     fixes = [
-        FileFix.objects.get(name='FurtherInfoUrlToPrim'),
-        FileFix.objects.get(name='MipEraToPrim')
+        FileFix.objects.get(name='WindSpeedStandardNameAdd'),
     ]
 
     # This next line could be done more quickly by:
