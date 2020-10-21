@@ -42,6 +42,7 @@ from pre_proc.file_fix import (
     HfbasinpmadvStandardNameAdd,
     HfbasinpmdiffStandardNameAdd,
     SeaWaterSalinityStandardNameAdd,
+    MipEraToPrim,
     MsftmzmpaStandardNameAdd,
     SeaSurfaceTemperatureNameAdd,
     ShallowConvectivePrecipitationFluxStandardNameAdd,
@@ -667,6 +668,23 @@ class TestHfbasinpmdiffStandardNameAdd(BaseTest):
             "'northward_ocean_heat_transport_due_to_parameterized_mesoscale_"
             "eddy_diffusion' "
             "/a/hfbasinpmdiff_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestMipEraToPrim(BaseTest):
+    """ Test MipEraToPrim """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        MipEraToPrim
+        """
+        fix = MipEraToPrim('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a mip_era,global,o,c,'PRIMAVERA' "
+            "/a/var_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

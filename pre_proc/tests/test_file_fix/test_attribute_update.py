@@ -21,6 +21,7 @@ from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                FurtherInfoUrlToHttps,
                                FurtherInfoUrlAWISourceIdAndHttps,
                                FurtherInfoUrlPrimToHttps,
+                               FurtherInfoUrlToPrim,
                                AogcmToAgcm, TrackingIdFix)
 
 
@@ -445,6 +446,55 @@ class TestFurtherInfoUrlPrimToHttps(BaseTest):
             'http://furtherinfo.es-doc.org/CMIP6.part2'
         )
         fix = FurtherInfoUrlPrimToHttps('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a further_info_url,global,o,c,"
+            "'https://furtherinfo.es-doc.org/PRIMAVERA.part2' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestFurtherInfoUrlToPrim(BaseTest):
+    """ Test FurtherInfoUrlToPrim """
+    def test_no_attribute_raises(self):
+        """ Test if the required attribute isn't found in the netCDF """
+        fix = FurtherInfoUrlToPrim('1.nc', '/a')
+        exception_text = ('Cannot find attribute further_info_url in '
+                          'file 1.nc')
+        self.assertRaisesRegex(AttributeNotFoundError, exception_text,
+                               fix.apply_fix)
+
+    def test_not_http(self):
+        """ Test exception is raised if it doesn't start with http """
+        self.mock_dataset.return_value.further_info_url = 'https://a.url/'
+        fix = FurtherInfoUrlToPrim('1.nc', '/a')
+        exception_text = ('Existing further_info_url attribute does not start '
+                          'with https://furtherinfo.es-doc.org/CMIP6')
+        self.assertRaisesRegex(ExistingAttributeError, exception_text,
+                               fix.apply_fix)
+
+    def test_not_cmip6(self):
+        """ Test exception is raised if it isn't CMIP6 """
+        self.mock_dataset.return_value.further_info_url = (
+            'https://furtherinfo.es-doc.org/CORDEX'
+        )
+        fix = FurtherInfoUrlToPrim('1.nc', '/a')
+        exception_text = ('Existing further_info_url attribute does not start '
+                          'with https://furtherinfo.es-doc.org/CMIP6')
+        self.assertRaisesRegex(ExistingAttributeError, exception_text,
+                               fix.apply_fix)
+
+    def test_subprocess_called_correctly_further_info_url(self):
+        """
+        Test that an external call's been made correctly for
+        FurtherInfoUrlPrimToHttps
+        """
+        self.mock_dataset.return_value.further_info_url = (
+            'https://furtherinfo.es-doc.org/CMIP6.part2'
+        )
+        fix = FurtherInfoUrlToPrim('1.nc', '/a')
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a further_info_url,global,o,c,"
