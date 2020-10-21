@@ -1,8 +1,10 @@
-[![DOI](https://zenodo.org/badge/122643471.svg)](https://zenodo.org/badge/latestdoi/122643471) [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3904596.svg)](https://doi.org/10.5281/zenodo.3904596)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 # pre-proc
 Copyright (c) 2020, PRIMAVERA
-Please see LICENSE.md for further details
+Please see LICENSE for further details
 
 PRIMAVERA pre_proc system for fixing metadata and data issues in netCDF files (particularly CMIP6 data). Pre_proc works by:
 

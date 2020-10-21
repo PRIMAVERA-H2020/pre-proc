@@ -860,6 +860,29 @@ class HfbasinpmdiffStandardNameAdd(AttributeAdd):
                           'parameterized_mesoscale_eddy_diffusion')
 
 
+class MipEraToPrim(AttributeAdd):
+    """
+    Change the mip_era to `PRIMAVERA`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'mip_era'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Change the existing value to `PRIMAVERA`.
+        """
+        self.new_value = 'PRIMAVERA'
+
+
 class MsftmzmpaStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
