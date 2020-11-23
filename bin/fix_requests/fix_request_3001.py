@@ -2,7 +2,7 @@
 """
 fix_request_3001.py
 
-CNRM-CERFACS.Prim*
+CNRM-CERFACS.Prim required
 
 Set further_info_url appropriately.
 """
@@ -43,10 +43,44 @@ def main():
     """
     Main entry point
     """
+    # First, remove the fix from all of the datasets
     data_reqs = DataRequest.objects.filter(
         institution_id__name='CNRM-CERFACS',
         table_id__startswith='Prim'
     )
+
+    fixes = [
+        FileFix.objects.get(name='FurtherInfoUrlToPrim'),
+    ]
+
+    # This next line could be done more quickly by:
+    # further_info_url_fix.datarequest_set.add(*data_reqs)
+    # but sqlite3 gives an error of:
+    # django.db.utils.OperationalError: too many SQL variables
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.remove(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} removed from {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    # Secondly, remove the fix from all of the datasets
+    lr = DataRequest.objects.filter(
+        source_id__name='CNRM-CM6-1',
+        experiment_id__name__in=['highresSST-present', 'hist-1950',
+                                 'control-1950', 'highres-future'],
+        table_id__startswith='Prim'
+    )
+
+    hr = DataRequest.objects.filter(
+        source_id__name='CNRM-CM6-1-HR',
+        experiment_id__name__in=['highresSST-present'],
+        table_id__startswith='Prim'
+    )
+
+    data_reqs = lr | hr
 
     fixes = [
         FileFix.objects.get(name='FurtherInfoUrlToPrim'),
