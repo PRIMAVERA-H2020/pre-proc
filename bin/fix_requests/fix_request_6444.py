@@ -53,6 +53,7 @@ def main():
 
     # Remove existing CMIP6 fix
     further_info_url_fix = FileFix.objects.get(name='FurtherInfoUrlPrimToHttps')
+    prim_further_info_fix = FileFix.objects.get(name='FurtherInfoUrlToPrim')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
@@ -60,19 +61,11 @@ def main():
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
         data_req.fixes.remove(further_info_url_fix)
+        data_req.fixes.remove(prim_further_info_fix)
 
     logger.debug('FileFix {} removed from {} data requests.'.
                  format(further_info_url_fix.name, data_reqs.count()))
-
-    # Add PRIMAVERA fix
-    prim_further_info_fix = FileFix.objects.get(
-        name='FurtherInfoUrlToPrim'
-    )
-
-    for data_req in data_reqs:
-        data_req.fixes.add(prim_further_info_fix)
-
-    logger.debug('FileFix {} added to {} data requests.'.
+    logger.debug('FileFix {} removed from {} data requests.'.
                  format(prim_further_info_fix.name, data_reqs.count()))
 
     ### Ocean
