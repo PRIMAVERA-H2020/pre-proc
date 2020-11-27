@@ -43,10 +43,9 @@ def main():
     """
     Main entry point
     """
-    # First, remove the fix from all of the datasets
     data_reqs = DataRequest.objects.filter(
         source_id__name='CNRM-CM6-1-HR',
-        experiment_id__name='hist-1950',
+        experiment_id__name__in=['control-1950', 'hist-1950'],
         table_id='PrimOday',
         cmor_name__in=['tauuo', 'tauvo']
     )
