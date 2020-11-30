@@ -66,7 +66,7 @@ def main():
         logger.debug('FileFix {} removed from {} data requests.'.
                      format(fix.name, num_data_reqs))
 
-    # Secondly, remove the fix from all of the datasets
+    # Secondly, add the fix to just the required datasets
     lr = DataRequest.objects.filter(
         source_id__name='CNRM-CM6-1',
         experiment_id__name__in=['highresSST-present', 'hist-1950',
@@ -76,7 +76,7 @@ def main():
 
     hr = DataRequest.objects.filter(
         source_id__name='CNRM-CM6-1-HR',
-        experiment_id__name__in=['highresSST-present'],
+        experiment_id__name__in=['highresSST-present', 'highres-future'],
         table_id__startswith='Prim'
     )
 
