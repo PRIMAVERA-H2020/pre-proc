@@ -1365,3 +1365,31 @@ class WindSpeedStandardNameAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'wind_speed'
+
+
+class ZZZThetapv2StandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `theta_on_pv2_surface`. This is done in overwrite
+    mode and so will work irrespective of whether there is an existing
+    standard_name attribute. This has to be done after ZZZEcEarthLongitudeFix,
+    which removes this standard_name
+
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'theta_on_pv2_surface'
