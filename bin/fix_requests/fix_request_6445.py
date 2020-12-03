@@ -43,7 +43,6 @@ def main():
     """
     Main entry point
     """
-    ### Atmosphere
     data_reqs = DataRequest.objects.filter(
         source_id__name__startswith='HadGEM3-GC31',
         table_id='Ofx',
