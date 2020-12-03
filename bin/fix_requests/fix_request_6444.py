@@ -48,7 +48,7 @@ def main():
     data_reqs = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-HH',
         table_id__in=['Prim3hr', 'Prim3hrPt', 'Prim6hr', 'Primday',
-                      'PrimdayPt', 'PrimmonZ']
+                      'PrimdayPt', 'PrimmonZ', 'PrimSIday']
     )
 
     # Remove existing CMIP6 fix
@@ -71,7 +71,7 @@ def main():
     ### Ocean
     data_reqs = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-HH',
-        table_id__in=['PrimOday', 'PrimOmon']
+        table_id__in=['PrimOday', 'PrimOmon', 'PrimSIday']
     )
 
     prim_further_info_fix = FileFix.objects.get(
