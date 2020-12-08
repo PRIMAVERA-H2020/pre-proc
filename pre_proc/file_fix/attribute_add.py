@@ -910,6 +910,29 @@ class MsftmzmpaStandardNameAdd(AttributeAdd):
                           'due_to_parameterized_mesoscale_eddy_advection')
 
 
+class RealmOcean(AttributeAdd):
+    """
+    Change the realm to `ocean`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'realm'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Change the existing value to `ocean`.
+        """
+        self.new_value = 'ocean'
+
+
 class SeaWaterSalinityStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
