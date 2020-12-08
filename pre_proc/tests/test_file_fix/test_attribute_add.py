@@ -44,6 +44,7 @@ from pre_proc.file_fix import (
     SeaWaterSalinityStandardNameAdd,
     MipEraToPrim,
     MsftmzmpaStandardNameAdd,
+    RealmAtmos,
     RealmOcean,
     SeaSurfaceTemperatureNameAdd,
     ShallowConvectivePrecipitationFluxStandardNameAdd,
@@ -705,6 +706,23 @@ class TestMsftmzmpaStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,msftmzmpa,o,c,'ocean_meridional_"
             "overturning_mass_streamfunction_due_to_parameterized_mesoscale_"
             "eddy_advection' /a/msftmzmpa_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestRealmAtmos(BaseTest):
+    """ Test RealmAtmos """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        RealmAtmos
+        """
+        fix = RealmAtmos('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a realm,global,o,c,'atmos' "
+            "/a/var_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
