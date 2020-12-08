@@ -58,7 +58,7 @@ def main():
         experiment_id__name='control-1950',
         variant_label='r1i1p2f1',
         table_id='SImon',
-        cmor_name=['siconc', 'sidivvel']
+        cmor_name__in=['siconc', 'sidivvel']
     )
 
     data_reqs = siday | simon
