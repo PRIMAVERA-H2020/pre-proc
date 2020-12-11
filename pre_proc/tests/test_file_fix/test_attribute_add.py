@@ -34,6 +34,7 @@ from pre_proc.file_fix import (
     CellMethodsSeaAreaTimeMeanAdd,
     CellMethodsAreaMeanTimePointAdd,
     CellMethodsAreaMeanTimePointAddLand,
+    CellMethodsAreaMeanLandTimePointAdd,
     CellMethodsAreaMeanTimeMinimumAdd,
     CellMethodsAreaMeanTimeMaximumAdd,
     CellMethodsAreaMeanTimeMinDailyAdd,
@@ -314,6 +315,24 @@ class TestCellMethodsAreaMeanTimePointAddLand(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a cell_methods,so,o,c,"
             "'area: mean (comment: over land and sea ice) time: point' "
+            "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsAreaMeanLandTimePointAdd(BaseTest):
+    """ Test CellMethodsAreaMeanTimePointAddLand """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaMeanLandTimePointAdd
+        """
+        fix = CellMethodsAreaMeanLandTimePointAdd('so_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,so,o,c,"
+            "'area: mean where land time: point' "
             "/a/so_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
