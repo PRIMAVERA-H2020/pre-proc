@@ -61,6 +61,31 @@ def main():
     logger.debug('FileFix {} added to {} data requests.'.
                  format(prim_further_info_fix.name, data_reqs.count()))
 
+    ### Ocean
+    data_reqs = DataRequest.objects.filter(
+        source_id__name='HadGEM3-GC31-HH',
+        experiment_id__name='highres-future',
+        table_id__startswith='PrimO'
+    )
+
+    prim_further_info_fix = FileFix.objects.get(
+        name='FurtherInfoUrlPrimToHttps'
+    )
+
+    prim_https = FileFix.objects.get(
+        name='FurtherInfoUrlToPrim'
+    )
+
+    for data_req in data_reqs:
+        data_req.fixes.remove(prim_further_info_fix)
+        data_req.fixes.add(prim_https)
+
+    logger.debug('FileFix {} removed from {} data requests.'.
+                 format(prim_further_info_fix.name, data_reqs.count()))
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(prim_https.name, data_reqs.count()))
+
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()
