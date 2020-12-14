@@ -77,7 +77,7 @@ def main():
         experiment_id__name='highresSST-present',
         variant_label='r1i1p1f1',
         table_id='6hrPlevPt',
-        cmor_name='ta7h'
+        cmor_name__in=['hus27', 'ta7h', 'zg27']
     )
 
     fixes = [
