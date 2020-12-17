@@ -51,7 +51,17 @@ def main():
         table_id__in=['PrimOday', 'PrimOmon']
     )
 
-    data_reqs = (hr_highres_future_r1p2_ocean)
+    hr_hist_r1p2 = DataRequest.objects.filter(
+        source_id__name='EC-Earth3P-HR',
+        experiment_id__name='hist-1950',
+        variant_label='r1i1p2f1',
+        table_id__startswith='Prim'
+    ).exclude(
+        table_id='Prim3hr',
+        cmor_name='evspsbl'
+    )
+
+    data_reqs = (hr_highres_future_r1p2_ocean | hr_hist_r1p2)
 
     fixes = [
         FileFix.objects.get(name='FurtherInfoUrlToPrim'),
