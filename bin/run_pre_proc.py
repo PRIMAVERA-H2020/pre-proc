@@ -13,6 +13,7 @@ import os
 import shutil
 import sys
 import tempfile
+import time
 import traceback
 import warnings
 
@@ -70,7 +71,15 @@ def main(args):
                 temp_dir = tempfile.mkdtemp(dir=args.temp_dir)
                 logger.debug('Temporary directory is {}'.format(temp_dir))
                 temp_path = os.path.join(temp_dir, os.path.basename(filepath))
-                shutil.copyfile(filepath, temp_path)
+                try:
+                    shutil.copyfile(filepath, temp_path)
+                except PermissionError:
+                    # A PermisssionError occurs on the JASMIN storage
+                    # occasionally and so wait and then retry once.
+                    logger.warning('PermissionError copying file to temp_dir. '
+                                   'Waiting ten minutes')
+                    time.sleep(600)
+                    shutil.copyfile(filepath, temp_path)
                 process_path = temp_path
             else:
                 process_path = filepath
@@ -80,7 +89,20 @@ def main(args):
             esgf_submission.update_history()
             if args.temp_dir:
                 os.rename(filepath, filepath + '.old')
-                shutil.copyfile(temp_path, filepath)
+                try:
+                    shutil.copyfile(temp_path, filepath)
+                except PermissionError:
+                    # A PermisssionError occurs on the JASMIN storage
+                    # occasionally and so wait and then retry once. The later
+                    # operations could also be affected but take much less
+                    # time and so are less likely to be affected. If experience
+                    # shows that they would also benefit from a repeat then
+                    # this can be added later. The later operations are also
+                    # easier to recover from.
+                    logger.warning('PermissionError copying file from '
+                                   'temp_dir. Waiting ten minutes')
+                    time.sleep(600)
+                    shutil.copyfile(temp_path, filepath)
                 os.remove(temp_path)
                 os.rmdir(temp_dir)
                 os.remove(filepath + '.old')
