@@ -2,7 +2,7 @@
 """
 fix_request_4300.py
 
-EC-Earth-Consortium.EC-Earth3P.highresSST-future.r1i1p1f1.Emon.hus27,[uv]a27
+EC-Earth-Consortium.EC-Earth3P[-HR].highresSST-future.r1i1p1f1.Emon.hus27,[uv]a27
 
 cell_methods to time: mean
 """
@@ -45,7 +45,7 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name='EC-Earth-Consortium',
-        source_id__name='EC-Earth3P',
+        source_id__name__startswith='EC-Earth3P',
         experiment_id__name='highresSST-future',
         variant_label='r1i1p1f1',
         table_id='Emon',
