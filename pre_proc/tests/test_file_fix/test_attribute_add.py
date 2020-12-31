@@ -31,6 +31,7 @@ from pre_proc.file_fix import (
     CellMeasuresDelete,
     CellMethodsAreaTimeMeanAdd,
     CellMethodsTimeMeanAdd,
+    CellMethodsTimePointAdd,
     CellMethodsSeaAreaTimeMeanAdd,
     CellMethodsAreaMeanTimePointAdd,
     CellMethodsAreaTimeMeanAddLand,
@@ -249,6 +250,23 @@ class TestCellMethodsTimeMeanAdd(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a cell_methods,tas,o,c,'time: mean' "
             "/a/tas_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsTimePointAdd(BaseTest):
+    """ Test CellMethodsTimePointAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsTimePointAdd
+        """
+        fix = CellMethodsTimePointAdd('ua_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,ua,o,c,'time: point' "
+            "/a/ua_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
