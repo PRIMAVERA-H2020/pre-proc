@@ -31,9 +31,11 @@ from pre_proc.file_fix import (
     CellMeasuresDelete,
     CellMethodsAreaTimeMeanAdd,
     CellMethodsTimeMeanAdd,
+    CellMethodsTimePointAdd,
     CellMethodsSeaAreaTimeMeanAdd,
     CellMethodsAreaMeanTimePointAdd,
     CellMethodsAreaTimeMeanAddLand,
+    CellMethodsAreaMeanLandTimeMeanAdd,
     CellMethodsAreaMeanTimePointAddLand,
     CellMethodsAreaMeanLandTimePointAdd,
     CellMethodsAreaMeanTimeMinimumAdd,
@@ -58,8 +60,10 @@ from pre_proc.file_fix import (
     SistrxubotStandardNameAdd,
     SistryubotStandardNameAdd,
     SitempbotStandardNameAdd,
+    SurfaceTemperatureNameAdd,
     TrackingIdNew,
     VarUnitsToDegC,
+    VarUnitsToKelvin,
     VarUnitsToPercent,
     VarUnitsToThousandths,
     VerticesLatStdNameDelete,
@@ -251,6 +255,23 @@ class TestCellMethodsTimeMeanAdd(BaseTest):
         )
 
 
+class TestCellMethodsTimePointAdd(BaseTest):
+    """ Test CellMethodsTimePointAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsTimePointAdd
+        """
+        fix = CellMethodsTimePointAdd('ua_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,ua,o,c,'time: point' "
+            "/a/ua_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestCellMethodsAreaTimeMeanAdd(BaseTest):
     """ Test CellMethodsAreaTimeMeanAdd """
     def test_subprocess_called_correctly(self):
@@ -335,6 +356,24 @@ class TestCellMethodsAreaMeanTimePointAddLand(BaseTest):
             "ncatted -h -a cell_methods,so,o,c,"
             "'area: mean (comment: over land and sea ice) time: point' "
             "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+# CellMethodsAreaMeanLandTimeMeanAdd
+class TestCellMethodsAreaMeanLandTimeMeanAdd(BaseTest):
+    """ Test CellMethodsAreaMeanLandTimeMeanAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaMeanLandTimeMeanAdd
+        """
+        fix = CellMethodsAreaMeanLandTimeMeanAdd('mrso_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,mrso,o,c,"
+            "'time: mean area: mean where land' "
+            "/a/mrso_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
@@ -996,6 +1035,23 @@ class TestSitempbotStandardNameAdd(BaseTest):
         )
 
 
+class TestSurfaceTemperatureNameAdd(BaseTest):
+    """ Test SurfaceTemperatureNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SurfaceTemperatureNameAdd
+        """
+        fix = SurfaceTemperatureNameAdd('ts_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,ts,o,c,'surface_temperature' "
+            "/a/ts_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestTrackingIdNew(BaseTest):
     """ Test TrackingIdNew """
     def test_subprocess_called_correctly(self):
@@ -1024,6 +1080,23 @@ class TestVarUnitsToDegC(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a units,tos,o,c,'degC' "
             "/a/tos_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVarUnitsToKelvin(BaseTest):
+    """ Test VarUnitsToKelvin """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VarUnitsToKelvin.
+        """
+        fix = VarUnitsToKelvin('ts_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a units,ts,o,c,'K' "
+            "/a/ts_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

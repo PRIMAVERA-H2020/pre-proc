@@ -247,6 +247,31 @@ class CellMethodsTimeMeanAdd(AttributeAdd):
         self.new_value = 'time: mean'
 
 
+class CellMethodsTimePointAdd(AttributeAdd):
+    """
+    Add a variable attribute `cell_methods` with a value of `time: point`.
+    This is done in overwrite mode and so will work irrespective of whether
+    there is an existing cell_methods attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'cell_methods'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'time: point'
+
+
 class CellMethodsAreaTimeMeanAdd(AttributeAdd):
     """
     Add a variable attribute `cellmethods` with a value of `area: time: mean`.
@@ -377,6 +402,34 @@ class CellMethodsAreaMeanTimePointAddLand(AttributeAdd):
         """
         self.new_value = (
             'area: mean (comment: over land and sea ice) time: point'
+        )
+
+
+class CellMethodsAreaMeanLandTimeMeanAdd(AttributeAdd):
+    """
+    Add a variable attribute `cellmethods` with a value of
+    `time: mean area: mean where land`. This is done
+    in overwrite mode and so will work irrespective of whether there is an
+    existing cellmethods attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'cell_methods'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = (
+            'time: mean area: mean where land'
         )
 
 
@@ -1298,6 +1351,31 @@ class SitempbotStandardNameAdd(AttributeAdd):
         self.new_value = 'sea_ice_basal_temperature'
 
 
+class SurfaceTemperatureNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `surface_temperature`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'surface_temperature'
+
+
 class TrackingIdNew(AttributeAdd):
     """
     Replace the tracking_id attribute with a new value. This may be useful
@@ -1345,6 +1423,31 @@ class VarUnitsToDegC(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'degC'
+
+
+class VarUnitsToKelvin(AttributeAdd):
+    """
+    Replace the variable's attribute `units` with `K`. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing units attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'units'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'K'
 
 
 class VarUnitsToPercent(AttributeAdd):
