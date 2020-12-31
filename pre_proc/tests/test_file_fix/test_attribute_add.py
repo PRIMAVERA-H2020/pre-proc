@@ -59,8 +59,10 @@ from pre_proc.file_fix import (
     SistrxubotStandardNameAdd,
     SistryubotStandardNameAdd,
     SitempbotStandardNameAdd,
+    SurfaceTemperatureNameAdd,
     TrackingIdNew,
     VarUnitsToDegC,
+    VarUnitsToKelvin,
     VarUnitsToPercent,
     VarUnitsToThousandths,
     VerticesLatStdNameDelete,
@@ -1015,6 +1017,23 @@ class TestSitempbotStandardNameAdd(BaseTest):
         )
 
 
+class TestSurfaceTemperatureNameAdd(BaseTest):
+    """ Test SurfaceTemperatureNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SurfaceTemperatureNameAdd
+        """
+        fix = SurfaceTemperatureNameAdd('ts_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,ts,o,c,'surface_temperature' "
+            "/a/ts_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestTrackingIdNew(BaseTest):
     """ Test TrackingIdNew """
     def test_subprocess_called_correctly(self):
@@ -1043,6 +1062,23 @@ class TestVarUnitsToDegC(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a units,tos,o,c,'degC' "
             "/a/tos_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVarUnitsToKelvin(BaseTest):
+    """ Test VarUnitsToKelvin """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VarUnitsToKelvin.
+        """
+        fix = VarUnitsToKelvin('ts_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a units,ts,o,c,'K' "
+            "/a/ts_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

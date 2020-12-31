@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_8016.py
+fix_request_8017.py
 
-MPI-M.*.Primday.mrlsl|mrso
+MPI-M.*.Primday.ts
 
-CellMethodsAreaMeanLandTimeMeanAdd
+Many fixes
 """
 import argparse
 import logging.config
@@ -46,20 +46,28 @@ def main():
     data_reqs = DataRequest.objects.filter(
         institution_id__name='MPI-M',
         table_id = 'Primday',
-        cmor_name__in = ['mrlsl', 'mrso']
+        cmor_name = 'ts'
     )
 
-    sisaltmass = FileFix.objects.get(name='CellMethodsAreaMeanLandTimeMeanAdd')
+    fixes = [
+        FileFix.objects.get(name='SurfaceTemperatureNameAdd'),
+        FileFix.objects.get(name='VarUnitsToKelvin'),
+        FileFix.objects.get(name='CellMethodsTimeMeanAdd'),
+        FileFix.objects.get(name='CellMeasuresAreacellaAdd')
+    ]
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(sisaltmass)
+        for fix in fixes:
+            data_req.fixes.add(fix)
 
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(sisaltmass.name, data_reqs.count()))
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug(f'FileFix {fix.name} added to {num_data_reqs} data '
+                     f'requests.')
 
 
 if __name__ == "__main__":
