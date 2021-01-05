@@ -39,6 +39,9 @@ def parse_args():
                                           'fix are stored', type=str)
     parser.add_argument('fix_name', help='the name of the FileFix class '
                                          'to apply', type=str)
+    parser.add_argument('-f', '--file', help='Process single file rather than '
+                                             'directory',
+                        action='store_true')
     parser.add_argument('-l', '--log-level', help='set logging level to one '
                                                   'of debug, info, warn (the '
                                                   'default), or error')
@@ -60,7 +63,13 @@ def main(args):
                  format(os.environ['DATABASE_DIR']))
 
     files_failed = []
-    for filepath in sorted(list_files(args.directory)):
+
+    if args.file:
+        files_to_process = [args.directory]
+    else:
+        files_to_process = sorted(list_files(args.directory))
+
+    for filepath in files_to_process:
         logger.debug('Processing {}'.format(filepath))
         try:
             esgf_submission = EsgfSubmission.from_file(filepath)
