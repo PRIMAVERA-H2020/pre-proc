@@ -2,7 +2,7 @@
 """
 fix_request_8212.py
 
-MPI-M.highresSST-present.PrimdayPt.[uv]a
+MPI-M.highresSST-present.Prim*.*
 
 external_variables
 """
@@ -46,8 +46,7 @@ def main():
     data_reqs = DataRequest.objects.filter(
         institution_id__name='MPI-M',
         experiment_id__name='highresSST-present',
-        table_id = 'PrimdayPt',
-        cmor_name__in = ['ua', 'va']
+        table_id__startswith = 'Prim'
     )
 
     fixes = [
