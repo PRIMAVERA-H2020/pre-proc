@@ -2,7 +2,7 @@
 """
 fix_request_6005.py
 
-MOHC.HadGEM3-GC31-[MM|HM|HH].PrimdayPt.[uv]a
+MOHC.HadGEM3-GC31-[MM|MH|HM|HH].PrimdayPt.[uv]a
 
 Add external_variables: areacella
 """
@@ -45,8 +45,8 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name__in=['MOHC', 'NERC'],
-        source_id__name__in=['HadGEM3-GC31-MM', 'HadGEM3-GC31-HM',
-                             'HadGEM3-GC31-HH'],
+        source_id__name__in=['HadGEM3-GC31-MM', 'HadGEM3-GC31-MH',
+                             'HadGEM3-GC31-HM', 'HadGEM3-GC31-HH'],
         table_id='PrimdayPt',
         cmor_name__in=['ua', 'va']
     )
