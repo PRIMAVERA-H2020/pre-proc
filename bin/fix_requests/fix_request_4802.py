@@ -58,7 +58,8 @@ def main():
     ]
 
     new_fixes = [
-        FileFix.objects.get(name='RealmOcean')
+        FileFix.objects.get(name='RealmOcean'),
+        FileFix.objects.get(name='ExternalVariablesAreacello')
     ]
 
     # This next line could be done more quickly by:
