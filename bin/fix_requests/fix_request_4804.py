@@ -68,8 +68,13 @@ def main():
         cmor_name__in=['hus27', 'ta27', 'ua27', 'va27', 'zg27']
     )
 
+    omon = DataRequest.objects.filter(
+        **common_atributes,
+        table_id='Omon',
+        cmor_name='ficeberg2d'
+    )
 
-    data_reqs = six_hour_plev | six_hour_plev_pt | emon
+    data_reqs = six_hour_plev | six_hour_plev_pt | emon | omon
 
     new_fixes = [
         FileFix.objects.get(name='AAVarNameToFileName'),
