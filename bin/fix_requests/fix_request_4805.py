@@ -69,7 +69,7 @@ def main():
     num_data_reqs = data_reqs.count()
     for data_req in data_reqs:
         for fix in new_fixes:
-            data_req.remove.add(fix)
+            data_req.fixes.remove(fix)
 
     for fix in new_fixes:
         logger.debug('FileFix {} removed from {} data requests.'.
