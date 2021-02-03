@@ -30,7 +30,7 @@ BYTE_MASK_DIR = '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/bytes_masks'
 NEMO_GRID_DIR = '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/grids'
 CICE_COORDS_DIR = ('/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/'
                    'cice_coords')
-
+CICE_MASK_DIR = '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/cice_masks'
 
 class LatDirection(NcoDataFix):
     """
@@ -709,3 +709,20 @@ class FixCiceCoords1UV(InsertHadGEMGrid):
             CICE_COORDS_DIR,
             'eORCA1/cice_eORCA1_coords_grid-uv.nc'
         )
+
+
+class FixMaskCICEOrca1UV(FixHadGEMMask):
+    """
+    Fix the mask for data on the CICE ORCA1 u and v grids.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            CICE_MASK_DIR,
+            'primavera_cice_orca1_uv.nc'
+        )
+        self.mask_var_name = 'mask'

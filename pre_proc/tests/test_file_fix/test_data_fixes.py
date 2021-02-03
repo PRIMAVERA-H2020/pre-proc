@@ -30,7 +30,8 @@ from pre_proc.file_fix import (LatDirection, LevToPlev, AAVarNameToFileName,
                                FixMaskOrca1USingleLevel,
                                FixMaskOrca1VSingleLevel,
                                FixMaskOrca025USingleLevel,
-                               FixMaskOrca025VSingleLevel)
+                               FixMaskOrca025VSingleLevel,
+                               FixMaskCICEOrca1UV)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -1222,6 +1223,39 @@ class TestFixCiceCoords1UV(NcoDataFixBaseTest):
             mock.call(
                 "ncks -h --no_alphabetize -7 --deflate=3 /a/siv_1.nc.temp "
                 "/a/siv_1.nc",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
+
+
+class TestFixMaskCICEOrca1UV(NcoDataFixBaseTest):
+    """
+    Test FixMaskCICEOrca1UV
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that external calls are made correctly for
+        FixMaskCICEOrca1UV
+        """
+        fix = FixMaskCICEOrca1UV('uo_1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call(
+                "ncks -h --no_alphabetize -A -v mask "
+                "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/cice_masks/"
+                "primavera_cice_orca1_uv.nc "
+                "/a/uo_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncap2 -h -s 'where(mask != 0) uo=uo@_FillValue' "
+                "/a/uo_1.nc.temp /a/uo_1.nc.temp_masked",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h --no_alphabetize -x -v mask "
+                "/a/uo_1.nc.temp_masked /a/uo_1.nc.temp_final",
                 stderr=subprocess.STDOUT, shell=True
             ),
         ]
