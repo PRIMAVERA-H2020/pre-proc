@@ -469,7 +469,7 @@ class FixHadGEMMask(MultiStageDataFix, metaclass=ABCMeta):
         self._run_command(command, NcksError)
 
         # Do the masking
-        command = (f"ncap2 -h -s 'where({self.mask_var_name} != 0) "
+        command = (f"ncap2 -h -s 'where({self.mask_var_name}!=0) "
                    f"{self.variable_name}={self.variable_name}@_FillValue' "
                    f"{temp_file} {masked_file}")
         self._run_command(command, Ncap2Error)

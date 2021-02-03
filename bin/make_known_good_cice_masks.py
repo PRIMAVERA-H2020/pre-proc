@@ -16,26 +16,29 @@ def main():
     """main entry"""
     rootgrp = Dataset(os.path.join(OUTPUT_DIR, "primavera_cice_orca1_uv.nc"),
                       "w", format="NETCDF3_CLASSIC")
+    print(os.path.join(OUTPUT_DIR, "primavera_cice_orca1_uv.nc"))
     mask = np.zeros((330, 360))
     mask[-1, 180:] += 1
-    _i = rootgrp.createDimension('i', 330)
-    _j = rootgrp.createDimension('j', 360)
-    mask_variable = rootgrp.createVariable('mask', 'i4', ('i', 'j'))
+    _i = rootgrp.createDimension('i', 360)
+    _j = rootgrp.createDimension('j', 330)
+    mask_variable = rootgrp.createVariable('mask', 'i4', ('j', 'i'))
     mask_variable.units = '1'
     mask_variable[:] = mask
     rootgrp.close()
 
+    print(os.path.join(OUTPUT_DIR, "primavera_cice_orca025_t.nc"))
     rootgrp = Dataset(os.path.join(OUTPUT_DIR, "primavera_cice_orca025_t.nc"),
                       "w", format="NETCDF3_CLASSIC")
     mask = np.zeros((1205, 1440))
     mask[-1, 720:] += 1
-    _i = rootgrp.createDimension('i', 1205)
-    _j = rootgrp.createDimension('j', 1440)
-    mask_variable = rootgrp.createVariable('mask', 'i4', ('i', 'j'))
+    _i = rootgrp.createDimension('i', 1440)
+    _j = rootgrp.createDimension('j', 1205)
+
+    mask_variable = rootgrp.createVariable('mask', 'i4', ('j', 'i'))
     mask_variable.units = '1'
     mask_variable[:] = mask
     rootgrp.close()
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     main()
