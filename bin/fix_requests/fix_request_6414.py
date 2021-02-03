@@ -67,6 +67,7 @@ def main():
 
     fixes = [
         FileFix.objects.get(name='FixCiceCoords1UV'),
+        FileFix.objects.get(name='FixMaskCICEOrca1UV'),
     ]
 
     # This next line could be done more quickly by:
