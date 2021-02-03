@@ -128,6 +128,32 @@ class DataSpecsVersionAdd(AttributeAdd):
         self.new_value = '01.00.23'
 
 
+class DataSpecsVersion29Add(AttributeAdd):
+    """
+    Add a global attribute `data_specs_version` with a value of '01.00.29'.
+
+    This will probably already exist but the parent abstract class uses
+    overwrite and so this should be fine.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'data_specs_version'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = '01.00.29'
+
+
 class CellMeasuresAreacellaAdd(AttributeAdd):
     """
     Add a variable attribute `cellmeasures` with a value of `area: areacella`
