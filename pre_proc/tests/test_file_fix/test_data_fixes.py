@@ -31,7 +31,8 @@ from pre_proc.file_fix import (LatDirection, LevToPlev, AAVarNameToFileName,
                                FixMaskOrca1VSingleLevel,
                                FixMaskOrca025USingleLevel,
                                FixMaskOrca025VSingleLevel,
-                               FixMaskCICEOrca1UV)
+                               FixMaskCICEOrca1UV,
+                               FixMaskCICEOrca025T)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -478,7 +479,7 @@ class TestMaskOrca1TOlevel(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_3D_T != 0) tos=tos@_FillValue' "
+                "ncap2 -h -s 'where(mask_3D_T!=0) tos=tos@_FillValue' "
                 "/a/tos_1.nc.temp /a/tos_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -510,7 +511,7 @@ class TestMaskOrca025TOlevel(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_3D_T != 0) tos=tos@_FillValue' "
+                "ncap2 -h -s 'where(mask_3D_T!=0) tos=tos@_FillValue' "
                 "/a/tos_1.nc.temp /a/tos_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -542,7 +543,7 @@ class TestMaskOrca1UOlevel(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_3D_U != 0) uo=uo@_FillValue' "
+                "ncap2 -h -s 'where(mask_3D_U!=0) uo=uo@_FillValue' "
                 "/a/uo_1.nc.temp /a/uo_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -574,7 +575,7 @@ class TestMaskOrca025UOlevel(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_3D_U != 0) uo=uo@_FillValue' "
+                "ncap2 -h -s 'where(mask_3D_U!=0) uo=uo@_FillValue' "
                 "/a/uo_1.nc.temp /a/uo_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -606,7 +607,7 @@ class TestMaskOrca1VOlevel(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_3D_V != 0) vo=vo@_FillValue' "
+                "ncap2 -h -s 'where(mask_3D_V!=0) vo=vo@_FillValue' "
                 "/a/vo_1.nc.temp /a/vo_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -638,7 +639,7 @@ class TestMaskOrca025VOlevel(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_3D_V != 0) vo=vo@_FillValue' "
+                "ncap2 -h -s 'where(mask_3D_V!=0) vo=vo@_FillValue' "
                 "/a/vo_1.nc.temp /a/vo_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -670,7 +671,7 @@ class TestMaskOrca1TSurface(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_2D_T != 0) tos=tos@_FillValue' "
+                "ncap2 -h -s 'where(mask_2D_T!=0) tos=tos@_FillValue' "
                 "/a/tos_1.nc.temp /a/tos_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -702,7 +703,7 @@ class TestMaskOrca025TSurface(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_2D_T != 0) tos=tos@_FillValue' "
+                "ncap2 -h -s 'where(mask_2D_T!=0) tos=tos@_FillValue' "
                 "/a/tos_1.nc.temp /a/tos_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -734,7 +735,7 @@ class TestMaskOrca1USurface(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_2D_U != 0) uo=uo@_FillValue' "
+                "ncap2 -h -s 'where(mask_2D_U!=0) uo=uo@_FillValue' "
                 "/a/uo_1.nc.temp /a/uo_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -768,7 +769,7 @@ class TestMaskOrca1USingleLevel(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_3D_U != 0) uo=uo@_FillValue' "
+                "ncap2 -h -s 'where(mask_3D_U!=0) uo=uo@_FillValue' "
                 "/a/uo_1.nc.temp /a/uo_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -800,7 +801,7 @@ class TestMaskOrca025USurface(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_2D_U != 0) uo=uo@_FillValue' "
+                "ncap2 -h -s 'where(mask_2D_U!=0) uo=uo@_FillValue' "
                 "/a/uo_1.nc.temp /a/uo_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -834,7 +835,7 @@ class TestMaskOrca025USingleLevel(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_3D_U != 0) uo=uo@_FillValue' "
+                "ncap2 -h -s 'where(mask_3D_U!=0) uo=uo@_FillValue' "
                 "/a/uo_1.nc.temp /a/uo_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -866,7 +867,7 @@ class TestMaskOrca1VSurface(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_2D_V != 0) vo=vo@_FillValue' "
+                "ncap2 -h -s 'where(mask_2D_V!=0) vo=vo@_FillValue' "
                 "/a/vo_1.nc.temp /a/vo_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -900,7 +901,7 @@ class TestMaskOrca1VSingleLevel(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_3D_V != 0) vo=vo@_FillValue' "
+                "ncap2 -h -s 'where(mask_3D_V!=0) vo=vo@_FillValue' "
                 "/a/vo_1.nc.temp /a/vo_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -932,7 +933,7 @@ class TestMaskOrca025VSurface(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_2D_V != 0) vo=vo@_FillValue' "
+                "ncap2 -h -s 'where(mask_2D_V!=0) vo=vo@_FillValue' "
                 "/a/vo_1.nc.temp /a/vo_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -966,7 +967,7 @@ class TestMaskOrca025VSingleLevel(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask_3D_V != 0) vo=vo@_FillValue' "
+                "ncap2 -h -s 'where(mask_3D_V!=0) vo=vo@_FillValue' "
                 "/a/vo_1.nc.temp /a/vo_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
@@ -1249,13 +1250,46 @@ class TestFixMaskCICEOrca1UV(NcoDataFixBaseTest):
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
-                "ncap2 -h -s 'where(mask != 0) uo=uo@_FillValue' "
+                "ncap2 -h -s 'where(mask!=0) uo=uo@_FillValue' "
                 "/a/uo_1.nc.temp /a/uo_1.nc.temp_masked",
                 stderr=subprocess.STDOUT, shell=True
             ),
             mock.call(
                 "ncks -h --no_alphabetize -x -v mask "
                 "/a/uo_1.nc.temp_masked /a/uo_1.nc.temp_final",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
+
+
+class TestFixMaskCICEOrca025T(NcoDataFixBaseTest):
+    """
+    Test FixMaskCICEOrca025T
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that external calls are made correctly for
+        FixMaskCICEOrca025T
+        """
+        fix = FixMaskCICEOrca025T('sit_1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call(
+                "ncks -h --no_alphabetize -A -v mask "
+                "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/cice_masks/"
+                "primavera_cice_orca025_t.nc "
+                "/a/sit_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncap2 -h -s 'where(mask!=0) sit=sit@_FillValue' "
+                "/a/sit_1.nc.temp /a/sit_1.nc.temp_masked",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h --no_alphabetize -x -v mask "
+                "/a/sit_1.nc.temp_masked /a/sit_1.nc.temp_final",
                 stderr=subprocess.STDOUT, shell=True
             ),
         ]
