@@ -2,7 +2,7 @@
 """
 fix_request_6414.py
 
-MOHC.ice_ORCA1_grid-uv.*
+HadGEM3-GC31-LL.ice_ORCA1_grid-uv.*
 
 In all MOHC ice data on the ORCA1 u and v-grids fix the coordinates.
 """
@@ -58,7 +58,7 @@ def main():
 
     primsiday = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-LL',
-        table_id='SIday',
+        table_id='PrimSIday',
         cmor_name__in=['sidivvel', 'siforceintstrx', 'siforceintstry',
                        'sistrxdtop', 'sistrxubot', 'sistrydtop', 'sistryubot']
     )

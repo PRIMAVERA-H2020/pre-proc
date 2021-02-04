@@ -220,11 +220,11 @@ vertices_longitude.
 </td></tr>
 <tr><td>6412</td><td>MOHC.ocean_ORCA1_grid-v_surface.*</td><td>In all MOHC ocean data on the ORCA1 v-grid fix the mask and grid.
 </td></tr>
-<tr><td>6413</td><td>MOHC.ice_ORCA1_grid-t.*</td><td>In all MOHC ice data on the ORCA1 t-grid fix the coordinates.
+<tr><td>6413</td><td>HadGEM3-GC31-LL.ice_ORCA1_grid-t.*</td><td>In all MOHC ice data on the ORCA1 t-grid fix the coordinates.
 </td></tr>
-<tr><td>6414</td><td>MOHC.ice_ORCA1_grid-uv.*</td><td>In all MOHC ice data on the ORCA1 u and v-grids fix the coordinates.
+<tr><td>6414</td><td>HadGEM3-GC31-LL.ice_ORCA1_grid-uv.*</td><td>In all MOHC ice data on the ORCA1 u and v-grids fix the coordinates.
 </td></tr>
-<tr><td>6415</td><td>MOHC.ice_ORCA.*</td><td>In all MOHC ice data on ORCA grids fix change cell_measures and
+<tr><td>6415</td><td>HadGEM3-GC31-*.ice_ORCA.*</td><td>In all HadGEM (except -HH) ice data on ORCA grids fix change cell_measures and
 external_variables to be areacello.
 </td></tr>
 <tr><td>6416</td><td>MOHC.coupled.SImon.siflcondbot</td><td>SiflcondbotStandardNameAdd
@@ -275,6 +275,12 @@ PRIMAVERA appropriately.
 </td></tr>
 <tr><td>6446</td><td>MOHC.HadGEM3-GC31-HH.highres-future.Prim*</td><td>Convert the further_info_url attribute on HadGEM3-GC31-HH from CMIP6 to
 PRIMAVERA appropriately.
+</td></tr>
+<tr><td>6447</td><td>HadGEM3-GC31*.ice_ORCA.selected</td><td>For variables with a bug in the cell_methods in version 01.00.23 of the tables
+update the tables to 01.00.29.
+</td></tr>
+<tr><td>6448</td><td>HadGEM3-GC31*.ice_ORCA.selected</td><td>For variables with a bug in the cell_methods in version 01.00.23 of the tables
+update the tables to 01.00.29 and cell_methods needs updating too.
 </td></tr>
 <tr><td>8000</td><td>MPI-M.*</td><td>Change the direction of the latitude coordinate to monotonically increasing on
 atmosphere variables.

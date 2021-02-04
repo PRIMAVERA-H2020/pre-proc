@@ -2,9 +2,9 @@
 """
 fix_request_6415.py
 
-MOHC.ice_ORCA.*
+HadGEM3-GC31-*.ice_ORCA.*
 
-In all MOHC ice data on ORCA grids fix change cell_measures and
+In all HadGEM (except -HH) ice data on ORCA grids fix change cell_measures and
 external_variables to be areacello.
 """
 import argparse
@@ -45,7 +45,7 @@ def main():
     Main entry point
     """
     simon = DataRequest.objects.filter(
-        institution_id__name__in=['MOHC', 'NERC'],
+        source_id__name__startswith='HadGEM3-GC31',
         table_id='SImon',
         cmor_name__in=[
             'sitimefrac', 'simass', 'sithick', 'sivol', 'sisnconc', 'sisnmass',
@@ -55,21 +55,27 @@ def main():
             'sipr', 'siflsaltbot', 'siflfwbot', 'siu', 'siv', 'sispeed',
             'sistrxdtop', 'sistrydtop', 'sistrxubot', 'sistryubot', 'sidivvel'
         ]
+    ).exclude(
+        source_id__name='HadGEM3-GC31-HH'
     )
 
     siday = DataRequest.objects.filter(
-        institution_id__name__in=['MOHC', 'NERC'],
+        source_id__name__startswith='HadGEM3-GC31',
         table_id='SIday',
         cmor_name__in=['sithick', 'siu', 'siv']
+    ).exclude(
+        source_id__name='HadGEM3-GC31-HH'
     )
 
     primsiday = DataRequest.objects.filter(
-        institution_id__name__in=['MOHC', 'NERC'],
-        table_id='SIday',
+        source_id__name__startswith='HadGEM3-GC31',
+        table_id='PrimSIday',
         cmor_name__in=[
             'sitimefrac', 'sistrxdtop', 'sistrydtop', 'sistrxubot',
             'sistryubot', 'siforceintstrx', 'siforceintstry', 'sidivvel'
         ]
+    ).exclude(
+        source_id__name='HadGEM3-GC31-HH'
     )
 
     data_reqs = (simon | siday | primsiday)
