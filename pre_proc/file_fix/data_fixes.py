@@ -722,7 +722,7 @@ class FixCiceCoords025T(InsertHadGEMGrid):
         """Set the known good grid"""
         self.known_good_file = os.path.join(
             CICE_COORDS_DIR,
-            'eORCA1/cice_eORCA025_coords_grid-t.nc'
+            'eORCA025/cice_eORCA025_coords_grid-t.nc'
         )
 
 
@@ -738,7 +738,7 @@ class FixCiceCoords025UV(InsertHadGEMGrid):
         """Set the known good grid"""
         self.known_good_file = os.path.join(
             CICE_COORDS_DIR,
-            'eORCA1/cice_eORCA025_coords_grid-uv.nc'
+            'eORCA025/cice_eORCA025_coords_grid-uv.nc'
         )
 
 
