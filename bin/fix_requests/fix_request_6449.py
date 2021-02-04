@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_6414.py
+fix_request_6449.py
 
-HadGEM3-GC31-LL.ice_ORCA1_grid-uv.*
+HadGEM3-GC31-[HM]M.ice_ORCA025_grid-t.*
 
-In all MOHC ice data on the ORCA1 u and v-grids fix the coordinates and mask.
+In all MOHC ice data on the ORCA025 t-grid fix the coordinates and mask.
 """
 import argparse
 import logging.config
@@ -44,30 +44,34 @@ def main():
     Main entry point
     """
     simon = DataRequest.objects.filter(
-        source_id__name='HadGEM3-GC31-LL',
+        source_id__name__in=['HadGEM3-GC31-MM', 'HadGEM3-GC31-HM'],
         table_id='SImon',
-        cmor_name__in=['sidivvel', 'sispeed', 'sistrxdtop', 'sistrxubot',
-                       'sistrydtop', 'sistryubot', 'siu', 'siv']
+        cmor_name__in=['siage', 'sidmassdyn', 'sidmassmeltbot',
+                       'sidmassmelttop', 'sidmassth', 'siflcondbot',
+                       'siflcondtop', 'siflfwbot', 'siflfwdrain',
+                       'sifllatstop', 'siflsaltbot', 'siflsensupbot', 'sihc',
+                       'simass', 'sipr', 'sisnconc', 'sisnhc', 'sisnmass',
+                       'sisnthick', 'sitempbot', 'sithick', 'sitimefrac',
+                       'sivol']
     )
 
     siday = DataRequest.objects.filter(
-        source_id__name='HadGEM3-GC31-LL',
+        source_id__name__in=['HadGEM3-GC31-MM', 'HadGEM3-GC31-HM'],
         table_id='SIday',
-        cmor_name__in=['siu', 'siv']
+        cmor_name__in=['sithick']
     )
 
     primsiday = DataRequest.objects.filter(
-        source_id__name='HadGEM3-GC31-LL',
+        source_id__name__in=['HadGEM3-GC31-MM', 'HadGEM3-GC31-HM'],
         table_id='PrimSIday',
-        cmor_name__in=['sidivvel', 'siforceintstrx', 'siforceintstry',
-                       'sistrxdtop', 'sistrxubot', 'sistrydtop', 'sistryubot']
+        cmor_name__in=['sitimefrac']
     )
 
     data_reqs = (simon | siday | primsiday)
 
     fixes = [
-        FileFix.objects.get(name='FixCiceCoords1UV'),
-        FileFix.objects.get(name='FixMaskCICEOrca1UV'),
+        FileFix.objects.get(name='FixCiceCoords025T'),
+        FileFix.objects.get(name='FixMaskCICEOrca025T')
     ]
 
     # This next line could be done more quickly by:
