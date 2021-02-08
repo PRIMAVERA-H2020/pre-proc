@@ -6,7 +6,7 @@
 # library sometimes struggles to rename dimensions.
 
 cice_coord_dir="/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/cice_coords"
-declare -a resolutions=("eORCA1" "eORCA025")
+declare -a resolutions=("eORCA1" "eORCA025" "eORCA12")
 
 for resolution in "${resolutions[@]}";
 do

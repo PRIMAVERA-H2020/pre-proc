@@ -742,6 +742,38 @@ class FixCiceCoords025UV(InsertHadGEMGrid):
         )
 
 
+class FixCiceCoords12T(InsertHadGEMGrid):
+    """
+    Fix the coords for CICE data on the HadGEM ORCA12 t-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(
+            CICE_COORDS_DIR,
+            'eORCA12/cice_eORCA12_coords_grid-t.nc'
+        )
+
+
+class FixCiceCoords12UV(InsertHadGEMGrid):
+    """
+    Fix the coords for CICE data on the HadGEM ORCA12 u and v-grids.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(
+            CICE_COORDS_DIR,
+            'eORCA12/cice_eORCA12_coords_grid-uv.nc'
+        )
+
+
 class FixMaskCICEOrca1UV(FixHadGEMMask):
     """
     Fix the mask for data on the CICE ORCA1 u and v grids.
