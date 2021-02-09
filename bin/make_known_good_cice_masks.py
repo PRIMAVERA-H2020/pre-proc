@@ -44,8 +44,8 @@ def main():
                       "w", format="NETCDF3_CLASSIC")
     mask = np.zeros((3604, 4320))
     mask[-1, 2160:] += 1
-    _i = rootgrp.createDimension('i', 3604)
-    _j = rootgrp.createDimension('j', 4320)
+    _i = rootgrp.createDimension('i', 4320)
+    _j = rootgrp.createDimension('j', 3604)
 
     mask_variable = rootgrp.createVariable('mask', 'i4', ('j', 'i'))
     mask_variable.units = '1'
