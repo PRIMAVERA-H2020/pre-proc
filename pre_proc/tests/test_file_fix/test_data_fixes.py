@@ -34,7 +34,8 @@ from pre_proc.file_fix import (LatDirection, LevToPlev, AAVarNameToFileName,
                                FixCiceCoords025T, FixCiceCoords025UV,
                                FixCiceCoords12T, FixCiceCoords12UV,
                                FixMaskCICEOrca1UV,
-                               FixMaskCICEOrca025T)
+                               FixMaskCICEOrca025T,
+                               FixMaskCICEOrca12T)
 
 
 class NcoDataFixBaseTest(unittest.TestCase):
@@ -1409,6 +1410,39 @@ class TestFixMaskCICEOrca025T(NcoDataFixBaseTest):
                 "ncks -h --no_alphabetize -A -v mask "
                 "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/cice_masks/"
                 "primavera_cice_orca025_t.nc "
+                "/a/sit_1.nc.temp",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncap2 -h -s 'where(mask!=0) sit=sit@_FillValue' "
+                "/a/sit_1.nc.temp /a/sit_1.nc.temp_masked",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+            mock.call(
+                "ncks -h --no_alphabetize -x -v mask "
+                "/a/sit_1.nc.temp_masked /a/sit_1.nc.temp_final",
+                stderr=subprocess.STDOUT, shell=True
+            ),
+        ]
+        self.mock_subprocess.assert_has_calls(calls)
+
+
+class TestFixMaskCICEOrca12T(NcoDataFixBaseTest):
+    """
+    Test FixMaskCICEOrca12T
+    """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that external calls are made correctly for
+        FixMaskCICEOrca12T
+        """
+        fix = FixMaskCICEOrca12T('sit_1.nc', '/a')
+        fix.apply_fix()
+        calls = [
+            mock.call(
+                "ncks -h --no_alphabetize -A -v mask "
+                "/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/cice_masks/"
+                "primavera_cice_orca12_t.nc "
                 "/a/sit_1.nc.temp",
                 stderr=subprocess.STDOUT, shell=True
             ),

@@ -806,3 +806,20 @@ class FixMaskCICEOrca025T(FixHadGEMMask):
             'primavera_cice_orca025_t.nc'
         )
         self.mask_var_name = 'mask'
+
+
+class FixMaskCICEOrca12T(FixHadGEMMask):
+    """
+    Fix the mask for data on the CICE ORCA12 t grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            CICE_MASK_DIR,
+            'primavera_cice_orca12_t.nc'
+        )
+        self.mask_var_name = 'mask'
