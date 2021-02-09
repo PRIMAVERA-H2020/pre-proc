@@ -39,6 +39,19 @@ def main():
     mask_variable[:] = mask
     rootgrp.close()
 
+    print(os.path.join(OUTPUT_DIR, "primavera_cice_orca12_t.nc"))
+    rootgrp = Dataset(os.path.join(OUTPUT_DIR, "primavera_cice_orca12_t.nc"),
+                      "w", format="NETCDF3_CLASSIC")
+    mask = np.zeros((3604, 4320))
+    mask[-1, 2160:] += 1
+    _i = rootgrp.createDimension('i', 3604)
+    _j = rootgrp.createDimension('j', 4320)
+
+    mask_variable = rootgrp.createVariable('mask', 'i4', ('j', 'i'))
+    mask_variable.units = '1'
+    mask_variable[:] = mask
+    rootgrp.close()
+
 
 if __name__ == "__main__":
     main()

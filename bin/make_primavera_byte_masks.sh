@@ -6,6 +6,7 @@
 # library sometimes struggles to rename dimensions.
 
 byte_mask_dir="/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/bytes_masks"
+temp_dir="/work/scratch-nopw/jseddon/temp"
 declare -a resolutions=("HadGEM3-GC31-LL" "HadGEM3-GC31-MM")
 
 byte_mask_file="ocean_byte_masks.nc"
@@ -15,7 +16,9 @@ output_file="primavera_byte_masks.nc"
 for resolution in "${resolutions[@]}";
 do
     res_dir=$byte_mask_dir/$resolution
-    ncks -3 "$res_dir/$byte_mask_file" "$res_dir/$temp_file";
-    ncrename -d x,i -d y,j -d deptht,lev "$res_dir/$temp_file" "$res_dir/$output_file";
-    rm "$res_dir/$temp_file";
+    cp "$res_dir/$byte_mask_file" "$temp_dir/$byte_mask_file";
+    ncks -3 "$temp_dir/$byte_mask_file" "$temp_dir/$temp_file";
+    ncrename -d x,i -d y,j -d deptht,lev "$temp_dir/$temp_file" "$temp_dir/$output_file";
+    cp "$temp_dir/$output_file" "$res_dir/$output_file";
+    rm "$temp_dir/$temp_file" "$temp_dir/$output_file";
 done
