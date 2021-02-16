@@ -60,7 +60,11 @@ def main():
 
     data_reqs = (simon | siday)
 
-    fixes = [
+    old_fixes = [
+        FileFix.objects.get(name='DataSpecsVersionAdd'),
+    ]
+
+    new_fixes = [
         FileFix.objects.get(name='DataSpecsVersion29Add'),
     ]
 
@@ -69,10 +73,19 @@ def main():
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(*fixes)
+        for fix in old_fixes:
+            data_req.fixes.remove(fix)
 
     num_data_reqs = data_reqs.count()
-    for fix in fixes:
+    for fix in old_fixes:
+        logger.debug('FileFix {} removed from {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    for data_req in data_reqs:
+        data_req.fixes.add(*new_fixes)
+
+    num_data_reqs = data_reqs.count()
+    for fix in new_fixes:
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
