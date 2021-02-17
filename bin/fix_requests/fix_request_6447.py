@@ -42,23 +42,15 @@ def parse_args():
 
 def main():
     """Main entry point"""
-    simon = DataRequest.objects.filter(
+    data_reqs = DataRequest.objects.filter(
         source_id__name__startswith='HadGEM3-GC31',
         table_id='SImon',
-        cmor_name__in=['sivol']
+        cmor_name__in=['sidmassdyn', 'sidmassmeltbot', 'sidmassmelttop',
+                       'sidmassth', 'siflsaltbot', 'sihc', 'simass',
+                       'sisnthick', 'sitimefrac', 'sivol']
     ).exclude(
         source_id__name='HadGEM3-GC31-HH'
     )
-
-    siday = DataRequest.objects.filter(
-        source_id__name__startswith='HadGEM3-GC31',
-        table_id='SIday',
-        cmor_name__in=['si_todo']
-    ).exclude(
-        source_id__name='HadGEM3-GC31-HH'
-    )
-
-    data_reqs = (simon | siday)
 
     old_fixes = [
         FileFix.objects.get(name='DataSpecsVersionAdd'),

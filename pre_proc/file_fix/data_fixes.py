@@ -710,6 +710,7 @@ class FixCiceCoords1UV(InsertHadGEMGrid):
             'eORCA1/cice_eORCA1_coords_grid-uv.nc'
         )
 
+
 class FixCiceCoords025T(InsertHadGEMGrid):
     """
     Fix the coords for CICE data on the HadGEM ORCA025 t-grid.
