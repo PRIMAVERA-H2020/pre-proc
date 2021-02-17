@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 """
-fix_request_6448.py
+fix_request_6451.py
 
 HadGEM3-GC31*.ice_ORCA.selected
 
 For variables with a bug in the cell_methods in version 01.00.23 of the tables
-that have been updated to 01.00.29, update the cell_methods too.
+that have been updated to 01.00.29, update the standard_name where required.
 """
 import argparse
 import logging.config
@@ -42,31 +42,27 @@ def parse_args():
 
 def main():
     """Main entry point"""
-    data_reqs = DataRequest.objects.filter(
-        source_id__name__startswith='HadGEM3-GC31',
-        table_id='SImon',
-        cmor_name__in=['sidmassdyn', 'sidmassmeltbot', 'sidmassmelttop',
-                       'sidmassth', 'siflsaltbot', 'sihc', 'simass',
-                       'sitimefrac', 'sivol']
-    ).exclude(
-        source_id__name='HadGEM3-GC31-HH'
-    )
+    variables = {
+        'sidmassdyn': 'SidmassdynStandardNameAdd',
+        'sidmassth': 'SidmassthStandardNameAdd',
+        'sihc': 'SihcStandardNameAdd',
+        'sitimefrac': 'SitimefracStandardNameAdd'
+    }
 
-    fixes = [
-        FileFix.objects.get(name='CellMethodsSeaAreaTimeMeanAdd'),
-    ]
-
-    # This next line could be done more quickly by:
-    # further_info_url_fix.datarequest_set.add(*data_reqs)
-    # but sqlite3 gives an error of:
-    # django.db.utils.OperationalError: too many SQL variables
-    for data_req in data_reqs:
-        data_req.fixes.add(*fixes)
-
-    num_data_reqs = data_reqs.count()
-    for fix in fixes:
-        logger.debug('FileFix {} added to {} data requests.'.
-                     format(fix.name, num_data_reqs))
+    for variable in variables:
+        data_reqs = DataRequest.objects.filter(
+            source_id__name__startswith='HadGEM3-GC31',
+            table_id='SImon',
+            cmor_name=variable
+        ).exclude(
+            source_id__name='HadGEM3-GC31-HH'
+        )
+        fix = FileFix.objects.get(name=variables[variable])
+        for data_req in data_reqs:
+            data_req.fixes.add(fix)
+        num_data_reqs = data_reqs.count()
+        logger.debug(f'FileFix {fix.name} added to '
+                     f'{num_data_reqs} data requests.')
 
 
 if __name__ == "__main__":

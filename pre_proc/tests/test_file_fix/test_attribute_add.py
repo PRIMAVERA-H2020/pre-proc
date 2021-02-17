@@ -54,13 +54,17 @@ from pre_proc.file_fix import (
     RealmOcean,
     SeaSurfaceTemperatureNameAdd,
     ShallowConvectivePrecipitationFluxStandardNameAdd,
+    SidmassdynStandardNameAdd,
+    SidmassthStandardNameAdd,
     SiflcondbotStandardNameAdd,
     SiflfwbotStandardNameAdd,
     SiflsensupbotStandardNameAdd,
+    SihcStandardNameAdd,
     SisaltmassStandardNameAdd,
     SistrxubotStandardNameAdd,
     SistryubotStandardNameAdd,
     SitempbotStandardNameAdd,
+    SitimefracStandardNameAdd,
     SurfaceTemperatureNameAdd,
     TrackingIdNew,
     VarUnitsToDegC,
@@ -377,6 +381,7 @@ class TestCellMethodsAreaMeanTimePointAddLand(BaseTest):
             stderr=subprocess.STDOUT,
             shell=True
         )
+
 
 # CellMethodsAreaMeanLandTimeMeanAdd
 class TestCellMethodsAreaMeanLandTimeMeanAdd(BaseTest):
@@ -913,6 +918,46 @@ class TestShallowConvectivePrecipitationFluxStandardNameAdd(BaseTest):
         )
 
 
+class TestSidmassdynStandardNameAdd(BaseTest):
+    """ Test SidmassdynStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SidmassdynStandardNameAdd
+        """
+        fix = SidmassdynStandardNameAdd(
+            'sidmassdyn_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,sidmassdyn,o,c,"
+            "'tendency_of_sea_ice_amount_due_to_sea_ice_dynamics' "
+            "/a/sidmassdyn_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSidmassthStandardNameAdd(BaseTest):
+    """ Test SidmassthStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SidmassthStandardNameAdd
+        """
+        fix = SidmassthStandardNameAdd(
+            'sidmassth_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,sidmassth,o,c,"
+            "'tendency_of_sea_ice_amount_due_to_sea_ice_thermodynamics' "
+            "/a/sidmassth_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestSiflcondbotStandardNameAdd(BaseTest):
     """ Test SiflcondbotStandardNameAdd """
     def test_subprocess_called_correctly(self):
@@ -968,6 +1013,26 @@ class TestSiflsensupbotStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,siflsensupbot,o,c,"
             "'upward_sea_ice_basal_heat_flux' "
             "/a/siflsensupbot_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSihcStandardNameAdd(BaseTest):
+    """ Test SihcStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SihcStandardNameAdd
+        """
+        fix = SihcStandardNameAdd(
+            'sihc_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,sihc,o,c,"
+            "'sea_ice_temperature_expressed_as_heat_content' "
+            "/a/sihc_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
@@ -1048,6 +1113,26 @@ class TestSitempbotStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,sitempbot,o,c,"
             "'sea_ice_basal_temperature' "
             "/a/sitempbot_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSitimefracStandardNameAdd(BaseTest):
+    """ Test SitimefracStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SitimefracStandardNameAdd
+        """
+        fix = SitimefracStandardNameAdd(
+            'sitimefrac_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,sitimefrac,o,c,"
+            "'fraction_of_time_with_sea_ice_area_fraction_above_threshold' "
+            "/a/sitimefrac_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

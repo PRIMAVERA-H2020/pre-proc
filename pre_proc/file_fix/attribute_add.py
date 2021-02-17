@@ -1195,6 +1195,59 @@ class ShallowConvectivePrecipitationFluxStandardNameAdd(AttributeAdd):
         self.new_value = 'shallow_convective_precipitation_flux'
 
 
+class SidmassdynStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `tendency_of_sea_ice_amount_due_to_sea_ice_dynamics`. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'tendency_of_sea_ice_amount_due_to_sea_ice_dynamics'
+
+
+class SidmassthStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `tendency_of_sea_ice_amount_due_to_sea_ice_thermodynamics`. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('tendency_of_sea_ice_amount_due_to_sea_ice_'
+                          'thermodynamics')
+
+
 class SiflcondbotStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
@@ -1271,6 +1324,32 @@ class SiflsensupbotStandardNameAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'upward_sea_ice_basal_heat_flux'
+
+
+class SihcStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `sea_ice_temperature_expressed_as_heat_content`. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'sea_ice_temperature_expressed_as_heat_content'
 
 
 class SisaltmassStandardNameAdd(AttributeAdd):
@@ -1375,6 +1454,33 @@ class SitempbotStandardNameAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'sea_ice_basal_temperature'
+
+
+class SitimefracStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `fraction_of_time_with_sea_ice_area_fraction_above_threshold`. This is done
+    in overwrite mode and so will work irrespective of whether there is an
+    existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('fraction_of_time_with_sea_ice_area_fraction_'
+                          'above_threshold')
 
 
 class SurfaceTemperatureNameAdd(AttributeAdd):
