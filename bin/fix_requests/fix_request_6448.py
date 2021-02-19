@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 """
-fix_request_6414.py
+fix_request_6448.py
 
-HadGEM3-GC31-LL.ice_ORCA1_grid-uv.*
+HadGEM3-GC31*.ice_ORCA.selected
 
-In all MOHC ice data on the ORCA1 u and v-grids fix the coordinates and mask.
+For variables with a bug in the cell_methods in version 01.00.23 of the tables
+that have been updated to 01.00.29, update the cell_methods too.
 """
 import argparse
 import logging.config
@@ -13,7 +14,7 @@ import sys
 import django
 django.setup()
 
-from pre_proc_app.models import DataRequest, FileFix
+from pre_proc_app.models import DataRequest, FileFix  # nopep8
 
 
 __version__ = '0.1.0b1'
@@ -40,34 +41,19 @@ def parse_args():
 
 
 def main():
-    """
-    Main entry point
-    """
-    simon = DataRequest.objects.filter(
-        source_id__name='HadGEM3-GC31-LL',
+    """Main entry point"""
+    data_reqs = DataRequest.objects.filter(
+        source_id__name__startswith='HadGEM3-GC31',
         table_id='SImon',
-        cmor_name__in=['sidivvel', 'sispeed', 'sistrxdtop', 'sistrxubot',
-                       'sistrydtop', 'sistryubot', 'siu', 'siv']
+        cmor_name__in=['sidmassdyn', 'sidmassmeltbot', 'sidmassmelttop',
+                       'sidmassth', 'siflsaltbot', 'sihc', 'simass',
+                       'sitimefrac', 'sivol']
+    ).exclude(
+        source_id__name='HadGEM3-GC31-HH'
     )
-
-    siday = DataRequest.objects.filter(
-        source_id__name='HadGEM3-GC31-LL',
-        table_id='SIday',
-        cmor_name__in=['siu', 'siv']
-    )
-
-    primsiday = DataRequest.objects.filter(
-        source_id__name='HadGEM3-GC31-LL',
-        table_id='PrimSIday',
-        cmor_name__in=['sidivvel', 'siforceintstrx', 'siforceintstry',
-                       'sistrxdtop', 'sistrxubot', 'sistrydtop', 'sistryubot']
-    )
-
-    data_reqs = (simon | siday | primsiday)
 
     fixes = [
-        FileFix.objects.get(name='FixCiceCoords1UV'),
-        FileFix.objects.get(name='FixMaskCICEOrca1UV'),
+        FileFix.objects.get(name='CellMethodsSeaAreaTimeMeanAdd'),
     ]
 
     # This next line could be done more quickly by:

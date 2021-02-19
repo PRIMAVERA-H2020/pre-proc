@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 """
-fix_request_6414.py
+fix_request_6451.py
 
-HadGEM3-GC31-LL.ice_ORCA1_grid-uv.*
+HadGEM3-GC31*.ice_ORCA.selected
 
-In all MOHC ice data on the ORCA1 u and v-grids fix the coordinates and mask.
+For variables with a bug in the cell_methods in version 01.00.23 of the tables
+that have been updated to 01.00.29, update the standard_name where required.
 """
 import argparse
 import logging.config
@@ -13,7 +14,7 @@ import sys
 import django
 django.setup()
 
-from pre_proc_app.models import DataRequest, FileFix
+from pre_proc_app.models import DataRequest, FileFix  # nopep8
 
 
 __version__ = '0.1.0b1'
@@ -40,47 +41,28 @@ def parse_args():
 
 
 def main():
-    """
-    Main entry point
-    """
-    simon = DataRequest.objects.filter(
-        source_id__name='HadGEM3-GC31-LL',
-        table_id='SImon',
-        cmor_name__in=['sidivvel', 'sispeed', 'sistrxdtop', 'sistrxubot',
-                       'sistrydtop', 'sistryubot', 'siu', 'siv']
-    )
+    """Main entry point"""
+    variables = {
+        'sidmassdyn': 'SidmassdynStandardNameAdd',
+        'sidmassth': 'SidmassthStandardNameAdd',
+        'sihc': 'SihcStandardNameAdd',
+        'sitimefrac': 'SitimefracStandardNameAdd'
+    }
 
-    siday = DataRequest.objects.filter(
-        source_id__name='HadGEM3-GC31-LL',
-        table_id='SIday',
-        cmor_name__in=['siu', 'siv']
-    )
-
-    primsiday = DataRequest.objects.filter(
-        source_id__name='HadGEM3-GC31-LL',
-        table_id='PrimSIday',
-        cmor_name__in=['sidivvel', 'siforceintstrx', 'siforceintstry',
-                       'sistrxdtop', 'sistrxubot', 'sistrydtop', 'sistryubot']
-    )
-
-    data_reqs = (simon | siday | primsiday)
-
-    fixes = [
-        FileFix.objects.get(name='FixCiceCoords1UV'),
-        FileFix.objects.get(name='FixMaskCICEOrca1UV'),
-    ]
-
-    # This next line could be done more quickly by:
-    # further_info_url_fix.datarequest_set.add(*data_reqs)
-    # but sqlite3 gives an error of:
-    # django.db.utils.OperationalError: too many SQL variables
-    for data_req in data_reqs:
-        data_req.fixes.add(*fixes)
-
-    num_data_reqs = data_reqs.count()
-    for fix in fixes:
-        logger.debug('FileFix {} added to {} data requests.'.
-                     format(fix.name, num_data_reqs))
+    for variable in variables:
+        data_reqs = DataRequest.objects.filter(
+            source_id__name__startswith='HadGEM3-GC31',
+            table_id='SImon',
+            cmor_name=variable
+        ).exclude(
+            source_id__name='HadGEM3-GC31-HH'
+        )
+        fix = FileFix.objects.get(name=variables[variable])
+        for data_req in data_reqs:
+            data_req.fixes.add(fix)
+        num_data_reqs = data_reqs.count()
+        logger.debug(f'FileFix {fix.name} added to '
+                     f'{num_data_reqs} data requests.')
 
 
 if __name__ == "__main__":

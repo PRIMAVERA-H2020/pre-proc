@@ -30,7 +30,7 @@ BYTE_MASK_DIR = '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/bytes_masks'
 NEMO_GRID_DIR = '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/grids'
 CICE_COORDS_DIR = ('/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/'
                    'cice_coords')
-
+CICE_MASK_DIR = '/gws/nopw/j04/primavera1/masks/HadGEM3Ocean_fixes/cice_masks'
 
 class LatDirection(NcoDataFix):
     """
@@ -709,3 +709,118 @@ class FixCiceCoords1UV(InsertHadGEMGrid):
             CICE_COORDS_DIR,
             'eORCA1/cice_eORCA1_coords_grid-uv.nc'
         )
+
+
+class FixCiceCoords025T(InsertHadGEMGrid):
+    """
+    Fix the coords for CICE data on the HadGEM ORCA025 t-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(
+            CICE_COORDS_DIR,
+            'eORCA025/cice_eORCA025_coords_grid-t.nc'
+        )
+
+
+class FixCiceCoords025UV(InsertHadGEMGrid):
+    """
+    Fix the coords for CICE data on the HadGEM ORCA025 u and v-grids.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(
+            CICE_COORDS_DIR,
+            'eORCA025/cice_eORCA025_coords_grid-uv.nc'
+        )
+
+
+class FixCiceCoords12T(InsertHadGEMGrid):
+    """
+    Fix the coords for CICE data on the HadGEM ORCA12 t-grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(
+            CICE_COORDS_DIR,
+            'eORCA12/cice_eORCA12_coords_grid-t.nc'
+        )
+
+
+class FixCiceCoords12UV(InsertHadGEMGrid):
+    """
+    Fix the coords for CICE data on the HadGEM ORCA12 u and v-grids.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_known_good(self):
+        """Set the known good grid"""
+        self.known_good_file = os.path.join(
+            CICE_COORDS_DIR,
+            'eORCA12/cice_eORCA12_coords_grid-uv.nc'
+        )
+
+
+class FixMaskCICEOrca1UV(FixHadGEMMask):
+    """
+    Fix the mask for data on the CICE ORCA1 u and v grids.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            CICE_MASK_DIR,
+            'primavera_cice_orca1_uv.nc'
+        )
+        self.mask_var_name = 'mask'
+
+
+class FixMaskCICEOrca025T(FixHadGEMMask):
+    """
+    Fix the mask for data on the CICE ORCA025 t grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            CICE_MASK_DIR,
+            'primavera_cice_orca025_t.nc'
+        )
+        self.mask_var_name = 'mask'
+
+
+class FixMaskCICEOrca12T(FixHadGEMMask):
+    """
+    Fix the mask for data on the CICE ORCA12 t grid.
+    """
+    def __init__(self, filename, directory):
+        """Initialise the class"""
+        super().__init__(filename, directory)
+
+    def _set_byte_mask(self):
+        """Set the mask file and name"""
+        self.byte_mask_file = os.path.join(
+            CICE_MASK_DIR,
+            'primavera_cice_orca12_t.nc'
+        )
+        self.mask_var_name = 'mask'
