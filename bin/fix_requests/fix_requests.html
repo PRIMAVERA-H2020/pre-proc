@@ -265,7 +265,7 @@ external_variables to be areacello.
 </td></tr>
 <tr><td>6442</td><td>MOHC.ocean_ORCA025.PrimOday.vo</td><td>Fix the correct mask.
 </td></tr>
-<tr><td>6443</td><td>MOHC.HagGEM3-GC31-HH.ocean_ice</td><td>Remove all fixes as these have been re-CMORized with a newer version of
+<tr><td>6443</td><td>MOHC.HagGEM3-GC31-[HM]H.ocean_ice</td><td>Remove all fixes as these have been re-CMORized with a newer version of
 mip_convert.
 </td></tr>
 <tr><td>6444</td><td>MOHC.HadGEM3-GC31-HH.*.Prim*</td><td>Convert the further_info_url attribute on HadGEM3-GC31-HH from CMIP6 to
@@ -280,11 +280,14 @@ PRIMAVERA appropriately.
 update the tables to 01.00.29.
 </td></tr>
 <tr><td>6448</td><td>HadGEM3-GC31*.ice_ORCA.selected</td><td>For variables with a bug in the cell_methods in version 01.00.23 of the tables
-update the tables to 01.00.29 and cell_methods needs updating too.
+that have been updated to 01.00.29, update the cell_methods too.
 </td></tr>
 <tr><td>6449</td><td>HadGEM3-GC31-[HM]M.ice_ORCA025_grid-t.*</td><td>In all MOHC ice data on the ORCA025 t-grid fix the coordinates and mask.
 </td></tr>
 <tr><td>6450</td><td>HadGEM3-GC31-[HM]M.ice_ORCA025_grid-uv.*</td><td>In all MOHC ice data on the ORCA025 u and v-grids fix the coordinates.
+</td></tr>
+<tr><td>6451</td><td>HadGEM3-GC31*.ice_ORCA.selected</td><td>For variables with a bug in the cell_methods in version 01.00.23 of the tables
+that have been updated to 01.00.29, update the standard_name where required.
 </td></tr>
 <tr><td>8000</td><td>MPI-M.*</td><td>Change the direction of the latitude coordinate to monotonically increasing on
 atmosphere variables.

@@ -2,7 +2,7 @@
 """
 fix_request_6443.py
 
-MOHC.HagGEM3-GC31-HH.ocean_ice
+MOHC.HagGEM3-GC31-[HM]H.ocean_ice
 
 Remove all fixes as these have been re-CMORized with a newer version of
 mip_convert.
@@ -45,7 +45,7 @@ def main():
     Main entry point
     """
     data_reqs = DataRequest.objects.filter(
-        source_id__name='HadGEM3-GC31-HH',
+        source_id__name__in=['HadGEM3-GC31-HH', 'HadGEM3-GC31-MH'],
         table_id__in=['Omon', 'Oday', 'SImon', 'SIday', 'PrimOmon', 'PrimOday',
                       'PrimSIday']
     )
