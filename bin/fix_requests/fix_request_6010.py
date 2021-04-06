@@ -64,7 +64,7 @@ def main():
     # N512 atmos
     data_reqs = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-HH',
-        table_id__in='fx',
+        table_id='fx',
     )
 
     nr50 = FileFix.objects.get(name='NominalResolution50km')
