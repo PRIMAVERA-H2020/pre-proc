@@ -50,6 +50,10 @@ from pre_proc.file_fix import (
     SeaWaterSalinityStandardNameAdd,
     MipEraToPrim,
     MsftmzmpaStandardNameAdd,
+    NominalResolution100km,
+    NominalResolution50km,
+    NominalResolution25km,
+    NominalResolution10km,
     RealmAtmos,
     RealmOcean,
     SeaSurfaceTemperatureNameAdd,
@@ -825,6 +829,70 @@ class TestMsftmzmpaStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,msftmzmpa,o,c,'ocean_meridional_"
             "overturning_mass_streamfunction_due_to_parameterized_mesoscale_"
             "eddy_advection' /a/msftmzmpa_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestNominalResolution100km(BaseTest):
+    """ Test NominalResolution100km """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        NominalResolution100km
+        """
+        fix = NominalResolution100km('file.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a nominal_resolution,global,o,c,'100 km' /a/file.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestNominalResolution50km(BaseTest):
+    """ Test NominalResolution50km """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        NominalResolution50km
+        """
+        fix = NominalResolution50km('file.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a nominal_resolution,global,o,c,'50 km' /a/file.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestNominalResolution25km(BaseTest):
+    """ Test NominalResolution25km """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        NominalResolution25km
+        """
+        fix = NominalResolution25km('file.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a nominal_resolution,global,o,c,'25 km' /a/file.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestNominalResolution10km(BaseTest):
+    """ Test NominalResolution10km """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        NominalResolution10km
+        """
+        fix = NominalResolution10km('file.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a nominal_resolution,global,o,c,'10 km' /a/file.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

@@ -1073,6 +1073,98 @@ class MsftmzmpaStandardNameAdd(AttributeAdd):
                           'due_to_parameterized_mesoscale_eddy_advection')
 
 
+class NominalResolution100km(AttributeAdd):
+    """
+    Change the nominal_resolution to `100 km`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'nominal_resolution'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Change the existing value to `100 km`.
+        """
+        self.new_value = '100 km'
+
+
+class NominalResolution50km(AttributeAdd):
+    """
+    Change the nominal_resolution to `50 km`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'nominal_resolution'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Change the existing value to `50 km`.
+        """
+        self.new_value = '50 km'
+
+
+class NominalResolution25km(AttributeAdd):
+    """
+    Change the nominal_resolution to `25 km`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'nominal_resolution'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Change the existing value to `25 km`.
+        """
+        self.new_value = '25 km'
+
+
+class NominalResolution10km(AttributeAdd):
+    """
+    Change the nominal_resolution to `10 km`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'nominal_resolution'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Change the existing value to `10 km`.
+        """
+        self.new_value = '10 km'
+
+
 class RealmAtmos(AttributeAdd):
     """
     Change the realm to `atmos`.
