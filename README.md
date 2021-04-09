@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 # pre-proc
-Copyright (c) 2020, PRIMAVERA
+Copyright (c) 2021, PRIMAVERA
 Please see LICENSE for further details
 
 PRIMAVERA pre_proc system for fixing metadata and data issues in netCDF files (particularly CMIP6 data). Pre_proc works by:
