@@ -2,7 +2,7 @@
 """
 fix_request_6500.py
 
-HadGEM3-GC31-MH.spinup-1950.PrimO(mon/day)
+HadGEM3-GC31-MH.spinup-1950.PrimO/SI(mon/day)
 
 FurtherInfoUrl CMIP6 to PRIMAVERA
 """
@@ -46,7 +46,7 @@ def main():
     data_reqs = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-MH',
         experiment_id__name='spinup-1950',
-        table_id__in=['PrimOmon', 'PrimOday'],
+        table_id__in=['PrimOmon', 'PrimOday', 'PrimSIday'],
     )
 
     fixes = [
