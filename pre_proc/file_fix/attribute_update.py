@@ -218,8 +218,7 @@ class FurtherInfoUrlAWISourceIdAndHttps(AttributeUpdate):
         :param str filename: The basename of the file to process.
         :param str directory: The directory that the file is currently in.
         """
-        super().__init__(filename,
-                                                                directory)
+        super().__init__(filename, directory)
         self.attribute_name = 'further_info_url'
         self.source_id = None
         self.attribute_visibility = 'global'
@@ -348,9 +347,44 @@ class AogcmToAgcm(AttributeUpdate):
         """
         if self.existing_value != 'AOGCM':
             raise ExistingAttributeError(self.filename, self.attribute_name,
-                                           'Existing value is not AOGCM.')
+                                         'Existing value is not AOGCM.')
         else:
             self.new_value = 'AGCM'
+
+
+class CICE12UComment(AttributeUpdate):
+    """
+    Add a comment regarding the generated CICE ORCA12 U grid.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'comment'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _get_existing_value(self):
+        """
+        Get the value of the existing attribute from the current file
+        """
+        filepath = os.path.join(self.directory, self.filename)
+        with Dataset(filepath) as rootgrp:
+            self.existing_value = getattr(rootgrp, self.attribute_name, None)
+
+    def _calculate_new_value(self):
+        """
+        Add new comment.
+        """
+        existing = self.existing_value + ' ' if self.existing_value else ''
+        new_comment = ('The grid in the model output contained errors and has '
+                       'been replaced by a U grid generated from the T grid '
+                       'bounds.')
+        self.new_value = existing + new_comment
 
 
 class TrackingIdFix(AttributeUpdate):

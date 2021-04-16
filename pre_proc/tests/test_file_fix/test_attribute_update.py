@@ -22,7 +22,9 @@ from pre_proc.file_fix import (ParentBranchTimeDoubleFix,
                                FurtherInfoUrlAWISourceIdAndHttps,
                                FurtherInfoUrlPrimToHttps,
                                FurtherInfoUrlToPrim,
-                               AogcmToAgcm, TrackingIdFix)
+                               AogcmToAgcm,
+                               CICE12UComment,
+                               TrackingIdFix)
 
 
 class BaseTest(unittest.TestCase):
@@ -533,6 +535,37 @@ class TestAogcmToAgcm(BaseTest):
         )
 
 
+class TestCICE12UComment(BaseTest):
+    """ Test CICE12UComment """
+    def test_blank_value(self):
+        """ Test existing blank comment """
+        self.mock_dataset.return_value.comment = None
+        fix = CICE12UComment('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a comment,global,o,c,"
+            "'The grid in the model output contained errors and has been "
+            "replaced by a U grid generated from the T grid bounds.' /a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+    def test_existing_value(self):
+        """ Test existing comment """
+        self.mock_dataset.return_value.comment = ("Parsnip soup sounds "
+                                                  "delicious.")
+        fix = CICE12UComment('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a comment,global,o,c,"
+            "'Parsnip soup sounds delicious. The grid in the model output "
+            "contained errors and has been replaced by a U grid generated "
+            "from the T grid bounds.' /a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestTrackingIdFix(BaseTest):
     """ Test TrackingIdFix """
     def test_no_attribute_raises(self):
@@ -547,7 +580,7 @@ class TestTrackingIdFix(BaseTest):
         """ Test exception is raised if it starts with hdl: """
         self.mock_dataset.return_value.tracking_id = 'hdl:/uuid'
         fix = TrackingIdFix('1.nc', '/a')
-        exception_text = ('Existing tracking_id attribute starts with hdl:')
+        exception_text = 'Existing tracking_id attribute starts with hdl:'
         self.assertRaisesRegex(ExistingAttributeError, exception_text,
                                fix.apply_fix)
 
