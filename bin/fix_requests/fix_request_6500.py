@@ -2,7 +2,7 @@
 """
 fix_request_6500.py
 
-HadGEM3-GC31-MH.spinup-1950.PrimO/SI(mon/day)
+HadGEM3-GC31-[MH]H.spinup-1950/highres-future.PrimO/SI(mon/day)
 
 FurtherInfoUrl CMIP6 to PRIMAVERA
 """
@@ -43,11 +43,19 @@ def main():
     """
     Main entry point
     """
-    data_reqs = DataRequest.objects.filter(
+    spinup = DataRequest.objects.filter(
         source_id__name='HadGEM3-GC31-MH',
         experiment_id__name='spinup-1950',
         table_id__in=['PrimOmon', 'PrimOday', 'PrimSIday'],
     )
+
+    future = DataRequest.objects.filter(
+        source_id__name='HadGEM3-GC31-HH',
+        experiment_id__name='highres-future',
+        table_id='PrimSIday',
+    )
+
+    data_reqs = spinup | future
 
     fixes = [
         FileFix.objects.get(name='FurtherInfoUrlToPrim'),
