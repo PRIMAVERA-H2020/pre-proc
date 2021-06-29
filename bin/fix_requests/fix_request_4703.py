@@ -2,7 +2,7 @@
 """
 fix_request_4703.py
 
-EC-Earth-Consortium.EC-Earth3P.hist-1950.r1i1p1f1.many
+EC-Earth-Consortium.EC-Earth3P[-HR].hist-1950.r1i1p1f1.many
 
 Make var_name the same as the filename.
 """
@@ -45,7 +45,7 @@ def main():
     """
     sixhrplevpt = DataRequest.objects.filter(
         institution_id__name='EC-Earth-Consortium',
-        source_id__name='EC-Earth3P',
+        source_id__name__in=['EC-Earth3P', 'EC-Earth3P-HR'],
         experiment_id__name='hist-1950',
         variant_label='r1i1p1f1',
         table_id='6hrPlevPt',
@@ -54,7 +54,7 @@ def main():
 
     sixhrplev = DataRequest.objects.filter(
         institution_id__name='EC-Earth-Consortium',
-        source_id__name='EC-Earth3P',
+        source_id__name__in=['EC-Earth3P', 'EC-Earth3P-HR'],
         experiment_id__name='hist-1950',
         variant_label='r1i1p1f1',
         table_id='6hrPlev',
@@ -63,7 +63,7 @@ def main():
 
     emon = DataRequest.objects.filter(
         institution_id__name='EC-Earth-Consortium',
-        source_id__name='EC-Earth3P',
+        source_id__name__in=['EC-Earth3P', 'EC-Earth3P-HR'],
         experiment_id__name='hist-1950',
         variant_label='r1i1p1f1',
         table_id='Emon',
@@ -72,7 +72,7 @@ def main():
 
     omon = DataRequest.objects.filter(
         institution_id__name='EC-Earth-Consortium',
-        source_id__name='EC-Earth3P',
+        source_id__name__in=['EC-Earth3P', 'EC-Earth3P-HR'],
         experiment_id__name='hist-1950',
         variant_label='r1i1p1f1',
         table_id='Omon',
