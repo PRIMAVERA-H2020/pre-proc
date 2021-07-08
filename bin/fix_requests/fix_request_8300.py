@@ -53,6 +53,7 @@ def main():
     fixes = [
         FileFix.objects.get(name='VarUnitsToPascalPerSecond'),
         FileFix.objects.get(name='WapStandardNameAdd'),
+        FileFix.objects.get(name='CellMeasuresAreacellaAdd')
     ]
 
     # This next line could be done more quickly by:
