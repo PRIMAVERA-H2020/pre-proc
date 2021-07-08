@@ -1674,6 +1674,31 @@ class VarUnitsToKelvin(AttributeAdd):
         self.new_value = 'K'
 
 
+class VarUnitsToPascalPerSecond(AttributeAdd):
+    """
+    Replace the variable's attribute `units` to `Pa s-1`. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing units attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'units'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'Pa s-1'
+
+
 class VarUnitsToPercent(AttributeAdd):
     """
     Replace the variable's attribute `units` to `%`. This is done in
@@ -1771,6 +1796,31 @@ class VerticesLonStdNameDelete(AttributeDelete):
         """
         self.new_value = 0
 
+
+class WapStandardNameAdd(AttributeAdd):
+    """
+    Replace the variable's `standard_name` with
+    `lagrangian_tendency_of_air_pressure`. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'lagrangian_tendency_of_air_pressure'
 
 class WtemStandardNameAdd(AttributeAdd):
     """

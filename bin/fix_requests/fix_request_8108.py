@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_8202.py
+fix_request_8108.py
 
-MPI-M.*.highresSST-present.*.Amon.tasmin/ax
+MPI-M.*.highresSST-*.*.6hrPlevPt.many
 
-Correct the cell_methods on Amon tasmin and tasmax.
+Set the cell_methods to "area: mean time: point" on various variables.
 """
 import argparse
 import logging.config
@@ -43,45 +43,32 @@ def main():
     """
     Main entry point
     """
-    # tasmin
-    data_reqs = DataRequest.objects.filter(
+    sixhrplevpt = DataRequest.objects.filter(
         institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
-        table_id='Amon',
-        cmor_name='tasmin'
+        experiment_id__name__in=['highresSST-present', 'highresSST-future'],
+        table_id='6hrPlevPt',
+        cmor_name__in=[
+            'hus7h', 'psl', 'ta7h', 'ua7h', 'uas', 'va7h', 'vas', 'zg7h'
+        ]
     )
 
-    tasmin = FileFix.objects.get(name='CellMethodsAreaMeanTimeMinimumAdd')
+    data_reqs = sixhrplevpt
+
+    cm_amtp = FileFix.objects.get(name='CellMethodsAreaMeanTimePointAdd')
+    ext_vars = FileFix.objects.get(name='ExternalVariablesAreacella')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(tasmin)
+        data_req.fixes.add(cm_amtp)
+        data_req.fixes.add(ext_vars)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(tasmin.name, data_reqs.count()))
-
-    # tasmax
-    data_reqs = DataRequest.objects.filter(
-        institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
-        table_id='Amon',
-        cmor_name='tasmax'
-    )
-
-    tasmax = FileFix.objects.get(name='CellMethodsAreaMeanTimeMaximumAdd')
-
-    # This next line could be done more quickly by:
-    # further_info_url_fix.datarequest_set.add(*data_reqs)
-    # but sqlite3 gives an error of:
-    # django.db.utils.OperationalError: too many SQL variables
-    for data_req in data_reqs:
-        data_req.fixes.add(tasmax)
-
+                 format(cm_amtp.name, data_reqs.count()))
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(tasmax.name, data_reqs.count()))
+                 format(ext_vars.name, data_reqs.count()))
 
 
 if __name__ == "__main__":

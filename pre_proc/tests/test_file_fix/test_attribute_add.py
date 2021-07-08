@@ -73,10 +73,12 @@ from pre_proc.file_fix import (
     TrackingIdNew,
     VarUnitsToDegC,
     VarUnitsToKelvin,
+    VarUnitsToPascalPerSecond,
     VarUnitsToPercent,
     VarUnitsToThousandths,
     VerticesLatStdNameDelete,
     VerticesLonStdNameDelete,
+    WapStandardNameAdd,
     WtemStandardNameAdd,
     WindSpeedStandardNameAdd,
     ZZZThetapv2StandardNameAdd
@@ -1273,6 +1275,23 @@ class TestVarUnitsToKelvin(BaseTest):
         )
 
 
+class TestVarUnitsToPascalPerSecond(BaseTest):
+    """ Test VarUnitsToPascalPerSecond """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VarUnitsToPascalPerSecond.
+        """
+        fix = VarUnitsToPascalPerSecond('wap_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a units,wap,o,c,'Pa s-1' "
+            "/a/wap_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestVarUnitsToPercent(BaseTest):
     """ Test VarUnitsToPercent """
     def test_subprocess_called_correctly(self):
@@ -1336,6 +1355,24 @@ class TestVerticesLonStdNameDelete(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a standard_name,vertices_longitude,d,c,0 "
             "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestWapStandardNameAdd(BaseTest):
+    """ Test WapStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        WapStandardNameAdd
+        """
+        fix = WapStandardNameAdd('wap_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,wap,o,c,"
+            "'lagrangian_tendency_of_air_pressure' "
+            "/a/wap_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

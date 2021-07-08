@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_8208.py
+fix_request_8110.py
 
-MPI-M.*.highresSST-present.*.6hrPlevPt.many
+MPI-M.*.highresSST-*.*.6hrPlev[Pt,].many
 
-Set the cell_methods to "area: mean time: point" on various variables.
+Set lev to plev
 """
 import argparse
 import logging.config
@@ -43,32 +43,26 @@ def main():
     """
     Main entry point
     """
-    sixhrplevpt = DataRequest.objects.filter(
+    data_reqs = DataRequest.objects.filter(
         institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
-        table_id='6hrPlevPt',
+        experiment_id__name__in=['highresSST-present', 'highresSST-future'],
+        table_id__in=['6hrPlev', '6hrPlevPt'],
         cmor_name__in=[
-            'hus7h', 'psl', 'ta7h', 'ua7h', 'uas', 'va7h', 'vas', 'zg7h'
+            'hus7h', 'ta7h', 'ua7h', 'va7h', 'wap4', 'zg7h'
         ]
     )
 
-    data_reqs = sixhrplevpt
-
-    cm_amtp = FileFix.objects.get(name='CellMethodsAreaMeanTimePointAdd')
-    ext_vars = FileFix.objects.get(name='ExternalVariablesAreacella')
+    lev_to_plev = FileFix.objects.get(name='LevToPlev')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(cm_amtp)
-        data_req.fixes.add(ext_vars)
+        data_req.fixes.add(lev_to_plev)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(cm_amtp.name, data_reqs.count()))
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(ext_vars.name, data_reqs.count()))
+                 format(lev_to_plev.name, data_reqs.count()))
 
 
 if __name__ == "__main__":

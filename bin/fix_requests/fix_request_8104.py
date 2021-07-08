@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
-fix_request_8204.py
+fix_request_8104.py
 
-MPI-M.*.highresSST-present.*.Amon/day/6hrPlevPt.[uv]as/sfcWind*
+MPI-M.*.highresSST-*.*.Amon/day/6hrPlevPt.[uv]as/sfcWind*
 
 Correct the cell_measures on uas, vas and the sfcWinds in various tables.
 """
@@ -45,21 +45,21 @@ def main():
     """
     monthly = DataRequest.objects.filter(
         institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
+        experiment_id__name__in=['highresSST-present', 'highresSST-future'],
         table_id='Amon',
         cmor_name__in=['uas', 'vas', 'sfcWind']
     )
 
     daily = DataRequest.objects.filter(
         institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
+        experiment_id__name__in=['highresSST-present', 'highresSST-future'],
         table_id='day',
         cmor_name__in=['uas', 'vas', 'sfcWind', 'sfcWindmax']
     )
 
     six_hourly = DataRequest.objects.filter(
         institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
+        experiment_id__name__in=['highresSST-present', 'highresSST-future'],
         table_id='6hrPlevPt',
         cmor_name__in=['uas', 'vas']
     )

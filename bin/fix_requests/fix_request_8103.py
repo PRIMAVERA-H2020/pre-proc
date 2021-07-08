@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_8210.py
+fix_request_8103.py
 
-MPI-M.*.highresSST-present.*.6hrPlev[Pt,].many
+MPI-M.*.highresSST-*.*.Amon/day.clt
 
-Set lev to plev
+Correct the units on clt.
 """
 import argparse
 import logging.config
@@ -45,24 +45,22 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
-        table_id__in=['6hrPlev', '6hrPlevPt'],
-        cmor_name__in=[
-            'hus7h', 'ta7h', 'ua7h', 'va7h', 'wap4', 'zg7h'
-        ]
+        experiment_id__name__in=['highresSST-present', 'highresSST-future'],
+        table_id__in=['Amon', 'day'],
+        cmor_name='clt'
     )
 
-    lev_to_plev = FileFix.objects.get(name='LevToPlev')
+    clt = FileFix.objects.get(name='VarUnitsToPercent')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(lev_to_plev)
+        data_req.fixes.add(clt)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(lev_to_plev.name, data_reqs.count()))
+                 format(clt.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
