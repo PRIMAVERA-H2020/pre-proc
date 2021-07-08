@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_8205.py
+fix_request_8106.py
 
-MPI-M.*.highresSST-present.*.Amon.clivi
+MPI-M.*.highresSST-*.*.day.sfcWindmax/tasmax
 
-Correct the cell_methods on Amon clivi.
+Correct the cell_methods on day for maxima.
 """
 import argparse
 import logging.config
@@ -45,22 +45,22 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
-        table_id='Amon',
-        cmor_name='clivi'
+        experiment_id__name__in=['highresSST-present', 'highresSST-future'],
+        table_id='day',
+        cmor_name__in=['sfcWindmax', 'tasmax']
     )
 
-    clivi = FileFix.objects.get(name='AtmosphereCloudIceContentStandardNameAdd')
+    sfcWindmax = FileFix.objects.get(name='CellMethodsAreaMeanTimeMaxDailyAdd')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(clivi)
+        data_req.fixes.add(sfcWindmax)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(clivi.name, data_reqs.count()))
+                 format(sfcWindmax.name, data_reqs.count()))
 
 
 if __name__ == "__main__":

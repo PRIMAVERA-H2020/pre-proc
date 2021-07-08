@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_8211.py
+fix_request_8107.py
 
-MPI-M.*.highresSST-present.*.6hrPlev.wap4
+MPI-M.*.highresSST-*.*.day.tasmin
 
-Set the cell_methods to "area: time: mean" and external_variables on 6hrPlev
-wap.
+Correct the cell_methods on day for minima.
 """
 import argparse
 import logging.config
@@ -46,26 +45,22 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
-        table_id='6hrPlev',
-        cmor_name='wap4'
+        experiment_id__name__in=['highresSST-present', 'highresSST-future'],
+        table_id='day',
+        cmor_name='tasmin'
     )
 
-    cm_atm = FileFix.objects.get(name='CellMethodsAreaTimeMeanAdd')
-    ext_vars = FileFix.objects.get(name='ExternalVariablesAreacella')
+    tasmin = FileFix.objects.get(name='CellMethodsAreaMeanTimeMinDailyAdd')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(cm_atm)
-        data_req.fixes.add(ext_vars)
+        data_req.fixes.add(tasmin)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(cm_atm.name, data_reqs.count()))
-    logger.debug('FileFix {} added to {} data requests.'.
-                 format(ext_vars.name, data_reqs.count()))
+                 format(tasmin.name, data_reqs.count()))
 
 
 if __name__ == "__main__":

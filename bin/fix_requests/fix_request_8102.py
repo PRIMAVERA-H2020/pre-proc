@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_8201.py
+fix_request_8102.py
 
-MPI-M.*.highresSST-present.*.many.many
+MPI-M.*.highresSST-*.*.Amon.tasmin/ax
 
-Set the cell_methods to "area: time: mean" on various variables.
+Correct the cell_methods on Amon tasmin and tasmax.
 """
 import argparse
 import logging.config
@@ -43,61 +43,45 @@ def main():
     """
     Main entry point
     """
-    amon = DataRequest.objects.filter(
+    # tasmin
+    data_reqs = DataRequest.objects.filter(
         institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
+        experiment_id__name__in=['highresSST-present', 'highresSST-future'],
         table_id='Amon',
-        cmor_name__in=[
-            'cl', 'cli', 'clivi', 'clt', 'clw', 'clwvi', 'evspsbl', 'hfls',
-            'hfss', 'hurs', 'huss', 'pr', 'prc', 'prsn', 'prw', 'ps', 'psl',
-            'rlds', 'rldscs', 'rlus', 'rlut', 'rlutcs', 'rsds', 'rsdscs',
-            'rsdt', 'rsus', 'rsutcs', 'rsuscs', 'rsut', 'rtmt', 'sfcWind',
-            'tas', 'tauu', 'tauv', 'ts', 'uas', 'vas'
-        ]
+        cmor_name='tasmin'
     )
 
-    day = DataRequest.objects.filter(
-        institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
-        table_id='day',
-        cmor_name__in=[
-            'clt', 'hfls', 'hfss', 'hurs', 'huss', 'pr', 'prc', 'prsn', 'psl',
-            'rlds', 'rlus', 'rlut', 'rsds', 'rsus', 'sfcWind', 'tas', 'uas',
-            'vas'
-        ]
-    )
-
-    eday = DataRequest.objects.filter(
-        institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
-        table_id='Eday',
-        cmor_name__in=[
-            'tauu', 'tauv'
-        ]
-    )
-
-    six_hour = DataRequest.objects.filter(
-        institution_id__name='MPI-M',
-        experiment_id__name='highresSST-present',
-        table_id='6hrPlev',
-        cmor_name__in=[
-            'psl'
-        ]
-    )
-
-    data_reqs = amon | day | eday | six_hour
-
-    cm_atm = FileFix.objects.get(name='CellMethodsAreaTimeMeanAdd')
+    tasmin = FileFix.objects.get(name='CellMethodsAreaMeanTimeMinimumAdd')
 
     # This next line could be done more quickly by:
     # further_info_url_fix.datarequest_set.add(*data_reqs)
     # but sqlite3 gives an error of:
     # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        data_req.fixes.add(cm_atm)
+        data_req.fixes.add(tasmin)
 
     logger.debug('FileFix {} added to {} data requests.'.
-                 format(cm_atm.name, data_reqs.count()))
+                 format(tasmin.name, data_reqs.count()))
+
+    # tasmax
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__in=['highresSST-present', 'highresSST-future'],
+        table_id='Amon',
+        cmor_name='tasmax'
+    )
+
+    tasmax = FileFix.objects.get(name='CellMethodsAreaMeanTimeMaximumAdd')
+
+    # This next line could be done more quickly by:
+    # further_info_url_fix.datarequest_set.add(*data_reqs)
+    # but sqlite3 gives an error of:
+    # django.db.utils.OperationalError: too many SQL variables
+    for data_req in data_reqs:
+        data_req.fixes.add(tasmax)
+
+    logger.debug('FileFix {} added to {} data requests.'.
+                 format(tasmax.name, data_reqs.count()))
 
 
 if __name__ == "__main__":
