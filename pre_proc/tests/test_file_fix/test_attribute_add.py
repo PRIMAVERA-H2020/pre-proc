@@ -9,6 +9,7 @@ import unittest
 import mock
 
 from pre_proc.file_fix import (
+    AirTemperatureNameAdd,
     ParentBranchTimeAdd,
     ChildBranchTimeAdd,
     BranchMethodAdd,
@@ -24,6 +25,7 @@ from pre_proc.file_fix import (
     ExternalVariablesAreacella,
     ExternalVariablesAreacello,
     ExternalVariablesAreacelloVolcello,
+    GeopotentialHeightNameAdd,
     HadGemMMParentSourceId,
     HistoryClearOld,
     CellMeasuresAreacellaAdd,
@@ -76,6 +78,7 @@ from pre_proc.file_fix import (
     VarUnitsTo1,
     VarUnitsToDegC,
     VarUnitsToKelvin,
+    VarUnitsToMetre,
     VarUnitsToMetrePerSecond,
     VarUnitsToPascalPerSecond,
     VarUnitsToPercent,
@@ -98,6 +101,23 @@ class BaseTest(unittest.TestCase):
         patch = mock.patch('pre_proc.common.subprocess.check_output')
         self.mock_subprocess = patch.start()
         self.addCleanup(patch.stop)
+
+
+class TestAirTemperatureNameAdd(BaseTest):
+    """ Test AirTemperatureNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        AirTemperatureNameAdd
+        """
+        fix = AirTemperatureNameAdd('ta_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,ta,o,c,'air_temperature' "
+            "/a/ta_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
 
 
 class TestParentBranchTimeAdd(BaseTest):
@@ -695,6 +715,23 @@ class TestExternalVariablesAreacelloVolcello(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a external_variables,global,o,c,'areacello volcello' "
             "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestGeopotentialHeightNameAdd(BaseTest):
+    """ Test GeopotentialHeightNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        GeopotentialHeightNameAdd
+        """
+        fix = GeopotentialHeightNameAdd('zg_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,zg,o,c,'geopotential_height' "
+            "/a/zg_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
@@ -1325,6 +1362,23 @@ class TestVarUnitsToKelvin(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a units,ts,o,c,'K' "
             "/a/ts_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVarUnitsToMetre(BaseTest):
+    """ Test VarUnitsToMetre """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VarUnitsToMetre.
+        """
+        fix = VarUnitsToMetre('zg_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a units,zg,o,c,'m' "
+            "/a/zg_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

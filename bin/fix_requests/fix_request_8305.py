@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
-fix_request_8303.py
+fix_request_8305.py
 
-MPI-M.highresSST-future.6hrPlevPt.ua
+MPI-M.highresSST-future.6hrPlevPt.zg7h
 
 Std name and units
 """
@@ -47,13 +47,12 @@ def main():
         institution_id__name='MPI-M',
         experiment_id__name='highresSST-future',
         table_id='6hrPlevPt',
-        cmor_name='ua'
+        cmor_name='zg7h'
     )
 
     fixes = [
-        FileFix.objects.get(name='UaStdNameAdd'),
-        FileFix.objects.get(name='VarUnitsToMetrePerSecond'),
-        FileFix.objects.get(name='CellMethodsAreaMeanTimePointAdd'),
+        FileFix.objects.get(name='GeopotentialHeightNameAdd'),
+        FileFix.objects.get(name='VarUnitsToMetre'),
         FileFix.objects.get(name='CellMeasuresAreacellaAdd')
     ]
 
