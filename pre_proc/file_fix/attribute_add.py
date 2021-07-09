@@ -1650,6 +1650,31 @@ class TrackingIdNew(AttributeAdd):
         self.new_value = f'hdl:21.14100/{uuid.uuid4()}'
 
 
+class UaStdNameAdd(AttributeAdd):
+    """
+    Replace the variable's `standard_name` with `eastward_wind`. This is done
+    in overwrite mode and so will work irrespective of whether there is an
+    existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'eastward_wind'
+
+
 class VarUnitsTo1(AttributeAdd):
     """
     Replace the variable's attribute `units` to `1`. This is done in
@@ -1725,6 +1750,31 @@ class VarUnitsToKelvin(AttributeAdd):
         self.new_value = 'K'
 
 
+class VarUnitsToMetrePerSecond(AttributeAdd):
+    """
+    Replace the variable's attribute `units` with `m s-1`. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing units attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'units'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'm s-1'
+
+
 class VarUnitsToPascalPerSecond(AttributeAdd):
     """
     Replace the variable's attribute `units` to `Pa s-1`. This is done in
@@ -1798,6 +1848,31 @@ class VarUnitsToThousandths(AttributeAdd):
         Set the new value.
         """
         self.new_value = '0.001'
+
+
+class VaStdNameAdd(AttributeAdd):
+    """
+    Replace the variable's `standard_name` with `northward_wind`. This is done
+    in overwrite mode and so will work irrespective of whether there is an
+    existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'northward_wind'
 
 
 class VerticesLatStdNameDelete(AttributeDelete):
