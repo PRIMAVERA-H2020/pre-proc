@@ -9,6 +9,7 @@ import unittest
 import mock
 
 from pre_proc.file_fix import (
+    AirTemperatureNameAdd,
     ParentBranchTimeAdd,
     ChildBranchTimeAdd,
     BranchMethodAdd,
@@ -24,6 +25,7 @@ from pre_proc.file_fix import (
     ExternalVariablesAreacella,
     ExternalVariablesAreacello,
     ExternalVariablesAreacelloVolcello,
+    GeopotentialHeightNameAdd,
     HadGemMMParentSourceId,
     HistoryClearOld,
     CellMeasuresAreacellaAdd,
@@ -69,13 +71,19 @@ from pre_proc.file_fix import (
     SistryubotStandardNameAdd,
     SitempbotStandardNameAdd,
     SitimefracStandardNameAdd,
+    SpecificHumidityStandardNameAdd,
     SurfaceTemperatureNameAdd,
     TrackingIdNew,
+    UaStdNameAdd,
+    VarUnitsTo1,
     VarUnitsToDegC,
     VarUnitsToKelvin,
+    VarUnitsToMetre,
+    VarUnitsToMetrePerSecond,
     VarUnitsToPascalPerSecond,
     VarUnitsToPercent,
     VarUnitsToThousandths,
+    VaStdNameAdd,
     VerticesLatStdNameDelete,
     VerticesLonStdNameDelete,
     WapStandardNameAdd,
@@ -93,6 +101,23 @@ class BaseTest(unittest.TestCase):
         patch = mock.patch('pre_proc.common.subprocess.check_output')
         self.mock_subprocess = patch.start()
         self.addCleanup(patch.stop)
+
+
+class TestAirTemperatureNameAdd(BaseTest):
+    """ Test AirTemperatureNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        AirTemperatureNameAdd
+        """
+        fix = AirTemperatureNameAdd('ta_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,ta,o,c,'air_temperature' "
+            "/a/ta_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
 
 
 class TestParentBranchTimeAdd(BaseTest):
@@ -695,6 +720,23 @@ class TestExternalVariablesAreacelloVolcello(BaseTest):
         )
 
 
+class TestGeopotentialHeightNameAdd(BaseTest):
+    """ Test GeopotentialHeightNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        GeopotentialHeightNameAdd
+        """
+        fix = GeopotentialHeightNameAdd('zg_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,zg,o,c,'geopotential_height' "
+            "/a/zg_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestHadGemMMParentSourceId(BaseTest):
     """ Test HadGemMMParentSourceId """
     def test_subprocess_called_correctly(self):
@@ -1208,6 +1250,23 @@ class TestSitimefracStandardNameAdd(BaseTest):
         )
 
 
+class TestSpecificHumidityStandardNameAdd(BaseTest):
+    """ Test SpecificHumidityStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SpecificHumidityStandardNameAdd
+        """
+        fix = SpecificHumidityStandardNameAdd('hus_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,hus,o,c,'specific_humidity' "
+            "/a/hus_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestSurfaceTemperatureNameAdd(BaseTest):
     """ Test SurfaceTemperatureNameAdd """
     def test_subprocess_called_correctly(self):
@@ -1241,6 +1300,39 @@ class TestTrackingIdNew(BaseTest):
                          r"/a/prcsh_components.nc")
 
 
+class TestUaStdNameAdd(BaseTest):
+    """ Test UaStdNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for UaStdNameAdd
+        """
+        fix = UaStdNameAdd('ua_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,ua,o,c,'eastward_wind' "
+            "/a/ua_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVarUnitsTo1(BaseTest):
+    """ Test VarUnitsTo1 """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VarUnitsTo1.
+        """
+        fix = VarUnitsTo1('hus_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a units,hus,o,c,'1' "
+            "/a/hus_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestVarUnitsToDegC(BaseTest):
     """ Test VarUnitsToDegC """
     def test_subprocess_called_correctly(self):
@@ -1270,6 +1362,40 @@ class TestVarUnitsToKelvin(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a units,ts,o,c,'K' "
             "/a/ts_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVarUnitsToMetre(BaseTest):
+    """ Test VarUnitsToMetre """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VarUnitsToMetre.
+        """
+        fix = VarUnitsToMetre('zg_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a units,zg,o,c,'m' "
+            "/a/zg_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVarUnitsToMetrePerSecond(BaseTest):
+    """ Test VarUnitsToMetrePerSecond """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VarUnitsToMetrePerSecond.
+        """
+        fix = VarUnitsToMetrePerSecond('ua_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a units,ua,o,c,'m s-1' "
+            "/a/ua_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
@@ -1321,6 +1447,22 @@ class TestVarUnitsToThousandths(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a units,so,o,c,'0.001' "
             "/a/so_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVaStdNameAdd(BaseTest):
+    """ Test VaStdNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for VaStdNameAdd
+        """
+        fix = VaStdNameAdd('va_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,va,o,c,'northward_wind' "
+            "/a/va_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

@@ -9,6 +9,31 @@ import uuid
 from .abstract import AttributeAdd, AttributeDelete
 
 
+class AirTemperatureNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `air_temperature`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'air_temperature'
+
+
 class ParentBranchTimeAdd(AttributeAdd):
     """
    Add a global attribute `branch_time_in_parent` with a value of zero.
@@ -869,6 +894,31 @@ class ExternalVariablesAreacelloVolcello(AttributeAdd):
         self.new_value = 'areacello volcello'
 
 
+class GeopotentialHeightNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `geopotential_height`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'geopotential_height'
+
+
 class HadGemMMParentSourceId(AttributeAdd):
     """
     Add a global attribute `parent_source_id` with a value for HadGEM3-GC31-MM.
@@ -1548,6 +1598,32 @@ class SitempbotStandardNameAdd(AttributeAdd):
         self.new_value = 'sea_ice_basal_temperature'
 
 
+class SpecificHumidityStandardNameAdd(AttributeAdd):
+    """
+    Add a variable attribute `standard_name` with a value of
+    `specific_humidity`. This is done
+    in overwrite mode and so will work irrespective of whether there is an
+    existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'specific_humidity'
+
+
 class SitimefracStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
@@ -1624,6 +1700,56 @@ class TrackingIdNew(AttributeAdd):
         self.new_value = f'hdl:21.14100/{uuid.uuid4()}'
 
 
+class UaStdNameAdd(AttributeAdd):
+    """
+    Replace the variable's `standard_name` with `eastward_wind`. This is done
+    in overwrite mode and so will work irrespective of whether there is an
+    existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'eastward_wind'
+
+
+class VarUnitsTo1(AttributeAdd):
+    """
+    Replace the variable's attribute `units` to `1`. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing units attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'units'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = '1'
+
+
 class VarUnitsToDegC(AttributeAdd):
     """
     Replace the variable's attribute `units` to `degC`. This is done in
@@ -1672,6 +1798,56 @@ class VarUnitsToKelvin(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'K'
+
+
+class VarUnitsToMetre(AttributeAdd):
+    """
+    Replace the variable's attribute `units` with `m`. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing units attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'units'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'm'
+
+
+class VarUnitsToMetrePerSecond(AttributeAdd):
+    """
+    Replace the variable's attribute `units` with `m s-1`. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing units attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'units'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'm s-1'
 
 
 class VarUnitsToPascalPerSecond(AttributeAdd):
@@ -1749,6 +1925,31 @@ class VarUnitsToThousandths(AttributeAdd):
         self.new_value = '0.001'
 
 
+class VaStdNameAdd(AttributeAdd):
+    """
+    Replace the variable's `standard_name` with `northward_wind`. This is done
+    in overwrite mode and so will work irrespective of whether there is an
+    existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'standard_name'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'northward_wind'
+
+
 class VerticesLatStdNameDelete(AttributeDelete):
     """
     Delete `standard_name` attribute from `vertices_latitude`.
@@ -1821,6 +2022,7 @@ class WapStandardNameAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'lagrangian_tendency_of_air_pressure'
+
 
 class WtemStandardNameAdd(AttributeAdd):
     """
