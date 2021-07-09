@@ -69,8 +69,10 @@ from pre_proc.file_fix import (
     SistryubotStandardNameAdd,
     SitempbotStandardNameAdd,
     SitimefracStandardNameAdd,
+    SpecificHumidityStandardNameAdd,
     SurfaceTemperatureNameAdd,
     TrackingIdNew,
+    VarUnitsTo1,
     VarUnitsToDegC,
     VarUnitsToKelvin,
     VarUnitsToPascalPerSecond,
@@ -1208,6 +1210,23 @@ class TestSitimefracStandardNameAdd(BaseTest):
         )
 
 
+class TestSpecificHumidityStandardNameAdd(BaseTest):
+    """ Test SpecificHumidityStandardNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SpecificHumidityStandardNameAdd
+        """
+        fix = SpecificHumidityStandardNameAdd('hus_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,hus,o,c,'specific_humidity' "
+            "/a/hus_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestSurfaceTemperatureNameAdd(BaseTest):
     """ Test SurfaceTemperatureNameAdd """
     def test_subprocess_called_correctly(self):
@@ -1239,6 +1258,23 @@ class TestTrackingIdNew(BaseTest):
                          r"ncatted -h -a tracking_id,global,o,c,"
                          r"'hdl:21.14100/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}' "
                          r"/a/prcsh_components.nc")
+
+
+class TestVarUnitsTo1(BaseTest):
+    """ Test VarUnitsTo1 """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VarUnitsTo1.
+        """
+        fix = VarUnitsTo1('hus_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a units,hus,o,c,'1' "
+            "/a/hus_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
 
 
 class TestVarUnitsToDegC(BaseTest):
