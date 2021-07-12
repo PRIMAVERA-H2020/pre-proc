@@ -9,7 +9,10 @@ FileFix.
 import argparse
 import logging.config
 import os
+import shutil
 import sys
+import tempfile
+import time
 import traceback
 import warnings
 
@@ -42,6 +45,9 @@ def parse_args():
     parser.add_argument('-f', '--file', help='Process single file rather than '
                                              'directory',
                         action='store_true')
+    parser.add_argument('-t', '--temp-dir',
+                        help='copy each file to the specified temporary '
+                             'directory before processing it')
     parser.add_argument('-l', '--log-level', help='set logging level to one '
                                                   'of debug, info, warn (the '
                                                   'default), or error')
@@ -72,13 +78,48 @@ def main(args):
     for filepath in files_to_process:
         logger.debug('Processing {}'.format(filepath))
         try:
-            esgf_submission = EsgfSubmission.from_file(filepath)
+            if args.temp_dir:
+                temp_dir = tempfile.mkdtemp(dir=args.temp_dir)
+                logger.debug('Temporary directory is {}'.format(temp_dir))
+                temp_path = os.path.join(temp_dir, os.path.basename(filepath))
+                try:
+                    shutil.copyfile(filepath, temp_path)
+                except PermissionError:
+                    # A PermisssionError occurs on the JASMIN storage
+                    # occasionally and so wait and then retry once.
+                    logger.warning('PermissionError copying file to temp_dir. '
+                                   'Waiting ten minutes')
+                    time.sleep(600)
+                    shutil.copyfile(filepath, temp_path)
+                process_path = temp_path
+            else:
+                process_path = filepath
+            esgf_submission = EsgfSubmission.from_file(process_path)
             esgf_submission.fixes = [getattr(pre_proc.file_fix, args.fix_name)
-                                     (os.path.basename(filepath),
-                                      os.path.dirname(filepath))]
+                                     (os.path.basename(process_path),
+                                      os.path.dirname(process_path))]
             esgf_submission.run_fixes()
             esgf_submission.update_history()
-        except:
+            if args.temp_dir:
+                os.rename(filepath, filepath + '.old')
+                try:
+                    shutil.copyfile(temp_path, filepath)
+                except PermissionError:
+                    # A PermisssionError occurs on the JASMIN storage
+                    # occasionally and so wait and then retry once. The later
+                    # operations could also be affected but take much less
+                    # time and so are less likely to be affected. If experience
+                    # shows that they would also benefit from a repeat then
+                    # this can be added later. The later operations are also
+                    # easier to recover from.
+                    logger.warning('PermissionError copying file from '
+                                   'temp_dir. Waiting ten minutes')
+                    time.sleep(600)
+                    shutil.copyfile(temp_path, filepath)
+                os.remove(temp_path)
+                os.rmdir(temp_dir)
+                os.remove(filepath + '.old')
+        except Exception:
             files_failed.append(filepath)
             exc_type, exc_value, exc_tb = sys.exc_info()
             tb_list = traceback.format_exception(exc_type, exc_value, exc_tb)
