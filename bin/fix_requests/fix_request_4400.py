@@ -51,7 +51,8 @@ def main():
     )
 
     fixes = [
-        FileFix.objects.get(name='MipEraToPrim')
+        FileFix.objects.get(name='MipEraToPrim'),
+        FileFix.objects.get(name='ZFurtherInfoUrl')
     ]
 
     # This next line could be done more quickly by:

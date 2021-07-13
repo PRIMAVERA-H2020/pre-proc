@@ -4,7 +4,10 @@ attribute_add.py
 Workers that fix the netCDF files that are based on the AttributeAdd
 abstract base classes.
 """
+import os
 import uuid
+
+from netCDF4 import Dataset
 
 from .abstract import AttributeAdd, AttributeDelete
 
@@ -2074,6 +2077,49 @@ class WindSpeedStandardNameAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'wind_speed'
+
+
+class ZFurtherInfoUrl(AttributeAdd):
+    """
+    Add a global attribute `further_info_url` with a value generated
+    correctly from existing other attributes in the file. This is done
+    in overwrite mode and so will work irrespective of whether there
+    is an existing attribute. The Z at the start of the name allows it
+    to run after other fixes so that the necessary attributes have
+    already been fixed.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'further_info_url'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        filepath = os.path.join(self.directory, self.filename)
+        with Dataset(filepath) as rootgrp:
+            mip_era = getattr(rootgrp, 'mip_era', None)
+            institution_id = getattr(rootgrp, 'institution_id', None)
+            source_id = getattr(rootgrp, 'source_id', None)
+            experiment_id = getattr(rootgrp, 'experiment_id', None)
+            sub_experiment_id = getattr(rootgrp, 'sub_experiment_id', None)
+            variant_label = getattr(rootgrp, 'variant_label', None)
+
+        self.new_value = (f'https://furtherinfo.es-doc.org/'
+                          f'{mip_era}.'
+                          f'{institution_id}.'
+                          f'{source_id}.'
+                          f'{experiment_id}.'
+                          f'{sub_experiment_id}.'
+                          f'{variant_label}')
 
 
 class ZZZThetapv2StandardNameAdd(AttributeAdd):

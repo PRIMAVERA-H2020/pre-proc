@@ -89,6 +89,7 @@ from pre_proc.file_fix import (
     WapStandardNameAdd,
     WtemStandardNameAdd,
     WindSpeedStandardNameAdd,
+    ZFurtherInfoUrl,
     ZZZThetapv2StandardNameAdd
 )
 
@@ -1551,6 +1552,35 @@ class TestWindSpeedStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,sfcWindmax,o,c,"
             "'wind_speed' "
             "/a/sfcWindmax_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestZFurtherInfoUrl(BaseTest):
+    """ Test ZFurtherInfoUrl """
+    @mock.patch('pre_proc.file_fix.attribute_add.Dataset')
+    def test_subprocess_called_correctly(self, mock_dataset):
+        """
+        Test that an external call's been made correctly for
+        ZFurtherInfoUrl
+        """
+        class MockedDataset:
+            mip_era = 'mip_era'
+            institution_id = 'institution_id'
+            source_id = 'source_id'
+            experiment_id = 'experiment_id'
+            sub_experiment_id = 'none'
+            variant_label = 'variant_label'
+        mock_dataset.return_value.__enter__.return_value = MockedDataset
+
+        fix = ZFurtherInfoUrl('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a further_info_url,global,o,c,"
+            "'https://furtherinfo.es-doc.org/mip_era.institution_id.source_id."
+            "experiment_id.none.variant_label' "
+            "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
