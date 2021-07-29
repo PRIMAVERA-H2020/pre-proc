@@ -48,8 +48,7 @@ def main():
         source_id__name='EC-Earth3P-HR',
         experiment_id__name='spinup-1950',
         variant_label='r1i1p1f1',
-        variable_request__table_name__in=['Amon', 'Emon', 'LImon', 'Lmon',
-                                          'Primmon']
+        table_id__in=['Amon', 'Emon', 'LImon', 'Lmon', 'Primmon']
     )
 
     fixes = [
