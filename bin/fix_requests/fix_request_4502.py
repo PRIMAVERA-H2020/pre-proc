@@ -4,7 +4,7 @@ fix_request_4502.py
 
 EC-Earth-Consortium.EC-Earth3P-HR.spinup-1950.r1i1p1f1.[O|SI]mon
 
-cell_measures areacello
+cell_measures areacello cell_methods
 """
 import argparse
 import logging.config
@@ -43,6 +43,7 @@ def main():
     """
     Main entry point
     """
+    ### Cell Measures
     data_reqs = DataRequest.objects.filter(
         institution_id__name='EC-Earth-Consortium',
         source_id__name='EC-Earth3P-HR',
@@ -68,6 +69,28 @@ def main():
     # Add good
     fixes = [
         FileFix.objects.get(name='CellMeasuresAreacelloAdd'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    ### Cell Methods (ocean only)
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='EC-Earth-Consortium',
+        source_id__name='EC-Earth3P-HR',
+        experiment_id__name='spinup-1950',
+        variant_label='r1i1p1f1',
+        table_id__in=['Omon']
+    )
+
+    fixes = [
+        FileFix.objects.get(name='CellMethodsSeaAreaTimeMeanAdd'),
     ]
 
     for data_req in data_reqs:
