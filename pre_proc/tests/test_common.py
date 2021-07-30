@@ -6,7 +6,7 @@ Unit tests for pre_proc.common
 from abc import ABCMeta, abstractmethod
 import unittest
 
-from pre_proc.common import get_concrete_subclasses
+from pre_proc.common import get_concrete_subclasses, to_int, to_float
 
 
 class AbstractParent(object, metaclass=ABCMeta):
@@ -60,3 +60,31 @@ class TestGetConcreteSubclasses(unittest.TestCase):
         """ Test that nothing is returned if there are no children"""
         self.assertEqual([],
                          get_concrete_subclasses(ConcreteChild))
+
+
+class TestToFloat(unittest.TestCase):
+    """ test pre_proc.common.to_float() """
+    def test_string(self):
+        expected = 1.0
+        actual = to_float("1.0")
+        self.assertEqual(actual, expected)
+
+    def test_not_int(self):
+        self.assertRaises(ValueError, to_float, 'a')
+
+    def test_not_float(self):
+        self.assertRaises(TypeError, to_float, 1.0)
+
+
+class TestToInt(unittest.TestCase):
+    """ test pre_proc.common.to_int() """
+    def test_string(self):
+        expected = 1
+        actual = to_int("1")
+        self.assertEqual(actual, expected)
+
+    def test_not_int(self):
+        self.assertRaises(ValueError, to_int, 'a')
+
+    def test_not_int(self):
+        self.assertRaises(TypeError, to_int, 1)

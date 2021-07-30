@@ -105,6 +105,7 @@ def to_float(string_value):
     :param str string_value: The string to convert.
     :returns: The float from the start of the string.
     :rtype: float
+    :raises TypeError: if something other than a string is passed in.
     :raises ValueError: if a float cannot be found.
     """
     float_regexp = r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?'
@@ -123,6 +124,7 @@ def to_int(string_value):
     :param str string_value: The string to convert.
     :returns: The int from the start of the string.
     :rtype: int
+    :raises TypeError: if something other than a string is passed in.
     :raises ValueError: if an int cannot be found.
     """
     int_regexp = r'[+-]?(\d+)'
