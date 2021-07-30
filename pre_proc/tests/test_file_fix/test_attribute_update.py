@@ -295,7 +295,6 @@ class TestPhysicsIndexIntFix(BaseTest):
         )
 
 
-
 class TestRealizationIndexIntFix(BaseTest):
     """ Test RealizationIndexIntFix """
     def test_no_attribute_raises(self):
