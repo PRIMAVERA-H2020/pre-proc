@@ -4,6 +4,7 @@ attribute_update.py
 Workers that fix the netCDF files that are based on the AttributeUpdate
 abstract base class.
 """
+import numbers
 import os
 
 from netCDF4 import Dataset
@@ -143,11 +144,14 @@ class PhysicsIndexIntFix(AttributeUpdate):
         """
         The new value is the existing string converted to a double.
         """
-        try:
-            self.new_value = to_int(self.existing_value)
-        except ValueError:
-            raise AttributeConversionError(self.filename, self.attribute_name,
-                                           'int')
+        if isinstance(self.existing_value, numbers.Number):
+            self.new_value = self.existing_value
+        else:
+            try:
+                self.new_value = to_int(self.existing_value)
+            except (ValueError, TypeError):
+                raise AttributeConversionError(self.filename,
+                                               self.attribute_name, 'int')
 
 
 class RealizationIndexIntFix(AttributeUpdate):

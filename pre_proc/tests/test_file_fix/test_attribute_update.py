@@ -279,6 +279,22 @@ class TestPhysicsIndexIntFix(BaseTest):
             shell=True
         )
 
+    def test_subprocess_called_correctly_already_int(self):
+        """
+        Test that an external call's been made correctly for
+        PhysicsIndexIntFix if there's already an integer.
+        """
+        self.mock_dataset.return_value.physics_index = 99
+        fix = PhysicsIndexIntFix('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a physics_index,global,o,s,99 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 
 class TestRealizationIndexIntFix(BaseTest):
     """ Test RealizationIndexIntFix """
