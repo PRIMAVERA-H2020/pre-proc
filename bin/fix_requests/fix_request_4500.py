@@ -4,7 +4,7 @@ fix_request_4500.py
 
 EC-Earth-Consortium.EC-Earth3P-HR.spinup-1950.r1i1p1f1.*
 
-data_specs_version institution BranchTimeDoubleFix
+data_specs_version institution BranchTimeDoubleFix physics_index
 """
 import argparse
 import logging.config
@@ -54,7 +54,8 @@ def main():
         FileFix.objects.get(name='DataSpecsVersionAdd'),
         FileFix.objects.get(name='ChildBranchTimeDoubleFix'),
         FileFix.objects.get(name='ParentBranchTimeDoubleFix'),
-        FileFix.objects.get(name='EcEarthInstitution')
+        FileFix.objects.get(name='EcEarthInstitution'),
+        FileFix.objects.get(name='PhysicsIndexIntFix')
     ]
 
     # This next line could be done more quickly by:
