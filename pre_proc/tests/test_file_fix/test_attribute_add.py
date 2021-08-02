@@ -26,6 +26,7 @@ from pre_proc.file_fix import (
     ExternalVariablesAreacello,
     ExternalVariablesAreacelloVolcello,
     GeopotentialHeightNameAdd,
+    GridLabelGnAdd,
     HadGemMMParentSourceId,
     HistoryClearOld,
     CellMeasuresAreacellaAdd,
@@ -733,6 +734,23 @@ class TestGeopotentialHeightNameAdd(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a standard_name,zg,o,c,'geopotential_height' "
             "/a/zg_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestGridLabelGnAdd(BaseTest):
+    """ Test GridLabelGnAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        GridLabelGnAdd
+        """
+        fix = GridLabelGnAdd('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a grid_label,global,o,c,'gn' "
+            "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
