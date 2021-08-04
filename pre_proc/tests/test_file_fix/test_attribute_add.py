@@ -46,6 +46,7 @@ from pre_proc.file_fix import (
     CellMethodsAreaMeanTimeMaximumAdd,
     CellMethodsAreaMeanTimeMinDailyAdd,
     CellMethodsAreaMeanTimeMaxDailyAdd,
+    CellMethodsAreaSumSeaTimeMeanAdd,
     ProductAdd,
     AtmosphereCloudIceContentStandardNameAdd,
     HfbasinpmadvStandardNameAdd,
@@ -521,6 +522,24 @@ class TestCellMethodsAreaMeanTimeMaxDailyAdd(BaseTest):
             "ncatted -h -a cell_methods,sfcWindmax,o,c,"
             "'area: mean time: maximum' "
             "/a/sfcWindmax_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsAreaSumSeaTimeMeanAdd(BaseTest):
+    """ Test CellMethodsAreaSumSeaTimeMeanAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaSumSeaTimeMeanAdd
+        """
+        fix = CellMethodsAreaSumSeaTimeMeanAdd('masso_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,masso,o,c,"
+            "'area: sum where sea time: mean' "
+            "/a/masso_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
