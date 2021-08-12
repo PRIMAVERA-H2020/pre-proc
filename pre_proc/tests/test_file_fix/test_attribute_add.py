@@ -35,6 +35,8 @@ from pre_proc.file_fix import (
     CellMeasuresAreacelloVolcelloAdd,
     CellMeasuresDelete,
     CellMethodsAreaTimeMeanAdd,
+    CellMethodsAreaMeanTimeLandMeanAdd,
+    CellMethodsTimeMaxAdd,
     CellMethodsTimeMeanAdd,
     CellMethodsTimePointAdd,
     CellMethodsSeaAreaTimeMeanAdd,
@@ -295,6 +297,23 @@ class TestCellMeasuresDelete(BaseTest):
         )
 
 
+class TestCellMethodsTimeMaxAdd(BaseTest):
+    """ Test CellMethodsTimeMaxAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsTimeMaxAdd
+        """
+        fix = CellMethodsTimeMaxAdd('sfcWindmax_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,sfcWindmax,o,c,'time: maximum' "
+            "/a/sfcWindmax_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestCellMethodsTimeMeanAdd(BaseTest):
     """ Test CellMethodsTimeMeanAdd """
     def test_subprocess_called_correctly(self):
@@ -341,6 +360,24 @@ class TestCellMethodsAreaTimeMeanAdd(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a cell_methods,tas,o,c,'area: time: mean' "
             "/a/tas_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsAreaMeanTimeLandMeanAdd(BaseTest):
+    """ Test CellMethodsAreaMeanTimeLandMeanAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsAreaMeanTimeLandMeanAdd
+        """
+        fix = CellMethodsAreaMeanTimeLandMeanAdd('mrro_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,mrro,o,c,"
+            "'area: mean where land time: mean' "
+            "/a/mrro_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
