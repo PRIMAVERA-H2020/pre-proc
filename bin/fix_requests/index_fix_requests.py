@@ -24,6 +24,7 @@ The file naming convention is assumed to be:
 *6** control-1950
 *7** hist-1950
 *8** highres-future
+*9** wp5
 
 The docstring at the top of every file is assumed to be in the form (index of
 docstring line on the left):

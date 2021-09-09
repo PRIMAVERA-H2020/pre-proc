@@ -15,6 +15,7 @@ from pre_proc.file_fix import (
     BranchMethodAdd,
     BranchTimeDelete,
     DataSpecsVersionAdd,
+    DataSpecsVersion27Add,
     DataSpecsVersion29Add,
     EcEarthInstitution,
     EcmwfInstitution,
@@ -25,11 +26,18 @@ from pre_proc.file_fix import (
     ExternalVariablesAreacella,
     ExternalVariablesAreacello,
     ExternalVariablesAreacelloVolcello,
+    ForcingIndexFromFilename,
+    FrequencyDayAdd,
+    FrequencyMonAdd,
     GeopotentialHeightNameAdd,
     GridLabelGnAdd,
     GridLabelGrAdd,
+    GridNativeAdd,
     HadGemMMParentSourceId,
     HistoryClearOld,
+    InitializationIndexFromFilename,
+    PhysicsIndexFromFilename,
+    RealizationIndexFromFilename,
     CellMeasuresAreacellaAdd,
     CellMeasuresAreacelloAdd,
     CellMeasuresAreacelloVolcelloAdd,
@@ -50,6 +58,12 @@ from pre_proc.file_fix import (
     CellMethodsAreaMeanTimeMinDailyAdd,
     CellMethodsAreaMeanTimeMaxDailyAdd,
     CellMethodsAreaSumSeaTimeMeanAdd,
+    Conventions,
+    CreationDate201807,
+    DcppcAmvNegExpt,
+    DcppcAmvNegExptId,
+    DcppcAmvPosExpt,
+    DcppcAmvPosExptId,
     ProductAdd,
     AtmosphereCloudIceContentStandardNameAdd,
     HfbasinpmadvStandardNameAdd,
@@ -80,6 +94,7 @@ from pre_proc.file_fix import (
     SurfaceTemperatureNameAdd,
     TrackingIdNew,
     UaStdNameAdd,
+    VariantLabelFromFilename,
     VarUnitsTo1,
     VarUnitsToDegC,
     VarUnitsToKelvin,
@@ -205,6 +220,23 @@ class TestDataSpecsVersionAdd(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a data_specs_version,global,o,c,'01.00.23' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestDataSpecsVersion27Add(BaseTest):
+    """ Test DataSpecsVersion27Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        DataSpecsVersion27Add
+        """
+        fix = DataSpecsVersion27Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a data_specs_version,global,o,c,'01.00.27' "
             "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
@@ -583,6 +615,114 @@ class TestCellMethodsAreaSumSeaTimeMeanAdd(BaseTest):
         )
 
 
+class TestConventions(BaseTest):
+    """ Test Conventions """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        Conventions
+        """
+        fix = Conventions('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a Conventions,global,o,c,"
+            "'CF-1.7 CMIP-6.2' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCreationDate201807(BaseTest):
+    """ Test CreationDate201807 """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CreationDate201807
+        """
+        fix = CreationDate201807('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a creation_date,global,o,c,"
+            "'2018-07-01T00:00:00Z' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestDcppcAmvNegExpt(BaseTest):
+    """ Test DcppcAmvNegExpt """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        DcppcAmvNegExpt
+        """
+        fix = DcppcAmvNegExpt('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a experiment,global,o,c,"
+            "'Idealized climate impact of negative 2xAMV anomaly pattern' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestDcppcAmvNegExptId(BaseTest):
+    """ Test DcppcAmvNegExptId """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        DcppcAmvNegExptId
+        """
+        fix = DcppcAmvNegExptId('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a experiment_id,global,o,c,"
+            "'dcppc-amv-neg' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestDcppcAmvPosExpt(BaseTest):
+    """ Test DcppcAmvPosExpt """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        DcppcAmvPosExpt
+        """
+        fix = DcppcAmvPosExpt('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a experiment,global,o,c,"
+            "'Idealized climate impact of positive 2xAMV anomaly pattern' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestDcppcAmvPosExptId(BaseTest):
+    """ Test DcppcAmvPosExptId """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        DcppcAmvPosExptId
+        """
+        fix = DcppcAmvPosExptId('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a experiment_id,global,o,c,"
+            "'dcppc-amv-pos' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestEcEartInstitution(BaseTest):
     """ Test EcEarthInstitution """
     def test_subprocess_called_correctly(self):
@@ -779,6 +919,58 @@ class TestExternalVariablesAreacelloVolcello(BaseTest):
         )
 
 
+class TestForcingIndexFromFilename(BaseTest):
+    """ Test ForcingIndexFromFilename """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ForcingIndexFromFilename
+        """
+        fix = ForcingIndexFromFilename(
+            'var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc',
+            '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a forcing_index,global,o,s,10 "
+            "/a/var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestFrequencyDayAdd(BaseTest):
+    """ Test FrequencyDayAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        FrequencyDayAdd
+        """
+        fix = FrequencyDayAdd('var_cmpts.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a frequency,global,o,c,'day' /a/var_cmpts.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestFrequencyMonAdd(BaseTest):
+    """ Test FrequencyMonAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        FrequencyMonAdd
+        """
+        fix = FrequencyMonAdd('var_cmpts.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a frequency,global,o,c,'mon' /a/var_cmpts.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestGeopotentialHeightNameAdd(BaseTest):
     """ Test GeopotentialHeightNameAdd """
     def test_subprocess_called_correctly(self):
@@ -830,6 +1022,23 @@ class TestGridLabelGrAdd(BaseTest):
         )
 
 
+class TestGridNativeAdd(BaseTest):
+    """ Test GridNativeAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        GridNativeAdd
+        """
+        fix = GridNativeAdd('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a grid,global,o,c,'native atmosphere and ocean grids' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestHadGemMMParentSourceId(BaseTest):
     """ Test HadGemMMParentSourceId """
     def test_subprocess_called_correctly(self):
@@ -859,6 +1068,66 @@ class TestHistoryClearOld(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a history,global,o,c,'' "
             "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestInitializationIndexFromFilename(BaseTest):
+    """ Test InitializationIndexFromFilename """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        InitializationIndexFromFilename
+        """
+        fix = InitializationIndexFromFilename(
+            'var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc',
+            '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a initialization_index,global,o,s,2 "
+            "/a/var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestPhysicsIndexFromFilename(BaseTest):
+    """ Test PhysicsIndexFromFilename """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        PhysicsIndexFromFilename
+        """
+        fix = PhysicsIndexFromFilename(
+            'var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc',
+            '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a physics_index,global,o,s,3 "
+            "/a/var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestRealizationIndexFromFilename(BaseTest):
+    """ Test RealizationIndexFromFilename """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        RealizationIndexFromFilename
+        """
+        fix = RealizationIndexFromFilename(
+            'var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc',
+            '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a realization_index,global,o,s,1 "
+            "/a/var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
@@ -1404,6 +1673,26 @@ class TestUaStdNameAdd(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a standard_name,ua,o,c,'eastward_wind' "
             "/a/ua_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVariantLabelFromFilename(BaseTest):
+    """ Test VariantLabelFromFilename """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VariantLabelFromFilename.
+        """
+        fix = VariantLabelFromFilename(
+            'var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc',
+            '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a variant_label,global,o,c,'r1i2p3f10' "
+            "/a/var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
