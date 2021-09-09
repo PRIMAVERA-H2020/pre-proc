@@ -1582,6 +1582,48 @@ class HfbasinpmdiffStandardNameAdd(AttributeAdd):
                           'parameterized_mesoscale_eddy_diffusion')
 
 
+class LicenseAdd(AttributeAdd):
+    """
+    Add a license global attribute appropriate to the institution_id.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'license'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Change the existing value to `PRIMAVERA`.
+        """
+        filepath = os.path.join(self.directory, self.filename)
+        with Dataset(filepath) as rootgrp:
+            institution_id = getattr(rootgrp, 'institution_id', None)
+
+        self.new_value = (
+            f'CMIP6 model data produced by {institution_id} is licensed under '
+            f'a Creative Commons Attribution-ShareAlike 4.0 International '
+            f'License (https://creativecommons.org/licenses/). Consult '
+            f'https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use '
+            f'governing CMIP6 output, including citation requirements and '
+            f'proper acknowledgment. Further information about this data, '
+            f'including some limitations, can be found via the '
+            f'further_info_url (recorded as a global attribute in this file). '
+            f'The data producers and data providers make no warranty, either '
+            f'express or implied, including, but not limited to, warranties '
+            f'of merchantability and fitness for a particular purpose. All '
+            f'liabilities arising from the supply of the information '
+            f'(including any liability arising in negligence) are excluded to '
+            f'the fullest extent permitted by law.'
+        )
+
+
 class MipEraToPrim(AttributeAdd):
     """
     Change the mip_era to `PRIMAVERA`.
@@ -1603,6 +1645,32 @@ class MipEraToPrim(AttributeAdd):
         Change the existing value to `PRIMAVERA`.
         """
         self.new_value = 'PRIMAVERA'
+
+
+class MpiInstitution(AttributeAdd):
+    """
+    Add a global attribute `institution` with a value for MPI. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'institution'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('Max Planck Institute for Meteorology, '
+                          'Hamburg 20146, Germany')
 
 
 class MsftmzmpaStandardNameAdd(AttributeAdd):

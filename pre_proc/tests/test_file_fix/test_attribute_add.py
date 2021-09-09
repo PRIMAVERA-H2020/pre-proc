@@ -69,7 +69,9 @@ from pre_proc.file_fix import (
     HfbasinpmadvStandardNameAdd,
     HfbasinpmdiffStandardNameAdd,
     SeaWaterSalinityStandardNameAdd,
+    LicenseAdd,
     MipEraToPrim,
+    MpiInstitution,
     MsftmzmpaStandardNameAdd,
     NominalResolution100km,
     NominalResolution50km,
@@ -1205,6 +1207,41 @@ class TestHfbasinpmdiffStandardNameAdd(BaseTest):
         )
 
 
+class TestLicenseAdd(BaseTest):
+    """ Test LicenseAdd """
+    @mock.patch('pre_proc.file_fix.attribute_add.Dataset')
+    def test_subprocess_called_correctly(self, mock_dataset):
+        """
+        Test that an external call's been made correctly for
+        LicenseAdd
+        """
+        class MockedDataset:
+            institution_id = 'my-institution'
+        mock_dataset.return_value.__enter__.return_value = MockedDataset
+
+        fix = LicenseAdd('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a license,global,o,c,"
+            "'CMIP6 model data produced by my-institution is licensed under a "
+            "Creative Commons Attribution-ShareAlike 4.0 International License "
+            "(https://creativecommons.org/licenses/). Consult https://pcmdi."
+            "llnl.gov/CMIP6/TermsOfUse for terms of use governing CMIP6 "
+            "output, including citation requirements and proper "
+            "acknowledgment. Further information about this data, including "
+            "some limitations, can be found via the further_info_url (recorded "
+            "as a global attribute in this file). The data producers and data "
+            "providers make no warranty, either express or implied, including, "
+            "but not limited to, warranties of merchantability and fitness for "
+            "a particular purpose. All liabilities arising from the supply of "
+            "the information (including any liability arising in negligence) "
+            "are excluded to the fullest extent permitted by law.' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestMipEraToPrim(BaseTest):
     """ Test MipEraToPrim """
     def test_subprocess_called_correctly(self):
@@ -1216,6 +1253,24 @@ class TestMipEraToPrim(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a mip_era,global,o,c,'PRIMAVERA' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestMpiInstitution(BaseTest):
+    """ Test MpiInstitution """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        MpiInstitution
+        """
+        fix = MpiInstitution('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a institution,global,o,c,"
+            "'Max Planck Institute for Meteorology, Hamburg 20146, Germany' "
             "/a/var_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
