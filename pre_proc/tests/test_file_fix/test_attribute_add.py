@@ -104,6 +104,7 @@ from pre_proc.file_fix import (
     TrackingIdNew,
     UaStdNameAdd,
     VariantLabelFromFilename,
+    VariableIdAdd,
     VarUnitsTo1,
     VarUnitsToDegC,
     VarUnitsToKelvin,
@@ -1894,6 +1895,23 @@ class TestVariantLabelFromFilename(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a variant_label,global,o,c,'r1i2p3f10' "
             "/a/var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestVariableIdAdd(BaseTest):
+    """ Test VariableIdAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        VariableIdAdd
+        """
+        fix = VariableIdAdd('var-name_table-name_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a variable_id,global,o,c,'var-name' "
+            "/a/var-name_table-name_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

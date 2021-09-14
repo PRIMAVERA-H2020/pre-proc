@@ -2494,6 +2494,31 @@ class UaStdNameAdd(AttributeAdd):
         self.new_value = 'eastward_wind'
 
 
+class VariableIdAdd(AttributeAdd):
+    """
+    Add a global attribute `variable_id` with an appropriate value determined
+    from the filename. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'variable_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = self.filename.split('_')[0]
+
+
 class VariantLabelFromFilename(AttributeAdd):
     """
     Add a global attribute `forcing_index` with a value of

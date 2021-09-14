@@ -66,6 +66,8 @@ def main():
         FileFix.objects.get(name='LicenseAdd'),
         FileFix.objects.get(name='SourceTypeAogcmAdd'),
         FileFix.objects.get(name='TableIdAdd'),
+        FileFix.objects.get(name='TrackingIdNew'),
+        FileFix.objects.get(name='VariableIdAdd'),
         FileFix.objects.get(name='ZFurtherInfoUrl'),
     ]
 
