@@ -13,7 +13,7 @@ import sys
 import django
 django.setup()
 
-from pre_proc_app.models import DataRequest, FileFix
+from pre_proc_app.models import DataRequest, FileFix  # noqa
 
 
 __version__ = '0.1.0b1'
@@ -65,6 +65,7 @@ def main():
         FileFix.objects.get(name='MpiInstitution'),
         FileFix.objects.get(name='LicenseAdd'),
         FileFix.objects.get(name='SourceTypeAogcmAdd'),
+        FileFix.objects.get(name='TableIdAdd'),
         FileFix.objects.get(name='ZFurtherInfoUrl'),
     ]
 
@@ -121,7 +122,6 @@ def main():
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
-
     ###############
     # dcppc-amv-pos
     ###############
@@ -165,7 +165,6 @@ def main():
     for fix in fixes:
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
-
 
     #########
     # monthly

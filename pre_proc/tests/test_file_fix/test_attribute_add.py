@@ -100,6 +100,7 @@ from pre_proc.file_fix import (
     SourceTypeAogcmAdd,
     SpecificHumidityStandardNameAdd,
     SurfaceTemperatureNameAdd,
+    TableIdAdd,
     TrackingIdNew,
     UaStdNameAdd,
     VariantLabelFromFilename,
@@ -1829,12 +1830,29 @@ class TestSurfaceTemperatureNameAdd(BaseTest):
         )
 
 
+class TestTableIdAdd(BaseTest):
+    """ Test TableIdAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        TableIdAdd
+        """
+        fix = TableIdAdd('var_table-name_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a table_id,global,o,c,'table-name' "
+            "/a/var_table-name_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestTrackingIdNew(BaseTest):
     """ Test TrackingIdNew """
     def test_subprocess_called_correctly(self):
         """
         Test that an external call's been made correctly for
-        ShallowConvectivePrecipitationFluxStandardNameAdd
+        TrackingIdNew
         """
         fix = TrackingIdNew('prcsh_components.nc', '/a')
         fix.apply_fix()
