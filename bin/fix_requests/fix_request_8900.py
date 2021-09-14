@@ -64,6 +64,7 @@ def main():
         FileFix.objects.get(name='GridNativeAdd'),
         FileFix.objects.get(name='MpiInstitution'),
         FileFix.objects.get(name='LicenseAdd'),
+        FileFix.objects.get(name='SourceTypeAogcmAdd'),
         FileFix.objects.get(name='ZFurtherInfoUrl'),
     ]
 

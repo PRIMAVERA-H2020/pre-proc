@@ -97,6 +97,7 @@ from pre_proc.file_fix import (
     SistryubotStandardNameAdd,
     SitempbotStandardNameAdd,
     SitimefracStandardNameAdd,
+    SourceTypeAogcmAdd,
     SpecificHumidityStandardNameAdd,
     SurfaceTemperatureNameAdd,
     TrackingIdNew,
@@ -1770,6 +1771,25 @@ class TestSitimefracStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,sitimefrac,o,c,"
             "'fraction_of_time_with_sea_ice_area_fraction_above_threshold' "
             "/a/sitimefrac_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSourceTypeAogcmAdd(BaseTest):
+    """ Test SourceTypeAogcmAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SourceTypeAogcmAdd
+        """
+        fix = SourceTypeAogcmAdd(
+            'var_components.nc', '/a'
+        )
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a source_type,global,o,c,"
+            "'AOGCM' /a/var_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
