@@ -79,6 +79,7 @@ from pre_proc.file_fix import (
     NominalResolution10km,
     RealmAtmos,
     RealmOcean,
+    RealmSeaIce,
     SeaSurfaceTemperatureNameAdd,
     ShallowConvectivePrecipitationFluxStandardNameAdd,
     SidmassdynStandardNameAdd,
@@ -1387,6 +1388,23 @@ class TestRealmOcean(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a realm,global,o,c,'ocean' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestRealmSeaIce(BaseTest):
+    """ Test RealmSeaIce """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        RealmSeaIce
+        """
+        fix = RealmSeaIce('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a realm,global,o,c,'seaIce' "
             "/a/var_components.nc",
             stderr=subprocess.STDOUT,
             shell=True

@@ -232,6 +232,73 @@ def main():
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
+    #######
+    # Atmos
+    #######
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv'
+    ).exclude(
+        table_id__in=['Omon', 'SImon']
+    )
+
+    fixes = [
+        FileFix.objects.get(name='RealmAtmos'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    #######
+    # Ocean
+    #######
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv',
+        table_id='Omon'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='RealmOcean'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    #########
+    # Sea Ice
+    #########
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv',
+        table_id='SImon'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='RealmSeaIce'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()

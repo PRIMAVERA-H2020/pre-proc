@@ -1316,8 +1316,9 @@ class GridLabelGrAdd(AttributeAdd):
 class GridNativeAdd(AttributeAdd):
     """
     Add a global attribute `grid` with a value of
-    `native atmosphere and ocean grids`. This is done in overwrite mode and so will work
-    irrespective of whether there is an existing standard_name attribute.
+    `native atmosphere and ocean grids`. This is done in overwrite mode
+    and so will work irrespective of whether there is an existing
+    standard_name attribute.
     """
     def __init__(self, filename, directory):
         """
@@ -1836,6 +1837,29 @@ class RealmOcean(AttributeAdd):
         Change the existing value to `ocean`.
         """
         self.new_value = 'ocean'
+
+
+class RealmSeaIce(AttributeAdd):
+    """
+    Change the realm to `seaIce`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'realm'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Change the existing value to `ocean`.
+        """
+        self.new_value = 'seaIce'
 
 
 class SeaWaterSalinityStandardNameAdd(AttributeAdd):
