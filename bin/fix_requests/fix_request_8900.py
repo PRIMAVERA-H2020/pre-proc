@@ -188,6 +188,50 @@ def main():
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
+    ###############
+    # MPI-ESM1-2-HR
+    ###############
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        source_id__name='MPI-ESM1-2-HR',
+        experiment_id__name__startswith='dcppc-amv'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='NominalResolution100km'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    ###############
+    # MPI-ESM1-2-XR
+    ###############
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        source_id__name='MPI-ESM1-2-XR',
+        experiment_id__name__startswith='dcppc-amv'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='NominalResolution50km'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()
