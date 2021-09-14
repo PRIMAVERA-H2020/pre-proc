@@ -1674,6 +1674,124 @@ class MpiInstitution(AttributeAdd):
                           'Hamburg 20146, Germany')
 
 
+class MPISourceHr(AttributeAdd):
+    """
+    Add a global attribute `source` with a value for MPI-ESM1-2-HR. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'source'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = (
+            'MPI-ESM1.2-HR (2017): \naerosol: none, prescribed MACv2-SP\n'
+            'atmos: ECHAM6.3 (spectral T127; 384 x 192 longitude/latitude; '
+            '95 levels; top level 0.01 hPa)\natmosChem: none\n'
+            'land: JSBACH3.20\nlandIce: none/prescribed\n'
+            'ocean: MPIOM1.63 (tripolar TP04, approximately 0.4deg; '
+            '802 x 404 longitude/latitude; 40 levels; top grid cell 0-12 m)\n'
+            'ocnBgchem: HAMOCC\nseaIce: unnamed (thermodynamic (Semtner '
+            'zero-layer) dynamic (Hibler 79) sea ice model)'
+        )
+
+
+class MPISourceIdHr(AttributeAdd):
+    """
+    Add a global attribute `source_id` of MPI-ESM1-2-HR. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'source_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'MPI-ESM1-2-HR'
+
+
+class MPISourceXr(AttributeAdd):
+    """
+    Add a global attribute `source` with a value for MPI-ESM1-2-XR. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'source'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = (
+            'MPI-ESM1.2-XR (2017): \naerosol: none, prescribed MACv2-SP\n'
+            'atmos: ECHAM6.3 (spectral T255; 768 x 384 longitude/latitude; '
+            '95 levels; top level 0.01 hPa)\natmosChem: none\n'
+            'land: JSBACH3.20\nlandIce: none/prescribed\n'
+            'ocean: MPIOM1.63 (tripolar TP04, approximately 0.4deg; '
+            '802 x 404 longitude/latitude; 40 levels; top grid cell 0-12 m)\n'
+            'ocnBgchem: HAMOCC6\nseaIce: unnamed (thermodynamic (Semtner '
+            'zero-layer) dynamic (Hibler 79) sea ice model)'
+        )
+
+
+class MPISourceIdXr(AttributeAdd):
+    """
+    Add a global attribute `source_id` of MPI-ESM1-2-XR. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'source_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'MPI-ESM1-2-XR'
+
+
 class MsftmzmpaStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of

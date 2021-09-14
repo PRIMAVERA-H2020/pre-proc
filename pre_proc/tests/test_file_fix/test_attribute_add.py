@@ -72,6 +72,10 @@ from pre_proc.file_fix import (
     LicenseAdd,
     MipEraToPrim,
     MpiInstitution,
+    MPISourceHr,
+    MPISourceIdHr,
+    MPISourceXr,
+    MPISourceIdXr,
     MsftmzmpaStandardNameAdd,
     NominalResolution100km,
     NominalResolution50km,
@@ -1272,6 +1276,92 @@ class TestMpiInstitution(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a institution,global,o,c,"
             "'Max Planck Institute for Meteorology, Hamburg 20146, Germany' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestMPISourceHr(BaseTest):
+    """ Test MPISourceHr """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        MPISourceHr
+        """
+        fix = MPISourceHr('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a source,global,o,c,"
+            "'MPI-ESM1.2-HR (2017): \naerosol: none, prescribed MACv2-SP\n"
+            "atmos: ECHAM6.3 (spectral T127; 384 x 192 longitude/latitude; "
+            "95 levels; top level 0.01 hPa)\natmosChem: none\n"
+            "land: JSBACH3.20\nlandIce: none/prescribed\n"
+            "ocean: MPIOM1.63 (tripolar TP04, approximately 0.4deg; "
+            "802 x 404 longitude/latitude; 40 levels; top grid cell 0-12 m)\n"
+            "ocnBgchem: HAMOCC\nseaIce: unnamed (thermodynamic (Semtner "
+            "zero-layer) dynamic (Hibler 79) sea ice model)' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestMPISourceIdHr(BaseTest):
+    """ Test MPISourceIdHr """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        MPISourceIdHr
+        """
+        fix = MPISourceIdHr('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a source_id,global,o,c,"
+            "'MPI-ESM1-2-HR' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestMPISourceXr(BaseTest):
+    """ Test MPISourceXr """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        MPISourceXr
+        """
+        fix = MPISourceXr('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a source,global,o,c,"
+            "'MPI-ESM1.2-XR (2017): \naerosol: none, prescribed MACv2-SP\n"
+            "atmos: ECHAM6.3 (spectral T255; 768 x 384 longitude/latitude; "
+            "95 levels; top level 0.01 hPa)\natmosChem: none\n"
+            "land: JSBACH3.20\nlandIce: none/prescribed\n"
+            "ocean: MPIOM1.63 (tripolar TP04, approximately 0.4deg; "
+            "802 x 404 longitude/latitude; 40 levels; top grid cell 0-12 m)\n"
+            "ocnBgchem: HAMOCC6\nseaIce: unnamed (thermodynamic (Semtner "
+            "zero-layer) dynamic (Hibler 79) sea ice model)' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestMPISourceIdXr(BaseTest):
+    """ Test MPISourceIdXr """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        MPISourceIdXr
+        """
+        fix = MPISourceIdXr('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a source_id,global,o,c,"
+            "'MPI-ESM1-2-XR' "
             "/a/var_components.nc",
             stderr=subprocess.STDOUT,
             shell=True

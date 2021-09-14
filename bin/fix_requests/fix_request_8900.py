@@ -199,6 +199,8 @@ def main():
 
     fixes = [
         FileFix.objects.get(name='NominalResolution100km'),
+        FileFix.objects.get(name='MPISourceHr'),
+        FileFix.objects.get(name='MPISourceIdHr')
     ]
 
     for data_req in data_reqs:
@@ -221,6 +223,8 @@ def main():
 
     fixes = [
         FileFix.objects.get(name='NominalResolution50km'),
+        FileFix.objects.get(name='MPISourceXr'),
+        FileFix.objects.get(name='MPISourceIdXr')
     ]
 
     for data_req in data_reqs:
