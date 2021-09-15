@@ -99,6 +99,8 @@ from pre_proc.file_fix import (
     SitimefracStandardNameAdd,
     SourceTypeAogcmAdd,
     SpecificHumidityStandardNameAdd,
+    SubExperiment,
+    SubExperimentId,
     SurfaceTemperatureNameAdd,
     TableIdAdd,
     TrackingIdNew,
@@ -1809,6 +1811,38 @@ class TestSpecificHumidityStandardNameAdd(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a standard_name,hus,o,c,'specific_humidity' "
             "/a/hus_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSubExperiment(BaseTest):
+    """ Test SubExperiment """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for SubExperiment
+        """
+        fix = SubExperiment('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a sub_experiment,global,o,c,'none' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSubExperimentId(BaseTest):
+    """ Test SubExperimentId """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for SubExperimentId
+        """
+        fix = SubExperimentId('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a sub_experiment_id,global,o,c,'none' "
+            "/a/var_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

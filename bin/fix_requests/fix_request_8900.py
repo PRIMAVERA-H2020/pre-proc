@@ -43,6 +43,27 @@ def main():
     """
     Main entry point
     """
+    ######################
+    # Remove some existing
+    ######################
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='DataSpecsVersionAdd'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.remove(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} removed from {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
     ##############
     # All datasets
     ##############
@@ -64,7 +85,10 @@ def main():
         FileFix.objects.get(name='GridNativeAdd'),
         FileFix.objects.get(name='MpiInstitution'),
         FileFix.objects.get(name='LicenseAdd'),
+        FileFix.objects.get(name='ProductAdd'),
         FileFix.objects.get(name='SourceTypeAogcmAdd'),
+        FileFix.objects.get(name='SubExperiment'),
+        FileFix.objects.get(name='SubExperimentId'),
         FileFix.objects.get(name='TableIdAdd'),
         FileFix.objects.get(name='TrackingIdNew'),
         FileFix.objects.get(name='VariableIdAdd'),
