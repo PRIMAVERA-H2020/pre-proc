@@ -11,8 +11,11 @@ import mock
 from pre_proc.file_fix import (
     AirTemperatureNameAdd,
     ParentBranchTimeAdd,
+    ParentBranchTime45655Add,
     ChildBranchTimeAdd,
+    ChildBranchTime36524Add,
     BranchMethodAdd,
+    BranchMethodStandardAdd,
     BranchTimeDelete,
     DataSpecsVersionAdd,
     DataSpecsVersion27Add,
@@ -36,6 +39,10 @@ from pre_proc.file_fix import (
     HadGemMMParentSourceId,
     HistoryClearOld,
     InitializationIndexFromFilename,
+    ParentActIdAdd,
+    ParentExptIdCtrlAdd,
+    ParentMipEraAdd,
+    ParentTimeUnits1850Add,
     PhysicsIndexFromFilename,
     RealizationIndexFromFilename,
     CellMeasuresAreacellaAdd,
@@ -72,6 +79,8 @@ from pre_proc.file_fix import (
     LicenseAdd,
     MipEraToPrim,
     MpiInstitution,
+    MPIParentSourceIdHr,
+    MPIParentSourceIdXr,
     MPISourceHr,
     MPISourceIdHr,
     MPISourceXr,
@@ -170,6 +179,23 @@ class TestParentBranchTimeAdd(BaseTest):
         )
 
 
+class TestParentBranchTime45655Add(BaseTest):
+    """ Test ParentBranchTime45655Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentBranchTime45655Add
+        """
+        fix = ParentBranchTime45655Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_parent,global,o,d,45655.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestChildBranchTimeAdd(BaseTest):
     """ Test ChildBranchTimeAdd """
     def test_subprocess_called_correctly(self):
@@ -187,6 +213,23 @@ class TestChildBranchTimeAdd(BaseTest):
         )
 
 
+class TestChildBranchTime36524Add(BaseTest):
+    """ Test ChildBranchTime36524Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTime36524Add
+        """
+        fix = ChildBranchTime36524Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_child,global,o,d,36524.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestBranchMethodAdd(BaseTest):
     """ Test BranchMethodAdd """
     def test_subprocess_called_correctly(self):
@@ -198,6 +241,23 @@ class TestBranchMethodAdd(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a branch_method,global,o,c,'no parent' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestBranchMethodStandardAdd(BaseTest):
+    """ Test BranchMethodStandardAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        BranchMethodStandardAdd
+        """
+        fix = BranchMethodStandardAdd('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a branch_method,global,o,c,'standard' "
             "/a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
@@ -1105,6 +1165,75 @@ class TestInitializationIndexFromFilename(BaseTest):
         )
 
 
+class TestParentExptIdCtrlAdd(BaseTest):
+    """ Test ParentExptIdCtrlAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentExptIdCtrlAdd
+        """
+        fix = ParentExptIdCtrlAdd('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a parent_experiment_id,global,o,c,'control-1950' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestParentActIdAdd(BaseTest):
+    """ Test ParentActIdAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentActIdAdd
+        """
+        fix = ParentActIdAdd('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a parent_activity_id,global,o,c,'HighResMIP' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestParentMipEraAdd(BaseTest):
+    """ Test ParentMipEraAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentMipEraAdd
+        """
+        fix = ParentMipEraAdd('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a parent_mip_era,global,o,c,'CMIP6' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestParentTimeUnits1850Add(BaseTest):
+    """ Test ParentTimeUnits1850Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentTimeUnits1850Add
+        """
+        fix = ParentTimeUnits1850Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a parent_time_units,global,o,c,"
+            "'days since 1850-1-1 00:00:00' "
+            "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestPhysicsIndexFromFilename(BaseTest):
     """ Test PhysicsIndexFromFilename """
     def test_subprocess_called_correctly(self):
@@ -1281,6 +1410,42 @@ class TestMpiInstitution(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a institution,global,o,c,"
             "'Max Planck Institute for Meteorology, Hamburg 20146, Germany' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestMPIParentSourceIdHr(BaseTest):
+    """ Test MPIParentSourceIdHr """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        MPIParentSourceIdHr
+        """
+        fix = MPIParentSourceIdHr('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a parent_source_id,global,o,c,"
+            "'MPI-ESM1-2-HR' "
+            "/a/var_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestMPIParentSourceIdXr(BaseTest):
+    """ Test MPIParentSourceIdXr """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        MPIParentSourceIdXr
+        """
+        fix = MPIParentSourceIdXr('var_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a parent_source_id,global,o,c,"
+            "'MPI-ESM1-2-XR' "
             "/a/var_components.nc",
             stderr=subprocess.STDOUT,
             shell=True

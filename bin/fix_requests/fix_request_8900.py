@@ -85,6 +85,13 @@ def main():
         FileFix.objects.get(name='GridNativeAdd'),
         FileFix.objects.get(name='MpiInstitution'),
         FileFix.objects.get(name='LicenseAdd'),
+        FileFix.objects.get(name='ParentActIdAdd'),
+        FileFix.objects.get(name='ParentExptIdCtrlAdd'),
+        FileFix.objects.get(name='ParentMipEra'),
+        FileFix.objects.get(name='ParentTimeUnits1850Add'),
+        FileFix.objects.get(name='BranchMethodStandardAdd'),
+        FileFix.objects.get(name='ChildBranchTime36524Add'),
+        FileFix.objects.get(name='ParentBranchTime45655Add'),
         FileFix.objects.get(name='ProductAdd'),
         FileFix.objects.get(name='SourceTypeAogcmAdd'),
         FileFix.objects.get(name='SubExperiment'),
@@ -203,6 +210,7 @@ def main():
 
     fixes = [
         FileFix.objects.get(name='NominalResolution100km'),
+        FileFix.objects.get(name='MPIParentSourceIdHr'),
         FileFix.objects.get(name='MPISourceHr'),
         FileFix.objects.get(name='MPISourceIdHr')
     ]
@@ -227,6 +235,7 @@ def main():
 
     fixes = [
         FileFix.objects.get(name='NominalResolution50km'),
+        FileFix.objects.get(name='MPIParentSourceIdXr'),
         FileFix.objects.get(name='MPISourceXr'),
         FileFix.objects.get(name='MPISourceIdXr')
     ]
