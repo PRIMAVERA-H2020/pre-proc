@@ -124,28 +124,6 @@ def main():
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
-    ###############
-    # dcppc-amv-pos
-    ###############
-    data_reqs = DataRequest.objects.filter(
-        institution_id__name='MPI-M',
-        experiment_id__name='dcppc-amv-pos'
-    )
-
-    fixes = [
-        FileFix.objects.get(name='DcppcAmvPosExpt'),
-        FileFix.objects.get(name='DcppcAmvPosExptId'),
-    ]
-
-    for data_req in data_reqs:
-        for fix in fixes:
-            data_req.fixes.add(fix)
-
-    num_data_reqs = data_reqs.count()
-    for fix in fixes:
-        logger.debug('FileFix {} added to {} data requests.'.
-                     format(fix.name, num_data_reqs))
-
     #######
     # daily
     #######
