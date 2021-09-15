@@ -87,7 +87,7 @@ def main():
         FileFix.objects.get(name='LicenseAdd'),
         FileFix.objects.get(name='ParentActIdAdd'),
         FileFix.objects.get(name='ParentExptIdCtrlAdd'),
-        FileFix.objects.get(name='ParentMipEra'),
+        FileFix.objects.get(name='ParentMipEraAdd'),
         FileFix.objects.get(name='ParentTimeUnits1850Add'),
         FileFix.objects.get(name='BranchMethodStandardAdd'),
         FileFix.objects.get(name='ChildBranchTime36524Add'),
