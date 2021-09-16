@@ -1589,6 +1589,31 @@ class ParentTimeUnits1850Add(AttributeAdd):
         self.new_value = 'days since 1850-1-1 00:00:00'
 
 
+class ParentVariantLabel(AttributeAdd):
+    """
+    Add a global attribute `parent_variant_label` with a value of
+    'r1i1p1f1'. This is done in overwrite mode and
+    so will work irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'parent_variant_label'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'r1i1p1f1'
+
+
 class PhysicsIndexFromFilename(AttributeAdd):
     """
     Add a global attribute `physics_index` with a value calculated from

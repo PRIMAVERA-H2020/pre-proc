@@ -43,6 +43,7 @@ from pre_proc.file_fix import (
     ParentExptIdCtrlAdd,
     ParentMipEraAdd,
     ParentTimeUnits1850Add,
+    ParentVariantLabel,
     PhysicsIndexFromFilename,
     RealizationIndexFromFilename,
     CellMeasuresAreacellaAdd,
@@ -1229,6 +1230,23 @@ class TestParentTimeUnits1850Add(BaseTest):
             "ncatted -h -a parent_time_units,global,o,c,"
             "'days since 1850-1-1 00:00:00' "
             "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestParentVariantLabel(BaseTest):
+    """ Test ParentVariantLabel """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentVariantLabel
+        """
+        fix = ParentVariantLabel('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a parent_variant_label,global,o,c,"
+            "'r1i1p1f1' /a/1.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

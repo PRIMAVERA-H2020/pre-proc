@@ -92,6 +92,7 @@ def main():
         FileFix.objects.get(name='BranchMethodStandardAdd'),
         FileFix.objects.get(name='ChildBranchTime36524Add'),
         FileFix.objects.get(name='ParentBranchTime45655Add'),
+        FileFix.objects.get(name='ParentVariantLabel'),
         FileFix.objects.get(name='ProductAdd'),
         FileFix.objects.get(name='SourceTypeAogcmAdd'),
         FileFix.objects.get(name='SubExperiment'),
