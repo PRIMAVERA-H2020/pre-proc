@@ -43,6 +43,30 @@ def main():
     """
     Main entry point
     """
+    ######################
+    ## remove bad existing
+    ######################
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='ECMWF',
+        experiment_id__name__startswith='primWP5-amv'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='FurtherInfoUrlToHttps'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.remove(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} removed from {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    ##########
+    ## add new
+    ##########
     data_reqs = DataRequest.objects.filter(
         institution_id__name='ECMWF',
         experiment_id__name__startswith='primWP5-amv'
