@@ -45,7 +45,7 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name='CNRM-CERFACS',
-        experiment_id__startswith='primWP5-amv'
+        experiment_id__name__startswith='primWP5-amv'
     )
 
     fixes = [
