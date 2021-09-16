@@ -45,6 +45,7 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name='EC-Earth-Consortium',
+        source_id__name='EC-Earth3P-HR',
         experiment_id__name__startswith='primWP5-amv'
     )
 

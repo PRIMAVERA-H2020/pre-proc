@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-fix_request_4900.py
+fix_request_4999.py
 
 EC-Earth3P.primWP5*
 
-Fix EC-Earth3P LR WP5 files appropriately.
+Clear current fixes, so that new ones can be applied cleanly.
 """
 import argparse
 import logging.config
@@ -45,36 +45,15 @@ def main():
     """
     data_reqs = DataRequest.objects.filter(
         institution_id__name='EC-Earth-Consortium',
-        source_id__name='EC-Earth3P',
         experiment_id__name__startswith='primWP5-amv'
     )
 
-    fixes = [
-        FileFix.objects.get(name='ZZEcEarthAtmosFix'),
-        FileFix.objects.get(name='ZZZEcEarthLongitudeFix'),
-        FileFix.objects.get(name='DataSpecsVersion27Add'),
-        FileFix.objects.get(name='BranchTimeDelete'),
-        FileFix.objects.get(name='HistoryClearOld'),
-        FileFix.objects.get(name='ChildBranchTimeDoubleFix'),
-        FileFix.objects.get(name='ParentBranchTimeDoubleFix'),
-        FileFix.objects.get(name='EcEarthInstitution'),
-        FileFix.objects.get(name='PhysicsIndexIntFix'),
-        FileFix.objects.get(name='RealizationIndexIntFix'),
-        FileFix.objects.get(name='ZFurtherInfoUrl'),
-    ]
-
-    # This next line could be done more quickly by:
-    # further_info_url_fix.datarequest_set.add(*data_reqs)
-    # but sqlite3 gives an error of:
-    # django.db.utils.OperationalError: too many SQL variables
     for data_req in data_reqs:
-        for fix in fixes:
-            data_req.fixes.add(fix)
+        for fix in data_reqs.fixes.all():
+            data_req.fixes.remove(fix)
 
-    num_data_reqs = data_reqs.count()
-    for fix in fixes:
-        logger.debug('FileFix {} added to {} data requests.'.
-                     format(fix.name, num_data_reqs))
+    logger.debug(f'All FileFixes removed from {data_reqs.count()} '
+                 f'data requests.')
 
 
 if __name__ == "__main__":
