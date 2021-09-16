@@ -53,6 +53,8 @@ def main():
 
     fixes = [
         FileFix.objects.get(name='DataSpecsVersionAdd'),
+        FileFix.objects.get(name='ParentBranchTime45655Add'),
+        FileFix.objects.get(name='ChildBranchTime36524Add'),
     ]
 
     for data_req in data_reqs:
@@ -90,8 +92,6 @@ def main():
         FileFix.objects.get(name='ParentMipEraAdd'),
         FileFix.objects.get(name='ParentTimeUnits1850Add'),
         FileFix.objects.get(name='BranchMethodStandardAdd'),
-        FileFix.objects.get(name='ChildBranchTime36524Add'),
-        FileFix.objects.get(name='ParentBranchTime45655Add'),
         FileFix.objects.get(name='ParentVariantLabel'),
         FileFix.objects.get(name='ProductAdd'),
         FileFix.objects.get(name='SourceTypeAogcmAdd'),
@@ -306,6 +306,53 @@ def main():
 
     fixes = [
         FileFix.objects.get(name='RealmSeaIce'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    ##########
+    # r1i1p1f1
+    ##########
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv',
+        variant_label='r1i1p1f1'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='ChildBranchTime38714Add'),
+        FileFix.objects.get(name='ParentBranchTime38714Add'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+
+    ##########
+    # r2i1p1f1
+    ##########
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv',
+        variant_label='r2i1p1f1'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='ChildBranchTime40175Add'),
+        FileFix.objects.get(name='ParentBranchTime40175Add'),
     ]
 
     for data_req in data_reqs:

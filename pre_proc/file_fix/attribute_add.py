@@ -64,6 +64,54 @@ class ParentBranchTimeAdd(AttributeAdd):
         self.new_value = 0.0
 
 
+class ParentBranchTime38714Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_parent` with a value of 38714
+   (1955-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 38714.0
+
+
+class ParentBranchTime40175Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_parent` with a value of 40175
+   (1959-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 40175.0
+
+
 class ParentBranchTime45655Add(AttributeAdd):
     """
    Add a global attribute `branch_time_in_parent` with a value of 45655.
@@ -132,6 +180,54 @@ class ChildBranchTime36524Add(AttributeAdd):
         The new value is 36524..
         """
         self.new_value = 36524.0
+
+
+class ChildBranchTime38714Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_child` with a value of 38714
+   (1955-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 38714.0
+
+
+class ChildBranchTime40175Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_child` with a value of 40175
+   (1959-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 40175.0
 
 
 class BranchMethodAdd(AttributeAdd):
