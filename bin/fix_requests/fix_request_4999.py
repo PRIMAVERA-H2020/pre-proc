@@ -49,7 +49,7 @@ def main():
     )
 
     for data_req in data_reqs:
-        for fix in data_reqs.fixes.all():
+        for fix in data_req.fixes.all():
             data_req.fixes.remove(fix)
 
     logger.debug(f'All FileFixes removed from {data_reqs.count()} '
