@@ -55,7 +55,7 @@ def main():
         FileFix.objects.get(name='DataSpecsVersion27Add'),
         FileFix.objects.get(name='BranchTimeDelete'),
         FileFix.objects.get(name='HistoryClearOld'),
-        FileFix.objects.get(name='ChildBranchTimeDoubleFix'),
+        FileFix.objects.get(name='ChildBranchTimeAdd'),
         FileFix.objects.get(name='ParentBranchTimeDoubleFix'),
         FileFix.objects.get(name='EcEarthInstitution'),
         FileFix.objects.get(name='PhysicsIndexIntFix'),
