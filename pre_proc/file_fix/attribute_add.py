@@ -5,11 +5,15 @@ Workers that fix the netCDF files that are based on the AttributeAdd
 abstract base classes.
 """
 import os
+import re
 import uuid
 
 from netCDF4 import Dataset
 
 from .abstract import AttributeAdd, AttributeDelete
+
+from pre_proc.common import to_int
+from pre_proc.exceptions import AttributeConversionError
 
 
 class AirTemperatureNameAdd(AttributeAdd):
@@ -60,6 +64,269 @@ class ParentBranchTimeAdd(AttributeAdd):
         self.new_value = 0.0
 
 
+class ParentBranchTime38714Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_parent` with a value of 38714
+   (1955-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 38714.0
+
+
+class ParentBranchTime40175Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_parent` with a value of 40175
+   (1959-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 40175.0
+
+
+class ParentBranchTime41636Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_parent` with a value of 41636
+   (1963-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 41636.0
+
+
+class ParentBranchTime43097Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_parent` with a value of 43097
+   (1967-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 43097.0
+
+
+class ParentBranchTime44558Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_parent` with a value of 44558
+   (1971-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 44558.0
+
+
+class ParentBranchTime45655Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_parent` with a value of 45655.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        The new value is 45655.
+        """
+        self.new_value = 45655.0
+
+
+class ParentBranchTime46019Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_parent` with a value of 46019
+   (1975-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 46019.0
+
+
+class ParentBranchTime47480Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_parent` with a value of 47480
+   (1979-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 47480.0
+
+
+class ParentBranchTime48941Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_parent` with a value of 48941
+   (1983-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 48941.0
+
+
+class ParentBranchTime50402Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_parent` with a value of 50402
+   (1987-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 50402.0
+
+
+class ParentBranchTime51863Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_parent` with a value of 51863
+   (1991-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_parent'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 51863.0
+
+
 class ChildBranchTimeAdd(AttributeAdd):
     """
     Add a global attribute `branch_time_in_child` with a value of zero.
@@ -83,6 +350,270 @@ class ChildBranchTimeAdd(AttributeAdd):
         self.new_value = 0.0
 
 
+class ChildBranchTime36524Add(AttributeAdd):
+    """
+    Add a global attribute `branch_time_in_child` with a value of 36524 (100
+    years when units are days and calendar is gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 36524.0
+
+
+class ChildBranchTime38714Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_child` with a value of 38714
+   (1955-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 38714.0
+
+
+class ChildBranchTime40175Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_child` with a value of 40175
+   (1959-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 40175.0
+
+
+class ChildBranchTime41636Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_child` with a value of 41636
+   (1963-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 41636.0
+
+
+class ChildBranchTime43097Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_child` with a value of 43097
+   (1967-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 43097.0
+
+
+class ChildBranchTime44558Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_child` with a value of 44558
+   (1971-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 44558.0
+
+
+class ChildBranchTime46019Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_child` with a value of 46019
+   (1975-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 46019.0
+
+
+class ChildBranchTime47480Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_child` with a value of 47480
+   (1979-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 47480.0
+
+
+class ChildBranchTime48941Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_child` with a value of 48941
+   (1983-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 48941.0
+
+
+class ChildBranchTime50402Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_child` with a value of 50402
+   (1987-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 50402.0
+
+
+class ChildBranchTime51863Add(AttributeAdd):
+    """
+   Add a global attribute `branch_time_in_child` with a value of 51863
+   (1991-12-31 in days since 1850-1-1 and gregorian).
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_time_in_child'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'd'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value
+        """
+        self.new_value = 51863.0
+
+
 class BranchMethodAdd(AttributeAdd):
     """
     Add a global attribute `branch_method` with a value of 'no_parent'.
@@ -104,6 +635,29 @@ class BranchMethodAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'no parent'
+
+
+class BranchMethodStandardAdd(AttributeAdd):
+    """
+    Add a global attribute `branch_method` with a value of 'standard'.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'branch_method'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'standard'
 
 
 class BranchTimeDelete(AttributeDelete):
@@ -154,6 +708,32 @@ class DataSpecsVersionAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = '01.00.23'
+
+
+class DataSpecsVersion27Add(AttributeAdd):
+    """
+    Add a global attribute `data_specs_version` with a value of '01.00.27'.
+
+    This will probably already exist but the parent abstract class uses
+    overwrite and so this should be fine.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'data_specs_version'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = '01.00.27'
 
 
 class DataSpecsVersion29Add(AttributeAdd):
@@ -698,6 +1278,160 @@ class CellMethodsAreaSumSeaTimeMeanAdd(AttributeAdd):
         self.new_value = 'area: sum where sea time: mean'
 
 
+class Conventions(AttributeAdd):
+    """
+    Add a global attribute `Conventions` with a value of
+    `CF-1.7 CMIP-6.2`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'Conventions'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'CF-1.7 CMIP-6.2'
+
+
+class CreationDate201807(AttributeAdd):
+    """
+    Add a global attribute `creation_date` with a value of
+    `2018-07-01T00:00:00Z`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'creation_date'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = '2018-07-01T00:00:00Z'
+
+
+class DcppcAmvNegExpt(AttributeAdd):
+    """
+    Add a global attribute `experiment` with a value of
+    `Idealized climate impact of negative 2xAMV anomaly pattern`. This is
+    done in overwrite mode and so will work
+    irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'experiment'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('Idealized climate impact of negative 2xAMV '
+                          'anomaly pattern')
+
+
+class DcppcAmvNegExptId(AttributeAdd):
+    """
+    Add a global attribute `experiment_id` with a value of
+    `dcppc-amv-neg`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'experiment_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'dcppc-amv-neg'
+
+
+class DcppcAmvPosExpt(AttributeAdd):
+    """
+    Add a global attribute `experiment` with a value of
+    `Idealized climate impact of positive 2xAMV anomaly pattern`. This is
+    done in overwrite mode and so will work
+    irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'experiment'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('Idealized climate impact of positive 2xAMV '
+                          'anomaly pattern')
+
+
+class DcppcAmvPosExptId(AttributeAdd):
+    """
+    Add a global attribute `experiment_id` with a value of
+    `dcppc-amv-pos`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'experiment_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'dcppc-amv-pos'
+
+
 class EcEarthInstitution(AttributeAdd):
     """
     Add a global attribute `institution` with a value for EC-Earth. This
@@ -974,6 +1708,86 @@ class ExternalVariablesAreacelloVolcello(AttributeAdd):
         self.new_value = 'areacello volcello'
 
 
+class ForcingIndexFromFilename(AttributeAdd):
+    """
+    Add a global attribute `forcing_index` with a value of
+    calculated from the filename. This is done in overwrite mode and
+    so will work irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'forcing_index'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 's'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        ripf_cmpts = re.search(r'r(\d+)i(\d+)p(\d+)f(\d+)', self.filename)
+        try:
+            self.new_value = to_int(ripf_cmpts.group(4))
+        except ValueError:
+            raise AttributeConversionError(self.filename, self.attribute_name,
+                                           'int')
+
+
+class FrequencyDayAdd(AttributeAdd):
+    """
+    Add a global attribute `frequency` with a value of
+    `day`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'frequency'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'day'
+
+
+class FrequencyMonAdd(AttributeAdd):
+    """
+    Add a global attribute `frequency` with a value of
+    `mon`. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'frequency'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'mon'
+
+
 class GeopotentialHeightNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
@@ -1049,6 +1863,32 @@ class GridLabelGrAdd(AttributeAdd):
         self.new_value = 'gr'
 
 
+class GridNativeAdd(AttributeAdd):
+    """
+    Add a global attribute `grid` with a value of
+    `native atmosphere and ocean grids`. This is done in overwrite mode
+    and so will work irrespective of whether there is an existing
+    standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'grid'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'native atmosphere and ocean grids'
+
+
 class HadGemMMParentSourceId(AttributeAdd):
     """
     Add a global attribute `parent_source_id` with a value for HadGEM3-GC31-MM.
@@ -1097,6 +1937,221 @@ class HistoryClearOld(AttributeAdd):
         Set the new value.
         """
         self.new_value = ''
+
+
+class InitializationIndexFromFilename(AttributeAdd):
+    """
+    Add a global attribute `initialization_index` with a value of
+    calculated from the filename. This is done in overwrite mode and
+    so will work irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'initialization_index'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 's'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        ripf_cmpts = re.search(r'r(\d+)i(\d+)p(\d+)f(\d+)', self.filename)
+        try:
+            self.new_value = to_int(ripf_cmpts.group(2))
+        except ValueError:
+            raise AttributeConversionError(self.filename, self.attribute_name,
+                                           'int')
+
+
+class ParentActIdAdd(AttributeAdd):
+    """
+    Add a global attribute `parent_activity_id` with a value of
+    'HighResMIP'. This is done in overwrite mode and
+    so will work irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'parent_activity_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'HighResMIP'
+
+
+class ParentExptIdCtrlAdd(AttributeAdd):
+    """
+    Add a global attribute `parent_experiment_id` with a value of
+    'control-1950'. This is done in overwrite mode and
+    so will work irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'parent_experiment_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'control-1950'
+
+
+class ParentMipEraAdd(AttributeAdd):
+    """
+    Add a global attribute `parent_mip_era` with a value of
+    'CMIP6'. This is done in overwrite mode and
+    so will work irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'parent_mip_era'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'CMIP6'
+
+
+class ParentTimeUnits1850Add(AttributeAdd):
+    """
+    Add a global attribute `parent_time_units` with a value of
+    'days since 1850-1-1 00:00:00'. This is done in overwrite mode and
+    so will work irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'parent_time_units'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'days since 1850-1-1 00:00:00'
+
+
+class ParentVariantLabel(AttributeAdd):
+    """
+    Add a global attribute `parent_variant_label` with a value of
+    'r1i1p1f1'. This is done in overwrite mode and
+    so will work irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'parent_variant_label'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'r1i1p1f1'
+
+
+class PhysicsIndexFromFilename(AttributeAdd):
+    """
+    Add a global attribute `physics_index` with a value calculated from
+    the filename. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'physics_index'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 's'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        ripf_cmpts = re.search(r'r(\d+)i(\d+)p(\d+)f(\d+)', self.filename)
+        try:
+            self.new_value = to_int(ripf_cmpts.group(3))
+        except ValueError:
+            raise AttributeConversionError(self.filename, self.attribute_name,
+                                           'int')
+
+
+class RealizationIndexFromFilename(AttributeAdd):
+    """
+    Add a global attribute `realization_index` with a value of
+    calculated from the filename. This is done in overwrite mode and
+    so will work irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'realization_index'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 's'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        ripf_cmpts = re.search(r'r(\d+)i(\d+)p(\d+)f(\d+)', self.filename)
+        try:
+            self.new_value = to_int(ripf_cmpts.group(1))
+        except ValueError:
+            raise AttributeConversionError(self.filename, self.attribute_name,
+                                           'int')
 
 
 class ProductAdd(AttributeAdd):
@@ -1203,6 +2258,48 @@ class HfbasinpmdiffStandardNameAdd(AttributeAdd):
                           'parameterized_mesoscale_eddy_diffusion')
 
 
+class LicenseAdd(AttributeAdd):
+    """
+    Add a license global attribute appropriate to the institution_id.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'license'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Change the existing value to `PRIMAVERA`.
+        """
+        filepath = os.path.join(self.directory, self.filename)
+        with Dataset(filepath) as rootgrp:
+            institution_id = getattr(rootgrp, 'institution_id', None)
+
+        self.new_value = (
+            f'CMIP6 model data produced by {institution_id} is licensed under '
+            f'a Creative Commons Attribution-ShareAlike 4.0 International '
+            f'License (https://creativecommons.org/licenses/). Consult '
+            f'https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use '
+            f'governing CMIP6 output, including citation requirements and '
+            f'proper acknowledgment. Further information about this data, '
+            f'including some limitations, can be found via the '
+            f'further_info_url (recorded as a global attribute in this file). '
+            f'The data producers and data providers make no warranty, either '
+            f'express or implied, including, but not limited to, warranties '
+            f'of merchantability and fitness for a particular purpose. All '
+            f'liabilities arising from the supply of the information '
+            f'(including any liability arising in negligence) are excluded to '
+            f'the fullest extent permitted by law.'
+        )
+
+
 class MipEraToPrim(AttributeAdd):
     """
     Change the mip_era to `PRIMAVERA`.
@@ -1224,6 +2321,200 @@ class MipEraToPrim(AttributeAdd):
         Change the existing value to `PRIMAVERA`.
         """
         self.new_value = 'PRIMAVERA'
+
+
+class MpiInstitution(AttributeAdd):
+    """
+    Add a global attribute `institution` with a value for MPI. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'institution'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = ('Max Planck Institute for Meteorology, '
+                          'Hamburg 20146, Germany')
+
+
+class MPIParentSourceIdHr(AttributeAdd):
+    """
+    Add a global attribute `parent_source_id` of MPI-ESM1-2-HR. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'parent_source_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'MPI-ESM1-2-HR'
+
+
+class MPIParentSourceIdXr(AttributeAdd):
+    """
+    Add a global attribute `parent_source_id` of MPI-ESM1-2-XR. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'parent_source_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'MPI-ESM1-2-XR'
+
+
+class MPISourceHr(AttributeAdd):
+    """
+    Add a global attribute `source` with a value for MPI-ESM1-2-HR. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'source'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = (
+            'MPI-ESM1.2-HR (2017): \naerosol: none, prescribed MACv2-SP\n'
+            'atmos: ECHAM6.3 (spectral T127; 384 x 192 longitude/latitude; '
+            '95 levels; top level 0.01 hPa)\natmosChem: none\n'
+            'land: JSBACH3.20\nlandIce: none/prescribed\n'
+            'ocean: MPIOM1.63 (tripolar TP04, approximately 0.4deg; '
+            '802 x 404 longitude/latitude; 40 levels; top grid cell 0-12 m)\n'
+            'ocnBgchem: HAMOCC\nseaIce: unnamed (thermodynamic (Semtner '
+            'zero-layer) dynamic (Hibler 79) sea ice model)'
+        )
+
+
+class MPISourceIdHr(AttributeAdd):
+    """
+    Add a global attribute `source_id` of MPI-ESM1-2-HR. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'source_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'MPI-ESM1-2-HR'
+
+
+class MPISourceXr(AttributeAdd):
+    """
+    Add a global attribute `source` with a value for MPI-ESM1-2-XR. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'source'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = (
+            'MPI-ESM1.2-XR (2017): \naerosol: none, prescribed MACv2-SP\n'
+            'atmos: ECHAM6.3 (spectral T255; 768 x 384 longitude/latitude; '
+            '95 levels; top level 0.01 hPa)\natmosChem: none\n'
+            'land: JSBACH3.20\nlandIce: none/prescribed\n'
+            'ocean: MPIOM1.63 (tripolar TP04, approximately 0.4deg; '
+            '802 x 404 longitude/latitude; 40 levels; top grid cell 0-12 m)\n'
+            'ocnBgchem: HAMOCC6\nseaIce: unnamed (thermodynamic (Semtner '
+            'zero-layer) dynamic (Hibler 79) sea ice model)'
+        )
+
+
+class MPISourceIdXr(AttributeAdd):
+    """
+    Add a global attribute `source_id` of MPI-ESM1-2-XR. This
+    is done in overwrite mode and so will work irrespective of whether
+    there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'source_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'MPI-ESM1-2-XR'
 
 
 class MsftmzmpaStandardNameAdd(AttributeAdd):
@@ -1389,6 +2680,29 @@ class RealmOcean(AttributeAdd):
         Change the existing value to `ocean`.
         """
         self.new_value = 'ocean'
+
+
+class RealmSeaIce(AttributeAdd):
+    """
+    Change the realm to `seaIce`.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'realm'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Change the existing value to `ocean`.
+        """
+        self.new_value = 'seaIce'
 
 
 class SeaWaterSalinityStandardNameAdd(AttributeAdd):
@@ -1728,6 +3042,31 @@ class SitempbotStandardNameAdd(AttributeAdd):
         self.new_value = 'sea_ice_basal_temperature'
 
 
+class SourceTypeAogcmAdd(AttributeAdd):
+    """
+    Add a global attribute `source_type` with a value of `AOGCM`. This is
+    done in overwrite mode and so will work irrespective of whether there
+    is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'source_type'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'AOGCM'
+
+
 class SpecificHumidityStandardNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
@@ -1781,6 +3120,56 @@ class SitimefracStandardNameAdd(AttributeAdd):
                           'above_threshold')
 
 
+class SubExperiment(AttributeAdd):
+    """
+    Add a global attribute `sub_experiment` with a value of
+    `none`. This is done in overwrite mode and so will work irrespective of
+    whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'sub_experiment'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'none'
+
+
+class SubExperimentId(AttributeAdd):
+    """
+    Add a global attribute `sub_experiment_id` with a value of
+    `none`. This is done in overwrite mode and so will work irrespective of
+    whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'sub_experiment_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'none'
+
+
 class SurfaceTemperatureNameAdd(AttributeAdd):
     """
     Add a variable attribute `standard_name` with a value of
@@ -1804,6 +3193,31 @@ class SurfaceTemperatureNameAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'surface_temperature'
+
+
+class TableIdAdd(AttributeAdd):
+    """
+    Add a global attribute `table_id` with an appropriate value determined
+    from the filename. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'table_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = self.filename.split('_')[1]
 
 
 class TrackingIdNew(AttributeAdd):
@@ -1853,6 +3267,60 @@ class UaStdNameAdd(AttributeAdd):
         Set the new value.
         """
         self.new_value = 'eastward_wind'
+
+
+class VariableIdAdd(AttributeAdd):
+    """
+    Add a global attribute `variable_id` with an appropriate value determined
+    from the filename. This is done in overwrite mode and so will work
+    irrespective of whether there is an existing standard_name attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'variable_id'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = self.filename.split('_')[0]
+
+
+class VariantLabelFromFilename(AttributeAdd):
+    """
+    Add a global attribute `forcing_index` with a value of
+    calculated from the filename. This is done in overwrite mode and
+    so will work irrespective of whether there is an existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'variant_label'
+        self.attribute_visibility = 'global'
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        ripf_cmpts = re.search(r'r(\d+)i(\d+)p(\d+)f(\d+)', self.filename)
+        self.new_value = (f'r{ripf_cmpts.group(1)}'
+                          f'i{ripf_cmpts.group(2)}'
+                          f'p{ripf_cmpts.group(3)}'
+                          f'f{ripf_cmpts.group(4)}')
 
 
 class VarUnitsTo1(AttributeAdd):

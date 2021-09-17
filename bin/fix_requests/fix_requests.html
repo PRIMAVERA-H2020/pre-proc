@@ -60,6 +60,8 @@ at 01.00.23.
 </td></tr>
 <tr><td>3002</td><td>CNRM-CERFACS.Prim required tau[uv]o</td><td>Remove cell_measures where required.
 </td></tr>
+<tr><td>3900</td><td>CNRM-CERFACS.primWP5*</td><td>Set further_info_url appropriately.
+</td></tr>
 <tr><td>4000</td><td>EC-Earth-Consortium.*atmos</td><td>Fix the latitude and longitude on all EC-Earth data on the atmosphere grid.
 </td></tr>
 <tr><td>4001</td><td>EC-Earth-Consortium.*.highresSST-present.r1i1p1f1.height2m</td><td>Add a height2m dimension to those variables that require it.
@@ -167,6 +169,12 @@ attribute.
 </td></tr>
 <tr><td>4805</td><td>EC-Earth-Consortium.EC-Earth3P.highres-future.r1i1p1f1.6hrPlevPt.zg7h</td><td>Don't fix var_name
 </td></tr>
+<tr><td>4900</td><td>EC-Earth3P.primWP5*</td><td>Fix EC-Earth3P LR WP5 files appropriately.
+</td></tr>
+<tr><td>4901</td><td>EC-Earth3P-HR.primWP5*</td><td>Fix EC-Earth3P-HR HR WP5 files appropriately.
+</td></tr>
+<tr><td>4999</td><td>EC-Earth3P.primWP5*</td><td>Clear current fixes, so that new ones can be applied cleanly.
+</td></tr>
 <tr><td>5000</td><td>ECMWF.*</td><td>Convert the further_info_url attribute on all ECMWF data from HTTP to
 HTTPS. Update data_specs_version to 01.00.23. branch_time_in_child and
 branch_time_in_parent to doubles. Correct the institution and add a
@@ -179,6 +187,8 @@ reference attribute.
 <tr><td>5100</td><td>ECMWF.*.highresSST-present.*</td><td>Change the source_type attribute on AMIP files from AOGCM to AGCM.
 </td></tr>
 <tr><td>5400</td><td>ECMWF.*.[coupled].*.O[mon/day].tos</td><td>Change the units is tos from Kelvin back to degC.
+</td></tr>
+<tr><td>5900</td><td>ECMWF.primWP5*</td><td>Set data_specs_version to 01.00.27 for WP5 data.
 </td></tr>
 <tr><td>6000</td><td>MOHC.*</td><td>Convert the further_info_url attribute on all MOHC and NERC data from HTTP to
 HTTPS. Update data_specs_version to 01.00.23.
@@ -321,6 +331,8 @@ that have been updated to 01.00.29, update the standard_name where required.
 </td></tr>
 <tr><td>6500</td><td>HadGEM3-GC31-[MH]H.spinup-1950/highres-future.PrimO/SI(mon/day)</td><td>FurtherInfoUrl CMIP6 to PRIMAVERA
 </td></tr>
+<tr><td>7900</td><td>NCAS.primWP5*</td><td>Set data_specs_version to 01.00.27 for WP5 data and correct futher_info_url.
+</td></tr>
 <tr><td>8000</td><td>MPI-M.*</td><td>Change the direction of the latitude coordinate to monotonically increasing on
 atmosphere variables.
 </td></tr>
@@ -403,6 +415,8 @@ product and tracking_id.
 <tr><td>8305</td><td>MPI-M.highresSST-future.6hrPlevPt.zg7h</td><td>Std name and units
 </td></tr>
 <tr><td>8800</td><td>MPI-M.*.highres-future.*.6hrPlev[Pt].several</td><td>Set lev to plev
+</td></tr>
+<tr><td>8900</td><td>MPI-M.DCPP.*</td><td>Fix MPI WP5 files appropriately.
 </td></tr>
 
 </table>
