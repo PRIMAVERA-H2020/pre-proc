@@ -364,6 +364,194 @@ def main():
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
+    ##########
+    # r3i1p1f1
+    ##########
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv',
+        variant_label='r3i1p1f1'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='ChildBranchTime41636Add'),
+        FileFix.objects.get(name='ParentBranchTime41636Add'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    ##########
+    # r4i1p1f1
+    ##########
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv',
+        variant_label='r4i1p1f1'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='ChildBranchTime43097Add'),
+        FileFix.objects.get(name='ParentBranchTime43097Add'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+
+    ##########
+    # r5i1p1f1
+    ##########
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv',
+        variant_label='r5i1p1f1'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='ChildBranchTime44558Add'),
+        FileFix.objects.get(name='ParentBranchTime44558Add'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    ##########
+    # r6i1p1f1
+    ##########
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv',
+        variant_label='r6i1p1f1'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='ChildBranchTime46019Add'),
+        FileFix.objects.get(name='ParentBranchTime46019Add'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    ##########
+    # r7i1p1f1
+    ##########
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv',
+        variant_label='r7i1p1f1'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='ChildBranchTime47480Add'),
+        FileFix.objects.get(name='ParentBranchTime47480Add'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    ##########
+    # r8i1p1f1
+    ##########
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv',
+        variant_label='r8i1p1f1'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='ChildBranchTime48941Add'),
+        FileFix.objects.get(name='ParentBranchTime48941Add'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    ##########
+    # r9i1p1f1
+    ##########
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv',
+        variant_label='r9i1p1f1'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='ChildBranchTime50402Add'),
+        FileFix.objects.get(name='ParentBranchTime50402Add'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    ###########
+    # r10i1p1f1
+    ###########
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='MPI-M',
+        experiment_id__name__startswith='dcppc-amv',
+        variant_label='r10i1p1f1'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='ChildBranchTime51863Add'),
+        FileFix.objects.get(name='ParentBranchTime51863Add'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()

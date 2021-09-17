@@ -13,11 +13,27 @@ from pre_proc.file_fix import (
     ParentBranchTimeAdd,
     ParentBranchTime38714Add,
     ParentBranchTime40175Add,
+    ParentBranchTime41636Add,
     ParentBranchTime45655Add,
+    ParentBranchTime43097Add,
+    ParentBranchTime44558Add,
+    ParentBranchTime46019Add,
+    ParentBranchTime47480Add,
+    ParentBranchTime48941Add,
+    ParentBranchTime50402Add,
+    ParentBranchTime51863Add,
     ChildBranchTimeAdd,
     ChildBranchTime36524Add,
     ChildBranchTime38714Add,
     ChildBranchTime40175Add,
+    ChildBranchTime41636Add,
+    ChildBranchTime43097Add,
+    ChildBranchTime44558Add,
+    ChildBranchTime46019Add,
+    ChildBranchTime47480Add,
+    ChildBranchTime48941Add,
+    ChildBranchTime50402Add,
+    ChildBranchTime51863Add,
     BranchMethodAdd,
     BranchMethodStandardAdd,
     BranchTimeDelete,
@@ -218,6 +234,57 @@ class TestParentBranchTime40175Add(BaseTest):
         )
 
 
+class TestParentBranchTime41636Add(BaseTest):
+    """ Test ParentBranchTime41636Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentBranchTime41636Add
+        """
+        fix = ParentBranchTime41636Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_parent,global,o,d,41636.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestParentBranchTime43097Add(BaseTest):
+    """ Test ParentBranchTime43097Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentBranchTime43097Add
+        """
+        fix = ParentBranchTime43097Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_parent,global,o,d,43097.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestParentBranchTime44558Add(BaseTest):
+    """ Test ParentBranchTime44558Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentBranchTime44558Add
+        """
+        fix = ParentBranchTime44558Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_parent,global,o,d,44558.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestParentBranchTime45655Add(BaseTest):
     """ Test ParentBranchTime45655Add """
     def test_subprocess_called_correctly(self):
@@ -229,6 +296,91 @@ class TestParentBranchTime45655Add(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             'ncatted -h -a branch_time_in_parent,global,o,d,45655.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestParentBranchTime46019Add(BaseTest):
+    """ Test ParentBranchTime46019Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentBranchTime46019Add
+        """
+        fix = ParentBranchTime46019Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_parent,global,o,d,46019.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestParentBranchTime47480Add(BaseTest):
+    """ Test ParentBranchTime47480Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentBranchTime47480Add
+        """
+        fix = ParentBranchTime47480Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_parent,global,o,d,47480.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestParentBranchTime48941Add(BaseTest):
+    """ Test ParentBranchTime48941Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentBranchTime48941Add
+        """
+        fix = ParentBranchTime48941Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_parent,global,o,d,48941.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestParentBranchTime50402Add(BaseTest):
+    """ Test ParentBranchTime50402Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentBranchTime50402Add
+        """
+        fix = ParentBranchTime50402Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_parent,global,o,d,50402.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestParentBranchTime51863Add(BaseTest):
+    """ Test ParentBranchTime51863Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ParentBranchTime51863Add
+        """
+        fix = ParentBranchTime51863Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_parent,global,o,d,51863.0 '
             '/a/1.nc',
             stderr=subprocess.STDOUT,
             shell=True
@@ -297,6 +449,142 @@ class TestChildBranchTime40175Add(BaseTest):
         fix.apply_fix()
         self.mock_subprocess.assert_called_once_with(
             'ncatted -h -a branch_time_in_child,global,o,d,40175.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestChildBranchTime41636Add(BaseTest):
+    """ Test ChildBranchTime41636Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTime41636Add
+        """
+        fix = ChildBranchTime41636Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_child,global,o,d,41636.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestChildBranchTime43097Add(BaseTest):
+    """ Test ChildBranchTime43097Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTime43097Add
+        """
+        fix = ChildBranchTime43097Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_child,global,o,d,43097.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestChildBranchTime44558Add(BaseTest):
+    """ Test ChildBranchTime44558Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTime44558Add
+        """
+        fix = ChildBranchTime44558Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_child,global,o,d,44558.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestChildBranchTime46019Add(BaseTest):
+    """ Test ChildBranchTime46019Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTime46019Add
+        """
+        fix = ChildBranchTime46019Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_child,global,o,d,46019.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestChildBranchTime47480Add(BaseTest):
+    """ Test ChildBranchTime47480Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTime47480Add
+        """
+        fix = ChildBranchTime47480Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_child,global,o,d,47480.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestChildBranchTime48941Add(BaseTest):
+    """ Test ChildBranchTime48941Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTime48941Add
+        """
+        fix = ChildBranchTime48941Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_child,global,o,d,48941.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestChildBranchTime50402Add(BaseTest):
+    """ Test ChildBranchTime50402Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTime50402Add
+        """
+        fix = ChildBranchTime50402Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_child,global,o,d,50402.0 '
+            '/a/1.nc',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestChildBranchTime51863Add(BaseTest):
+    """ Test ChildBranchTime51863Add """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        ChildBranchTime51863Add
+        """
+        fix = ChildBranchTime51863Add('1.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            'ncatted -h -a branch_time_in_child,global,o,d,51863.0 '
             '/a/1.nc',
             stderr=subprocess.STDOUT,
             shell=True
