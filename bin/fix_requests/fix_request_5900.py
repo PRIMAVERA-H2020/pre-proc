@@ -53,6 +53,7 @@ def main():
 
     fixes = [
         FileFix.objects.get(name='FurtherInfoUrlToHttps'),
+        FileFix.objects.get(name='DataSpecsVersionAdd'),
     ]
 
     for data_req in data_reqs:
