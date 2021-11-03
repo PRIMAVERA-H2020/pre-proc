@@ -46,6 +46,7 @@ from pre_proc.file_fix import (
     EcmwfSourceHr,
     EcmwfSourceMr,
     EcmwfSourceLr,
+    EvapotranspirationNameAdd,
     ExternalVariablesAreacella,
     ExternalVariablesAreacello,
     ExternalVariablesAreacelloVolcello,
@@ -1296,6 +1297,23 @@ class TestEcmwfSourceLr(BaseTest):
             "none\nseaIce: LIM2 (LIM v2; ORCA1 tripolar grid; 362 x 292 "
             "longitude/latitude)' "
             "/a/1.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestEvapotranspirationNameAdd(BaseTest):
+    """ Test EvapotranspirationNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        EvapotranspirationNameAdd
+        """
+        fix = EvapotranspirationNameAdd('evspsbl_other.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,evspsbl,o,c,"
+            "'water_evapotranspiration_flux' /a/evspsbl_other.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
