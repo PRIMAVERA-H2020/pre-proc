@@ -128,6 +128,7 @@ from pre_proc.file_fix import (
     SistryubotStandardNameAdd,
     SitempbotStandardNameAdd,
     SitimefracStandardNameAdd,
+    SoilMoistureNameAdd,
     SourceTypeAogcmAdd,
     SpecificHumidityStandardNameAdd,
     SubExperiment,
@@ -2336,6 +2337,24 @@ class TestSitimefracStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,sitimefrac,o,c,"
             "'fraction_of_time_with_sea_ice_area_fraction_above_threshold' "
             "/a/sitimefrac_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSoilMoistureNameAdd(BaseTest):
+    """ Test SoilMoistureNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SoilMoistureNameAdd
+        """
+        fix = SoilMoistureNameAdd('mrso_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,mrso,o,c,"
+            "'mass_content_of_water_in_soil' "
+            "/a/mrso_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
