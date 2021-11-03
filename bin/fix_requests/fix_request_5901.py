@@ -67,6 +67,31 @@ def main():
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
+    ## sithick
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='ECMWF',
+        experiment_id__name__startswith='primWP5-amv',
+        cmor_name='evspsbl'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='ExternalVariablesAreacello'),
+        FileFix.objects.get(name='CellMeasuresAreacelloAdd'),
+    ]
+
+    # This next line could be done more quickly by:
+    # further_info_url_fix.datarequest_set.add(*data_reqs)
+    # but sqlite3 gives an error of:
+    # django.db.utils.OperationalError: too many SQL variables
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()
