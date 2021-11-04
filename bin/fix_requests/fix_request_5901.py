@@ -13,7 +13,7 @@ import sys
 import django
 django.setup()
 
-from pre_proc_app.models import DataRequest, FileFix
+from pre_proc_app.models import DataRequest, FileFix  # noqa
 
 
 __version__ = '0.1.0b1'
@@ -43,7 +43,7 @@ def main():
     """
     Main entry point
     """
-    ## evspsbl
+    # evspsbl
     data_reqs = DataRequest.objects.filter(
         institution_id__name='ECMWF',
         experiment_id__name__startswith='primWP5-amv',
@@ -63,7 +63,7 @@ def main():
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
-    ## mrso
+    # mrso
     data_reqs = DataRequest.objects.filter(
         institution_id__name='ECMWF',
         experiment_id__name__startswith='primWP5-amv',
@@ -83,7 +83,7 @@ def main():
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
-    ## psl
+    # psl
     data_reqs = DataRequest.objects.filter(
         institution_id__name='ECMWF',
         experiment_id__name__startswith='primWP5-amv',
@@ -103,8 +103,7 @@ def main():
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
-
-    ## sithick
+    # sithick
     data_reqs = DataRequest.objects.filter(
         institution_id__name='ECMWF',
         experiment_id__name__startswith='primWP5-amv',
@@ -125,7 +124,7 @@ def main():
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
-    ## tos
+    # tos
     data_reqs = DataRequest.objects.filter(
         institution_id__name='ECMWF',
         experiment_id__name__startswith='primWP5-amv',
