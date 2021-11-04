@@ -66,6 +66,7 @@ from pre_proc.file_fix import (
     ParentTimeUnits1850Add,
     ParentVariantLabel,
     PhysicsIndexFromFilename,
+    PressureNameAdd,
     RealizationIndexFromFilename,
     CellMeasuresAreacellaAdd,
     CellMeasuresAreacelloAdd,
@@ -1646,6 +1647,23 @@ class TestPhysicsIndexFromFilename(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a physics_index,global,o,s,3 "
             "/a/var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestPressureNameAdd(BaseTest):
+    """ Test PressureNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        PressureNameAdd
+        """
+        fix = PressureNameAdd('psl_other.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,psl,o,c,"
+            "'air_pressure_at_mean_sea_level' /a/psl_other.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
