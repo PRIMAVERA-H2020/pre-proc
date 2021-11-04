@@ -46,6 +46,7 @@ from pre_proc.file_fix import (
     EcmwfSourceHr,
     EcmwfSourceMr,
     EcmwfSourceLr,
+    EvapotranspirationNameAdd,
     ExternalVariablesAreacella,
     ExternalVariablesAreacello,
     ExternalVariablesAreacelloVolcello,
@@ -65,6 +66,7 @@ from pre_proc.file_fix import (
     ParentTimeUnits1850Add,
     ParentVariantLabel,
     PhysicsIndexFromFilename,
+    PressureNameAdd,
     RealizationIndexFromFilename,
     CellMeasuresAreacellaAdd,
     CellMeasuresAreacelloAdd,
@@ -127,6 +129,7 @@ from pre_proc.file_fix import (
     SistryubotStandardNameAdd,
     SitempbotStandardNameAdd,
     SitimefracStandardNameAdd,
+    SoilMoistureNameAdd,
     SourceTypeAogcmAdd,
     SpecificHumidityStandardNameAdd,
     SubExperiment,
@@ -1301,6 +1304,23 @@ class TestEcmwfSourceLr(BaseTest):
         )
 
 
+class TestEvapotranspirationNameAdd(BaseTest):
+    """ Test EvapotranspirationNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        EvapotranspirationNameAdd
+        """
+        fix = EvapotranspirationNameAdd('evspsbl_other.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,evspsbl,o,c,"
+            "'water_evapotranspiration_flux' /a/evspsbl_other.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestExternalVariablesAreacella(BaseTest):
     """ Test ExternalVariablesAreacella """
     def test_subprocess_called_correctly(self):
@@ -1627,6 +1647,23 @@ class TestPhysicsIndexFromFilename(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a physics_index,global,o,s,3 "
             "/a/var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestPressureNameAdd(BaseTest):
+    """ Test PressureNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        PressureNameAdd
+        """
+        fix = PressureNameAdd('psl_other.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,psl,o,c,"
+            "'air_pressure_at_mean_sea_level' /a/psl_other.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
@@ -2318,6 +2355,24 @@ class TestSitimefracStandardNameAdd(BaseTest):
             "ncatted -h -a standard_name,sitimefrac,o,c,"
             "'fraction_of_time_with_sea_ice_area_fraction_above_threshold' "
             "/a/sitimefrac_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestSoilMoistureNameAdd(BaseTest):
+    """ Test SoilMoistureNameAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        SoilMoistureNameAdd
+        """
+        fix = SoilMoistureNameAdd('mrso_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a standard_name,mrso,o,c,"
+            "'mass_content_of_water_in_soil' "
+            "/a/mrso_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )
