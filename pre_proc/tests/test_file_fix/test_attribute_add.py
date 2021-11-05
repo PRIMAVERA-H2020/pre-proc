@@ -50,6 +50,7 @@ from pre_proc.file_fix import (
     ExternalVariablesAreacella,
     ExternalVariablesAreacello,
     ExternalVariablesAreacelloVolcello,
+    FillValueNeg999,
     ForcingIndexFromFilename,
     FrequencyDayAdd,
     FrequencyMonAdd,
@@ -60,6 +61,7 @@ from pre_proc.file_fix import (
     HadGemMMParentSourceId,
     HistoryClearOld,
     InitializationIndexFromFilename,
+    MissingValueNeg999,
     ParentActIdAdd,
     ParentExptIdCtrlAdd,
     ParentMipEraAdd,
@@ -1372,6 +1374,22 @@ class TestExternalVariablesAreacelloVolcello(BaseTest):
         )
 
 
+class TestFillValueNeg999(BaseTest):
+    """ Test FillValueNeg999 """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        FillValueNeg999
+        """
+        fix = FillValueNeg999('var_cmpts.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a _FillValue,var,o,s,-999 /a/var_cmpts.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
 class TestForcingIndexFromFilename(BaseTest):
     """ Test ForcingIndexFromFilename """
     def test_subprocess_called_correctly(self):
@@ -1541,6 +1559,22 @@ class TestInitializationIndexFromFilename(BaseTest):
         self.mock_subprocess.assert_called_once_with(
             "ncatted -h -a initialization_index,global,o,s,2 "
             "/a/var_Table_Model-id_Expt-id_r1i2p3f10_gn_195601-195612.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestMissingValueNeg999(BaseTest):
+    """ Test MissingValueNeg999 """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        MissingValueNeg999
+        """
+        fix = MissingValueNeg999('var_cmpts.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a missing_value,var,o,s,-999 /a/var_cmpts.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

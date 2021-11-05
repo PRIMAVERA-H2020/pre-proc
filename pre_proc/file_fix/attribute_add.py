@@ -1734,6 +1734,31 @@ class ExternalVariablesAreacelloVolcello(AttributeAdd):
         self.new_value = 'areacello volcello'
 
 
+class FillValueNeg999(AttributeAdd):
+    """
+    Add a variable attribute `_FillValue` with a value of -999. This is done in
+    overwrite mode and so will work irrespective of whether there is an
+    existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = '_FillValue'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 's'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = -999
+
+
 class ForcingIndexFromFilename(AttributeAdd):
     """
     Add a global attribute `forcing_index` with a value of
@@ -1993,6 +2018,31 @@ class InitializationIndexFromFilename(AttributeAdd):
         except ValueError:
             raise AttributeConversionError(self.filename, self.attribute_name,
                                            'int')
+
+
+class MissingValueNeg999(AttributeAdd):
+    """
+    Add a variable attribute `missing_value` with a value of -999. This is done
+    in overwrite mode and so will work irrespective of whether there is an
+    existing attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'missing_value'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 's'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = -999
 
 
 class ParentActIdAdd(AttributeAdd):
