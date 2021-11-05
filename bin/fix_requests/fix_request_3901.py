@@ -70,7 +70,7 @@ def main():
         institution_id__name='CNRM-CERFACS',
         experiment_id__name__startswith='primWP5-amv',
         table_id='Ofx',
-        cmor_name__in=['deptho', 'hfgeou']
+        cmor_name__in=['basin', 'deptho', 'hfgeou']
     )
 
     fixes = [
