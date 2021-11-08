@@ -114,6 +114,7 @@ def main():
 
     fixes = [
         FileFix.objects.get(name='CellMeasuresAreacellaAdd'),
+        FileFix.objects.get(name='ExternalVariablesAreacella'),
     ]
 
     for data_req in data_reqs:
