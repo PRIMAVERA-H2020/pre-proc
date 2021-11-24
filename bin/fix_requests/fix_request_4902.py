@@ -43,6 +43,26 @@ def main():
     """
     Main entry point
     """
+    # evspsbl
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='EC-Earth-Consortium',
+        experiment_id__name__startswith='primWP5-amv',
+        cmor_name='evspsbl'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='EvapotranspirationNameAdd'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
     # mrso
     data_reqs = DataRequest.objects.filter(
         institution_id__name='EC-Earth-Consortium',
@@ -72,6 +92,46 @@ def main():
 
     fixes = [
         FileFix.objects.get(name='PressureNameAdd'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    # siconc
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='EC-Earth-Consortium',
+        experiment_id__name__startswith='primWP5-amv',
+        cmor_name='siconc'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='ExternalVariablesAreacello'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
+    # sithick
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='EC-Earth-Consortium',
+        experiment_id__name__startswith='primWP5-amv',
+        cmor_name='sithick'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='CellMeasuresAreacelloAdd'),
     ]
 
     for data_req in data_reqs:
