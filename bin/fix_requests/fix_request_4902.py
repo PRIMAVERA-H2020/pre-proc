@@ -132,6 +132,8 @@ def main():
 
     fixes = [
         FileFix.objects.get(name='CellMeasuresAreacelloAdd'),
+        FileFix.objects.get(name='ExternalVariablesAreacello'),
+        FileFix.objects.get(name='CellMethodsIceAreaTimeMeanMaskAdd'),
     ]
 
     for data_req in data_reqs:
