@@ -90,6 +90,7 @@ from pre_proc.file_fix import (
     CellMethodsAreaMeanTimeMinDailyAdd,
     CellMethodsAreaMeanTimeMaxDailyAdd,
     CellMethodsAreaSumSeaTimeMeanAdd,
+    CellMethodsIceAreaTimeMeanMaskAdd,
     Conventions,
     CreationDate201807,
     DcppcAmvNegExpt,
@@ -1048,6 +1049,24 @@ class TestCellMethodsAreaSumSeaTimeMeanAdd(BaseTest):
             "ncatted -h -a cell_methods,masso,o,c,"
             "'area: sum where sea time: mean' "
             "/a/masso_components.nc",
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+
+
+class TestCellMethodsIceAreaTimeMeanMaskAdd(BaseTest):
+    """ Test CellMethodsIceAreaTimeMeanMaskAdd """
+    def test_subprocess_called_correctly(self):
+        """
+        Test that an external call's been made correctly for
+        CellMethodsIceAreaTimeMeanMaskAdd
+        """
+        fix = CellMethodsIceAreaTimeMeanMaskAdd('sithick_components.nc', '/a')
+        fix.apply_fix()
+        self.mock_subprocess.assert_called_once_with(
+            "ncatted -h -a cell_methods,sithick,o,c,"
+            "'area: time: mean where sea_ice (comment: mask=siconc)' "
+            "/a/sithick_components.nc",
             stderr=subprocess.STDOUT,
             shell=True
         )

@@ -1278,6 +1278,32 @@ class CellMethodsAreaSumSeaTimeMeanAdd(AttributeAdd):
         self.new_value = 'area: sum where sea time: mean'
 
 
+class CellMethodsIceAreaTimeMeanMaskAdd(AttributeAdd):
+    """
+    Add a variable attribute `cell_methods` with a value of
+    `area: time: mean where sea_ice (comment: mask=siconc)`. This is done
+    in overwrite mode and so will work irrespective of whether there is an
+    existing cell_methods attribute.
+    """
+    def __init__(self, filename, directory):
+        """
+        Initialise the class
+
+        :param str filename: The basename of the file to process.
+        :param str directory: The directory that the file is currently in.
+        """
+        super().__init__(filename, directory)
+        self.attribute_name = 'cell_methods'
+        self.attribute_visibility = self.variable_name
+        self.attribute_type = 'c'
+
+    def _calculate_new_value(self):
+        """
+        Set the new value.
+        """
+        self.new_value = 'area: time: mean where sea_ice (comment: mask=siconc)'
+
+
 class Conventions(AttributeAdd):
     """
     Add a global attribute `Conventions` with a value of
