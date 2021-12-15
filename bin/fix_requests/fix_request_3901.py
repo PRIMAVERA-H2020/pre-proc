@@ -129,6 +129,26 @@ def main():
         logger.debug('FileFix {} added to {} data requests.'.
                      format(fix.name, num_data_reqs))
 
+    # sitimefrac
+    data_reqs = DataRequest.objects.filter(
+        institution_id__name='CNRM-CERFACS',
+        experiment_id__name__startswith='primWP5-amv',
+        cmor_name='sitimefrac'
+    )
+
+    fixes = [
+        FileFix.objects.get(name='SitimefracStandardNameAdd'),
+    ]
+
+    for data_req in data_reqs:
+        for fix in fixes:
+            data_req.fixes.add(fix)
+
+    num_data_reqs = data_reqs.count()
+    for fix in fixes:
+        logger.debug('FileFix {} added to {} data requests.'.
+                     format(fix.name, num_data_reqs))
+
 
 if __name__ == "__main__":
     cmd_args = parse_args()
